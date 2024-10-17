@@ -1,8 +1,25 @@
-# React + Vite
+# DOCES - Documentación Escolar y Servicios
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Tecnologías Utilizadas
+- React
+- Bootstrap: Versión 5.3.3
+- Íconos: [Feather Icons](https://feathericons.com/)
 
-Currently, two official plugins are available:
+## Requisitos previos
+Asegurate de tener instalado en tu máquina:
+- Node.js
+- npm (gestor de paquetes de Node)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Instalación y ejecución
+
+### 1. Clonar el repositorio:
+git clone <URL_DEL_REPOSITORIO>
+cd nombre-del-proyecto
+
+### 2. Instalar dependencias:
+Ejecuta el siguiente comando para instalar las dependencias necesarias:
+npm install
+
+### 3. Ejecutar el proyecto
+Para iniciar el proyectol, utiliza:
+npm run dev
