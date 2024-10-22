@@ -63,10 +63,8 @@ const Frontend = () => {
                     </Link>
                 </div>
             </aside>
-            <div className="main p-3">
-                <div className="text-center">
-                    <Outlet />
-                </div>
+            <div className="main p-4 overflow-auto">
+                <Outlet />
             </div>
         </div>
     )

@@ -2,9 +2,7 @@ import React from 'react'
 
 const Payments = () => {
     return (
-        <div>
-            <h1>Pagos</h1>
-        </div>
+        <h1 className='title py-2'>Pagos</h1>
     )
 }
 
