@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Outlet, Link } from "react-router-dom"
 import { Home, FileText, DollarSign, LogOut, Menu } from "react-feather"
+import '../../public/css/sidebar.css'
 
 const Frontend = () => {
 
