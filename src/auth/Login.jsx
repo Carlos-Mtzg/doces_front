@@ -10,7 +10,7 @@ const Login = () => {
                 <h1 className={`fw-semibold text-center pb-5 ${styles['title']}`}>Inicio de Sesion</h1>
                 <Form method='post'>
                     <div className="form-gorup mb-4">
-                        <label htmlFor="email-input" className={`form-label fw-normal ${styles['email-label']}`}>Correo Institucional</label>
+                        <label htmlFor="email-input" className={`form-label fw-normal ${styles['email-label']}`}>Correo Electrónico</label>
                         <input name='email-input' type="text" className={`form-control ${styles['email-input']}`} placeholder='usuario@email.com' />
                     </div>
                     <div className="form-gorup">
@@ -21,14 +21,12 @@ const Login = () => {
                         <Link className={`${styles['forget-password']}`} to="/">¿Olvidaste tu contraseña?</Link>
                     </div>
                     <div className="form-gorup d-flex flex-column gap-3">
-                        {/* <button className={`btn d-flex gap-2 justify-content-center ${styles['signIn-btn']}`}>
-                            Iniciar Sesión
-                            <LogIn />
-                        </button> */}
-                        <button>
+                        <button className={`${styles['signIn-btn']}`}>
+                            <div className={`${styles['signIn-content']}`}>
+                                Iniciar Sesión
+                                <LogIn />
+                            </div>
                             <span></span>
-                            Iniciar Sesión
-                            <LogIn />
                         </button>
                         <Link className={`text-center ${styles['register-now']}`} to="/">Registrarme ahora</Link>
                     </div>
