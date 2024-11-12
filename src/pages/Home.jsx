@@ -4,8 +4,7 @@ const Home = () => {
     return (
         <>
             <h1 className='title py-2 mb-4'>Inicio</h1>
-            
-            </>
+        </>
     )
 }
 
