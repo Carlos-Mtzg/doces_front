@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Outlet, Link } from "react-router-dom"
-import { Home, FileText, DollarSign, LogOut, Menu } from "react-feather"
+import { Home, FileText, DollarSign, LogOut, Menu, Folder, FolderPlus } from "react-feather"
 import '../../public/css/sidebar.css'
 
 const Frontend = () => {
@@ -39,6 +39,18 @@ const Frontend = () => {
                         <Link to="/payments" className="sidebar-link">
                             <DollarSign />
                             <span>Pagos</span>
+                        </Link>
+                    </li>
+                    <li className="sidebar-item">
+                        <Link to="/admin/" className="sidebar-link">
+                            <Folder />
+                            <span>Solicitudes</span>
+                        </Link>
+                    </li>
+                    <li className="sidebar-item">
+                        <Link to="/admin/requestsSelected" className="sidebar-link">
+                            <FolderPlus />
+                            <span>Solicitudes Seleccionadas</span>
                         </Link>
                     </li>
                     {/* <li className="sidebar-item">
