@@ -36,12 +36,6 @@ const Frontend = () => {
                         </Link>
                     </li>
                     <li className="sidebar-item">
-                        <Link to="/payments" className="sidebar-link">
-                            <DollarSign />
-                            <span>Pagos</span>
-                        </Link>
-                    </li>
-                    <li className="sidebar-item">
                         <Link to="/admin/" className="sidebar-link">
                             <Folder />
                             <span>Solicitudes</span>
