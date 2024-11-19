@@ -1,23 +1,23 @@
 import React from 'react';
-import '../../public/css/user/home.css';
+import styles from '../../public/css/user/requests.module.css';
 import RequestCard from '../components/RequestCard.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Requests = () => {
     const data = [
-        { id: '1', title: 'Kardex', description: 'Descripción del kardex', status: 'Solicitud en espera'},
-        { id: '2', title: 'Constancia de estudios', description: 'Descripción del certificado', status: 'Solicitud en progreso'},
-        { id: '3', title: 'Carta de recomendación', description: 'Descripción de la constancia', status: 'Solicitud terminada'},
-        { id: '4', title: 'Certificado de estudios', description: 'Descripción de la constancia', status: 'Solicitud terminada'},
-        { id: '5', title: 'Certificado de estudios', description: 'Descripción de la constancia', status: 'Solicitud terminada'},
-        { id: '5', title: 'Kardex', description: 'Descripción de la constancia', status: 'Solicitud terminada'},
-        { id: '5', title: 'Certificado de estudios', description: 'Descripción de la constancia', status: 'Solicitud terminada'},
+        { id: '1', title: 'Kardex', description: 'Descripción del kardex', status: 'Solicitud en espera' },
+        { id: '2', title: 'Constancia de estudios', description: 'Descripción del certificado', status: 'Solicitud en progreso' },
+        { id: '3', title: 'Carta de recomendación', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
+        { id: '4', title: 'Certificado de estudios', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
+        { id: '5', title: 'Certificado de estudios', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
+        { id: '5', title: 'Kardex', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
+        { id: '5', title: 'Certificado de estudios', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
 
     ];
 
     return (
         <>
-            <h1 className='title py-2'>Mis solicitudes</h1>
+            <h1 className={`py-2 mb-4 ${styles['title']}`}>Mis solicitudes</h1>
             <div className="container-fluid">
                 <div className="row">
                     {data.map((item) => (
