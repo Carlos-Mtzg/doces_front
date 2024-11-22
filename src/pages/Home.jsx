@@ -1,11 +1,11 @@
 import React from 'react'
-import '../../public/css/user/home.css'
+import styles from '../../public/css/user/home.module.css'
 import DocumentCard from '../components/DocumentCard'
 
 const Home = () => {
     return (
         <>
-            <h1 className='title py-2 mb-4'>Inicio</h1>
+            <h1 className={`py-2 mb-4 ${styles['title']}`}>Inicio</h1>
             <DocumentCard />
         </>
     )
