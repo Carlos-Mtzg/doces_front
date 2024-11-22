@@ -203,7 +203,7 @@ const AdminRequestModal = ({ doc, fecha, prioridad, status, id, closeModal }) =>
                                             onChange={handleFileChange}
                                         />
                                     </div>
-                                    <div class="position-relative p-4">
+                                    <div className="position-relative p-4">
 
                                     <div className='d-flex flex-column col-12 position-absolute top-50 start-100 translate-middle'>
                                     <button className='btn col-6 rounded-4 btn-outline-secondary' >Enviar Documento</button>
