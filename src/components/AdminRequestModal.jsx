@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { BarChart2, AlertCircle, FileText, ChevronsLeft, Calendar, Send ,Paperclip} from 'react-feather'
-
+import { BarChart2, AlertCircle, FileText, ChevronsLeft, Calendar, Send, Paperclip, File } from 'react-feather'
+import styles from '../../public/css/components/admin-requests.module.css'
 
 const AdminRequestModal = ({ doc, fecha, prioridad, status, id, closeModal }) => {
 
@@ -48,33 +48,24 @@ const AdminRequestModal = ({ doc, fecha, prioridad, status, id, closeModal }) =>
 
     return (
         <>
-
             <div
                 className="offcanvas-backdrop fade show" onClick={handleBackdropClick} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 1)', zIndex: 1040, }}
             />
 
-            <div className="offcanvas offcanvas-end show " tabIndex="-1" aria-labelledby="offcanvasNavbarLabel">
+            <div className={`${styles['custom-offcanvas']} offcanvas offcanvas-end show px-3`} tabIndex="-1" aria-labelledby="offcanvasNavbarLabel">
                 <div className="offcanvas-header">
-                    <button
-                        onClick={handleCloseModal}
-                        type="button"
-                        className="btn border-0 p-0"
-                        aria-label="Close"
-                    >
-                        <ChevronsLeft className="text-secondary" style={{ width: "20px" }} />
+                    <button onClick={handleCloseModal} type="button" className="btn border-0 p-0" aria-label="Close">
+                        <ChevronsLeft className={`${styles['leftBtn']} text-secondary`} style={{ width: "20px" }} />
                     </button>
                 </div>
 
                 <div className="offcanvas-body" style={{ fontSize: "14PX" }}>
-                    <ul className="navbar-nav justify-content-center flex-grow-1 pe-0 mb-3">
-                        <h5 className="fs-2 text text-center">Detalles de Solicitud</h5>
-                    </ul>
-
+                    <h5 className="px-3 fs-2 fw-bold mb-4">Detalles de Solicitud</h5>
                     <div className="d-flex justify-content-start">
                         <div className="px-3 w-100">
-                            <div className="row align-items-start pb-3 pt-2">
-                                <div className="col-sm-6 col-md-5 col-lg-7 text-start fs-6">
-                                    <AlertCircle className="text-secondary mx-2" style={{ width: "20px" }} />
+                            <div className="row align-items-start pb-4 pt-2">
+                                <div className="col-sm-6 col-md-5 col-lg-7 text-start text-secondary fs-7 fw-bold">
+                                    <AlertCircle className="text-secondary me-2" style={{ width: "20px" }} />
                                     Prioridad
                                 </div>
                                 <div
@@ -92,25 +83,25 @@ const AdminRequestModal = ({ doc, fecha, prioridad, status, id, closeModal }) =>
                                 </div>
                             </div>
 
-                            <div className="row align-items-start pb-3">
-                                <div className="col-sm-6 col-md-5 col-lg-7 text-start">
-                                    <Calendar className="text-secondary mx-2" style={{ width: "20px" }} />
+                            <div className="row align-items-start pb-4">
+                                <div className="col-sm-6 col-md-5 col-lg-7 text-start text-secondary fs-7 fw-bold">
+                                    <Calendar className="text-secondary me-2" style={{ width: "20px" }} />
                                     Fecha de Entrega
                                 </div>
                                 <div className="col-sm-6 col-md-5 offset-md-2 col-lg-5 offset-lg-0 text-start">{fecha}</div>
                             </div>
 
-                            <div className="row align-items-start pb-3">
-                                <div className="col-sm-6 col-md-5 col-lg-7 text-start">
-                                    <FileText className="text-secondary mx-2" style={{ width: "20px" }} />
+                            <div className="row align-items-start pb-4">
+                                <div className="col-sm-6 col-md-5 col-lg-7 text-start text-secondary fs-7 fw-bold">
+                                    <FileText className="text-secondary me-2" style={{ width: "20px" }} />
                                     Tipo de Documento
                                 </div>
                                 <div className="col-sm-6 col-md-5 offset-md-2 col-lg-5 offset-lg-0 text-start">{doc}</div>
                             </div>
 
-                            <div className="row align-items-start pb-3">
-                                <div className="col-sm-6 col-md-5 col-lg-7 text-start">
-                                    <BarChart2 className="text-secondary mx-2" style={{ width: "20px" }} />
+                            <div className="row align-items-start pb-4">
+                                <div className="col-sm-6 col-md-5 col-lg-7 text-start text-secondary fs-7 fw-bold">
+                                    <BarChart2 className="text-secondary me-2" style={{ width: "20px" }} />
                                     Status
                                 </div>
                                 <div
@@ -128,9 +119,9 @@ const AdminRequestModal = ({ doc, fecha, prioridad, status, id, closeModal }) =>
                                 </div>
                             </div>
 
-                            <div className="row align-items-start pb-3">
-                                <div className="col-sm-6 col-md-5 col-lg-7 text-start">
-                                    <FileText className="text-secondary mx-2" style={{ width: "20px" }} />
+                            <div className="row align-items-start pb-2">
+                                <div className="col-sm-6 col-md-5 col-lg-7 text-start text-secondary fs-7 fw-bold">
+                                    <FileText className="text-secondary me-2" style={{ width: "20px" }} />
                                     Datos del usuario
                                 </div>
                                 <div className="col-sm-6 col-md-5 offset-md-2 col-lg-5 offset-lg-0 text-start"></div>
@@ -138,28 +129,24 @@ const AdminRequestModal = ({ doc, fecha, prioridad, status, id, closeModal }) =>
 
                             <div className="position-relative p-4 mb-3 ">
                                 {data.map((obj, index) => (
-                                    <div key={index} className="flex-column position-absolute top-50 start-50 translate-middle">
-
+                                    <div key={index} className="flex-column position-absolute top-50 start-50 translate-middle text-secondary">
                                         <div className="row mb-2  gap-5 ">
-                                            <div className="col-5 col-md-4 col-lg-4 text-start fw-bold">Nombre:</div>
+                                            <div className="col-5 col-md-4 col-lg-4 text-start fw-semi">Nombre:</div>
                                             <div className="col-4 col-md-4 col-lg-4 text-start ">{obj.nombre}</div>
                                         </div>
-
                                         <div className="row mb-2  gap-5">
-                                            <div className="col-5 col-md-4 col-lg-4 text-start fw-bold">Matrícula:</div>
-                                            <div className="col-4 col-md-4 col-lg-4 text-start  ">{obj.matricula}</div>
+                                            <div className="col-5 col-md-4 col-lg-4 text-start fw-semi">Matrícula:</div>
+                                            <div className="col-4 col-md-4 col-lg-4 text-start">{obj.matricula}</div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
 
-
-
-                            <div className='position-relative col-12 p-2 border-bottom border-top dark-subtle gap-2 items-center' >
-
-                                <textarea className='col-11  border-0 shadow-none focus-ring focus-ring-light' type="text" style={{ resize: "none", overflow: "hidden" }} placeholder='Notificar de Información errónea...' />
-
-                                <button className="position-absolute top-50 start-100 translate-middle fixed z-index-2 btn border-0 p-0" ><Send className='text-secondary' style={{ width: "15px" }} />  </button>
+                            <div className='position-relative col-12 border-bottom border-top mt-4'>
+                                <textarea className='col-11 border-0 shadow-none py-2' type="text" style={{ resize: "none", overflow: "hidden" }} placeholder='Notificar de Información errónea...' />
+                                <button className="position-absolute top-50 start-100 translate-middle fixed z-index-2 btn border-0 p-0" >
+                                    <Send className={`${styles['leftBtn']} text-secondary`} size={15} />
+                                </button>
                             </div>
                             {
                                 !doc && (
@@ -171,52 +158,32 @@ const AdminRequestModal = ({ doc, fecha, prioridad, status, id, closeModal }) =>
                                 )
                             }
 
-                            <div className='fs-5 pt-4'><Paperclip  style={{ width:"18px" }} className='text-secondary'/> Cargar archivo</div>
-
-
-                            <div className='mt-3 '>
-
+                            <div className='fs-6 pt-4 text-secondary'>
+                                <Paperclip size={15} className='me-2' />
+                                Cargar archivo
+                            </div>
+                            <div className='mt-3'>
                                 <form>
                                     <div className="input-group mb-3">
-                                        <button
-                                            className="btn border "
-                                            type="button"
-                                            style={{ backgroundColor: "#eceded" }}
-
-                                            onClick={handleButtonClick}
-                                        >
+                                        <button className="btn border fs-6 text-secondary" type="button" onClick={handleButtonClick}>
                                             Examinar...
                                         </button>
-
-                                        <label
-                                            className="form-control rounded-end border-start-0 "
-                                            onClick={handleButtonClick}
-                                            style={{ cursor: "pointer", fontSize: "15px" }}
-                                        >
-                                            {fileName}
+                                        <label htmlFor="file-input" className="form-control rounded-end text-secondary fs-6" style={{ cursor: "pointer" }}>
+                                            Selecciona un archivo
                                         </label>
-
-                                        <input
-                                            type="file"
-                                            ref={fileInputRef}
-                                            style={{ display: "none" }}
-                                            onChange={handleFileChange}
-                                        />
+                                        <input id="file-input" type="file" ref={fileInputRef} style={{ display: "none" }} onChange={handleFileChange} />
                                     </div>
-                                    <div className="position-relative p-4">
-
-                                    <div className='d-flex flex-column col-12 position-absolute top-50 start-100 translate-middle'>
-                                    <button className='btn col-6 rounded-4 btn-outline-secondary' >Enviar Documento</button>
-
+                                    <div className="position-relative d-flex justify-content-end mt-4">
+                                        <button type='button' className={`p-2 px-4 ${styles['send-document-btn']}`}>
+                                            <div className={`d-flex gap-2 justify-content-evenly align-items-center ${styles['send-document-content']}`}>
+                                                Enviar Documento
+                                                <File size={15} />
+                                            </div>
+                                            <span></span>
+                                        </button>
                                     </div>
-                                    </div>
-
-
                                 </form>
-
-
                             </div>
-
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import AdminRequestModal from './AdminRequestModal'
+import styles from '../../public/css/components/admin-requests.module.css'
 
 import { BarChart2, AlertCircle, FileText, ChevronsLeft, Calendar } from 'react-feather'
 
@@ -37,7 +38,7 @@ const AdminRequestTable = () => {
     return (
         <>
             <div className="table-responsive">
-                <table className="table caption-top">
+                <table className="table caption-top table-hover">
                     <thead className='text-secondary'>
                         <tr className="text-center text-secondary border-bottom border-secondary-subtle">
                             <th className="border-end border-secondary-subtle text-secondary">#</th>
@@ -93,7 +94,7 @@ const AdminRequestTable = () => {
                                 </td>
                                 <td className="align-middle text-center">
                                     <button onClick={() => openModal(obj)} className="btn border-0 p-0">
-                                   <ChevronsLeft className='text-secondary'/>
+                                   <ChevronsLeft className={`${styles['leftBtn']} text-secondary`}/>
                                     </button>
                                 </td>
                             </tr>
