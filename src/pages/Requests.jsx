@@ -18,7 +18,7 @@ const Requests = () => {
     return (
         <>
             <h1 className={`py-2 mb-4 ${styles['title']}`}>Mis solicitudes</h1>
-            <div className="container-fluid">
+            <div className={`container-fluid`}>
                 <div className="row">
                     {data.map((item) => (
                         <div key={item.id} className="col-12 col-sm-6 col-md-4 col-lg-3 mt-3 mb-1">
