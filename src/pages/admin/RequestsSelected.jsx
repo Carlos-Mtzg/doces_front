@@ -1,4 +1,5 @@
 import React from 'react'
+import styles from '../../../public/css/admin/selected.module.css'
 
 const Requests = () => {
     return (
