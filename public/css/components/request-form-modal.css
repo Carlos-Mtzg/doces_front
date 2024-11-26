@@ -1,0 +1,15 @@
+:root {
+    --azul-utez: #002E5D;
+    --verde-utez: #00AB84;
+    --gris-utez: #707372;
+    --color-texto: #5E6366;
+}
+
+.modal-header {
+    color: var(--azul-utez);
+}
+
+.btn-siguiente {
+    background-color: var(--azul-utez);
+    color: white;
+}
