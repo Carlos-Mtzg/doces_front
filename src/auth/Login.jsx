@@ -6,7 +6,6 @@ import * as yup from 'yup'
 import { useFormik } from 'formik'
 import AuthContext from '../config/context/auth-context'
 import AxiosClient from '../config/htttp-client/axios-client'
-import { Button, TextInput, Label } from 'flowbite-react'
 
 
 const Login = () => {
@@ -30,8 +29,8 @@ const Login = () => {
                 });
                 if (response && response.accessToken) {
                     console.log(response.data);
-                    
-                    
+
+
                     localStorage.setItem('token', response.accessToken);
                     localStorage.setItem('role', response.role);
                     sessionStorage.setItem('userId', response.id);
@@ -52,15 +51,14 @@ const Login = () => {
     });
 
     return (
-
         <div className="container-fluid d-flex px-0 h-100">
             <div className={`h-100 col-12 col-md-4 d-flex justify-content-center flex-column p-5 ${styles['login-container']}`}>
                 <h1 className={`fw-semibold pb-5 ${styles['title']}`}>Inicio de Sesion</h1>
                 {/* Formulario */}
                 <form onSubmit={formik.handleSubmit}>
                     <div className="form-group mb-4">
-                        <Label htmlFor="email-input" className={`form-label fw-normal ${styles['email-label']}`}>Correo Electrónico</Label>
-                        <TextInput name='email' type="text"
+                        <label htmlFor="email-input" className={`form-label fw-normal ${styles['email-label']}`}>Correo Electrónico</label>
+                        <input name='email' type="text"
                             value={formik.values.email}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
@@ -71,8 +69,8 @@ const Login = () => {
                         ) : null}
                     </div>
                     <div className="form-group">
-                        <Label htmlFor="password-input" className={`form-label fw-normal ${styles['password-label']}`}>Contraseña</Label>
-                        <TextInput name='password' type="password"
+                        <label htmlFor="password-input" className={`form-label fw-normal ${styles['password-label']}`}>Contraseña</label>
+                        <input name='password' type="password"
                             value={formik.values.password}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
@@ -86,7 +84,7 @@ const Login = () => {
                         <Link className={`${styles['forget-password']}`} to="" data-bs-toggle="modal" data-bs-target="#recover-password">¿Olvidaste tu contraseña?</Link>
                     </div>
                     <div className="form-group d-flex flex-column gap-3">
-                        <Button className={`${styles['signIn-btn']}`} type='submit'
+                        <button className={`${styles['signIn-btn']}`} type='submit'
                             disabled={formik.isSubmitting}
                         >
                             <div className={`${styles['signIn-content']}`}>
@@ -94,7 +92,7 @@ const Login = () => {
                                 <LogIn className="ms-2" />
                             </div>
                             <span></span>
-                        </Button>
+                        </button>
 
                         <Link className={`text-center ${styles['register-now']}`} to="/auth/register">Registrarme ahora</Link>
                     </div>
@@ -139,7 +137,6 @@ const Login = () => {
             </div>
             {/* Modal */}
         </div>
-
     )
 }
 
