@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import React, { useContext } from 'react'
 import { Form, Link, useNavigate } from 'react-router-dom'
 import styles from '../../public/css/auth/login.module.css'
+=======
+import React from 'react'
+import { Form, Link } from 'react-router-dom'
+import styles from '../assets/css/auth/login.module.css'
+>>>>>>> a1921407acc630b04c335ad0accb930dc8641c89
 import { LogIn, Send, AlertCircle } from 'react-feather'
 import * as yup from 'yup'
 import { useFormik } from 'formik'

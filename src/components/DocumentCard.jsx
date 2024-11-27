@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOMServer from 'react-dom/server'
-import styles from '../../public/css/components/document-card.module.css'
+import styles from '../assets/css/components/document-card.module.css'
 import { AlertCircle, FilePlus, FileText, Award, ArrowRight } from 'react-feather'
 import Swal from 'sweetalert2'
+import RequestFormModal from './RequestFormModal'
 
 function DocumentCard() {
+    const [selectedDocument, setSelectedDocument] = useState('');
+
     const handleClick = () => {
         const arrowRight = ReactDOMServer.renderToString(<ArrowRight size={18} style={{ color: '#002E5D' }} />)
         Swal.fire({
@@ -18,6 +21,10 @@ function DocumentCard() {
             icon: "question"
         });
     }
+
+    const openModal = (documentTitle) => {
+        setSelectedDocument(documentTitle);
+    };
 
     return (
         <div className={`${styles['cardsContainer']}`}>
@@ -36,7 +43,7 @@ function DocumentCard() {
                             </div>
                             <span></span>
                         </button>
-                        <button type='button' className={`${styles['request-document-btn']}`}>
+                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Kardex')}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['request-document-content']}`}>
                                 <FilePlus size={15} />
                                 Solicitar
@@ -61,7 +68,7 @@ function DocumentCard() {
                             </div>
                             <span></span>
                         </button>
-                        <button type='button' className={`${styles['request-document-btn']}`}>
+                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Constancia de estudios')}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['request-document-content']}`}>
                                 <FilePlus size={15} />
                                 Solicitar
@@ -87,7 +94,7 @@ function DocumentCard() {
                             </div>
                             <span></span>
                         </button>
-                        <button type='button' className={`${styles['request-document-btn']}`}>
+                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Constancia de estudios')}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['request-document-content']}`}>
                                 <FilePlus size={15} />
                                 Solicitar
@@ -113,7 +120,7 @@ function DocumentCard() {
                             </div>
                             <span></span>
                         </button>
-                        <button type='button' className={`${styles['request-document-btn']}`}>
+                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Carta de recomendación')}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['request-document-content']}`}>
                                 <FilePlus size={15} />
                                 Solicitar
@@ -139,7 +146,7 @@ function DocumentCard() {
                             </div>
                             <span></span>
                         </button>
-                        <button type='button' className={`${styles['request-document-btn']}`}>
+                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Título')}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['request-document-content']}`}>
                                 <FilePlus size={15} />
                                 Solicitar
@@ -149,6 +156,7 @@ function DocumentCard() {
                     </div>
                 </div>
             </div>
+            <RequestFormModal tipoDocumento={selectedDocument} />
         </div>
     )
 }

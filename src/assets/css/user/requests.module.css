@@ -1,0 +1,13 @@
+:root {
+    --azul-utez: #002E5D;
+    --verde-utez: #00AB84;
+    --gris-utez: #707372;
+    --color-texto: #5E6366;
+    --sign-out: rgb(138, 0, 0);
+}
+
+.title {
+    font-size: 36px;
+    color: var(--azul-utez);
+    border-bottom: 2px solid var(--azul-utez);
+}

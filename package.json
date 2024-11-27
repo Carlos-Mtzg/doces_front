@@ -14,16 +14,13 @@
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "doces_front": "file:",
-    "flowbite": "^2.5.2",
-    "flowbite-react": "^0.10.2",
     "formik": "^2.4.6",
     "i": "^0.3.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-feather": "^2.0.10",
-    "react-router-dom": "^6.28.0",
-    "sweetalert2": "^11.14.5",
-    "sweetalert2-react-content": "^5.0.7",
+    "react-router-dom": "^6.27.0",
+    "sweetalert2": "^11.6.13",
     "yup": "^1.4.0"
   },
   "devDependencies": {
