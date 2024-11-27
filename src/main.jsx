@@ -14,6 +14,7 @@ import Login from "./auth/Login"
 import Register from "./auth/Register"
 import AdminRequests from "./pages/admin/Requests"
 import RequestsSelected from "./pages/admin/RequestsSelected"
+import { AuthProvider } from "./config/context/auth-context"
 
 const router = createBrowserRouter(
   [
@@ -66,6 +67,8 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <AuthProvider>
     <RouterProvider router={router}></RouterProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
