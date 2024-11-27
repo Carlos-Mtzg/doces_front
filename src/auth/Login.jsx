@@ -1,37 +1,103 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Form, Link } from 'react-router-dom'
 import styles from '../assets/css/auth/login.module.css'
 import { LogIn, Send, AlertCircle } from 'react-feather'
 
+import * as yup from 'yup'
+import { useFormik } from 'formik'
+import AuthContext from '../config/context/auth-context'
+import AxiosClient from '../config/htttp-client/axios-client'
+
+
 const Login = () => {
+    const { dispatch } = useContext(AuthContext)
+    const navigate = useNavigate();
+
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: ''
+        },
+        validationSchema: yup.object().shape({
+            email: yup.string().email().required('Campo obligatorio'),
+            password: yup.string().required('Campo obligatorio')
+        }),
+        onSubmit: async (values, { setSubmitting }) => {
+            try {
+                const response = await AxiosClient.post('/login', {
+                    email: values.email,
+                    password: values.password
+                });
+                if (response && response.accessToken) {
+                    console.log(response.data);
+
+
+                    localStorage.setItem('token', response.accessToken);
+                    localStorage.setItem('role', response.role);
+                    sessionStorage.setItem('userId', response.id);
+                    dispatch({ type: 'SIGNIN', payload: response.data });
+                    navigate('/', { replace: true });
+                    sessionStorage.setItem('user', JSON.stringify(response.data.id));
+
+                } else
+                    throw Error('Error')
+
+            } catch (error) {
+                console.log(response.data);
+            }
+            finally {
+                setSubmitting(false);
+            }
+        }
+    });
+
     return (
         <div className="container-fluid d-flex px-0 h-100">
             <div className={`h-100 col-12 col-md-4 d-flex justify-content-center flex-column p-5 ${styles['login-container']}`}>
                 <h1 className={`fw-semibold pb-5 ${styles['title']}`}>Inicio de Sesion</h1>
                 {/* Formulario */}
-                <Form method='post'>
+                <form onSubmit={formik.handleSubmit}>
                     <div className="form-group mb-4">
                         <label htmlFor="email-input" className={`form-label fw-normal ${styles['email-label']}`}>Correo Electrónico</label>
-                        <input name='email-input' type="text" className={`form-control ${styles['email-input']}`} placeholder='Escribe aqui tu correo electrónico' />
+                        <input name='email' type="text"
+                            value={formik.values.email}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className={`form-control ${styles['email-input']}`}
+                            placeholder='Escribe aqui tu correo electrónico' />
+                        {formik.touched.email && formik.errors.email ? (
+                            <div className="text-danger">{formik.errors.email}</div>
+                        ) : null}
                     </div>
                     <div className="form-group">
                         <label htmlFor="password-input" className={`form-label fw-normal ${styles['password-label']}`}>Contraseña</label>
-                        <input name='password-input' type="password" className={`form-control ${styles['password-input']}`} placeholder='********' />
+                        <input name='password' type="password"
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className={`form-control ${styles['password-input']}`}
+                            placeholder='********' />
+                        {formik.touched.password && formik.errors.password ? (
+                            <div className="text-danger">{formik.errors.password}</div>
+                        ) : null}
                     </div>
                     <div className="form-grup text-end pt-2 pb-5">
                         <Link className={`${styles['forget-password']}`} to="" data-bs-toggle="modal" data-bs-target="#recover-password">¿Olvidaste tu contraseña?</Link>
                     </div>
                     <div className="form-group d-flex flex-column gap-3">
-                        <button className={`${styles['signIn-btn']}`}>
+                        <button className={`${styles['signIn-btn']}`} type='submit'
+                            disabled={formik.isSubmitting}
+                        >
                             <div className={`${styles['signIn-content']}`}>
                                 Iniciar Sesión
                                 <LogIn className="ms-2" />
                             </div>
                             <span></span>
                         </button>
+
                         <Link className={`text-center ${styles['register-now']}`} to="/auth/register">Registrarme ahora</Link>
                     </div>
-                </Form>
+                </form>
                 {/* Formulario */}
             </div>
             <div className='col-8'></div>
@@ -58,7 +124,7 @@ const Login = () => {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type='button' className={`py-2 ${styles['send-email-btn']}`}>
+                                <button type='Submit' className={`py-2 ${styles['send-email-btn']}`}>
                                     <div className={`${styles['send-email-content']}`}>
                                         Enviar Correo
                                         <Send className="ms-2" width={18} />
