@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from '../../public/css/components/request-form-modal.module.css';
+import styles from '../assets/css/components/request-form-modal.module.css';
 import { ArrowRightCircle, X, AlertCircle } from "react-feather";
 
 const SolicitudDocumentoModal = ({ tipoDocumento }) => {

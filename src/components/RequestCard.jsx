@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../public/css/components/request-card.module.css';
+import styles from '../assets/css/components/request-card.module.css';
 import { AlertCircle, FileText } from 'react-feather';
 
 /*

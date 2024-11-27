@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styles from '../../../public/css/admin/requests.module.css'
+import styles from '../../assets/css/admin/requests.module.css'
 import AdminRequestTable from '../../components/AdminRequestTable'
 import AdminRequestOffCanvas from '../../components/AdminRequestOffCanvas';
 

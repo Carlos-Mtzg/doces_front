@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ReactDOMServer from 'react-dom/server'
-import styles from '../../public/css/components/document-card.module.css'
+import styles from '../assets/css/components/document-card.module.css'
 import { AlertCircle, FilePlus, FileText, Award, ArrowRight } from 'react-feather'
 import Swal from 'sweetalert2'
 import RequestFormModal from './RequestFormModal'

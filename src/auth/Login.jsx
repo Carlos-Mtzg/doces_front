@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Link } from 'react-router-dom'
-import styles from '../../public/css/auth/login.module.css'
+import styles from '../assets/css/auth/login.module.css'
 import { LogIn, Send, AlertCircle } from 'react-feather'
 
 const Login = () => {

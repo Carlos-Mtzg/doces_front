@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import styles from '../../public/css/components/payment-gateway.module.css';
+import styles from '../assets/css/components/payment-gateway.module.css';
 import { paymentSchema } from '../schemas/paymentSchema.js';
 
 const onSubmit = async (values, actions) => {
