@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Form, Link } from 'react-router-dom'
+import { Form, Link, useNavigate } from 'react-router-dom'
 import styles from '../assets/css/auth/login.module.css'
 import { LogIn, Send, AlertCircle } from 'react-feather'
 
@@ -19,8 +19,8 @@ const Login = () => {
             password: ''
         },
         validationSchema: yup.object().shape({
-            email: yup.string().email().required('Campo obligatorio'),
-            password: yup.string().required('Campo obligatorio')
+            email: yup.string().email().required('Campo obligatorio *'),
+            password: yup.string().required('Campo obligatorio *')
         }),
         onSubmit: async (values, { setSubmitting }) => {
             try {
@@ -66,7 +66,7 @@ const Login = () => {
                             className={`form-control ${styles['email-input']}`}
                             placeholder='Escribe aqui tu correo electrónico' />
                         {formik.touched.email && formik.errors.email ? (
-                            <div className="text-danger">{formik.errors.email}</div>
+                            <div className="text-danger mt-1" style={{ fontSize: '15px' }}>{formik.errors.email}</div>
                         ) : null}
                     </div>
                     <div className="form-group">
@@ -78,7 +78,7 @@ const Login = () => {
                             className={`form-control ${styles['password-input']}`}
                             placeholder='********' />
                         {formik.touched.password && formik.errors.password ? (
-                            <div className="text-danger">{formik.errors.password}</div>
+                            <div className="text-danger mt-1" style={{ fontSize: '15px' }}>{formik.errors.password}</div>
                         ) : null}
                     </div>
                     <div className="form-grup text-end pt-2 pb-5">
