@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { ChevronsRight, BarChart2, AlertCircle, FileText, Calendar, Send, Paperclip, File } from 'react-feather'
-import styles from '../../public/css/components/offcanvas-requests.module.css'
+import styles from '../assets/css/components/offcanvas-requests.module.css'
 import StatusBadge from './StatusBadge'
 import PriorityBadge from './PriorityBadge'
 

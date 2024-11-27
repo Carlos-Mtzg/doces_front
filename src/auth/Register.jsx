@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Link } from "react-router-dom";
-import styles from "../../public/css/auth/register.module.css";
+import styles from "../assets/css/auth/register.module.css";
 import { LogIn } from 'react-feather'
 
 const Register = () => {

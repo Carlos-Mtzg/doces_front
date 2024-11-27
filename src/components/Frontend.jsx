@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Outlet, Link } from "react-router-dom"
 import { Home, FileText, LogOut, Menu, Folder, FolderPlus } from "react-feather"
-import '../../public/css/sidebar.css'
+import '../assets/css/sidebar.css'
 
 const Frontend = () => {
 

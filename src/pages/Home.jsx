@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '../../public/css/user/home.module.css'
+import styles from '../assets/css/user/home.module.css'
 import DocumentCard from '../components/DocumentCard'
 
 const Home = () => {

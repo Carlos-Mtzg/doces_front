@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../public/css/user/requests.module.css';
+import styles from '../assets/css/user/requests.module.css';
 import RequestCard from '../components/RequestCard.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 

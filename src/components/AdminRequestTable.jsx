@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '../../public/css/components/admin-requests.module.css'
+import styles from '../assets/css/components/admin-requests.module.css'
 import { BarChart2, AlertCircle, FileText, ChevronsLeft, Calendar } from 'react-feather'
 import PriorityBadge from './PriorityBadge'
 import StatusBadge from './StatusBadge'

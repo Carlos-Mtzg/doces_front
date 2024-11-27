@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import styles from '../../public/css/components/request-form-modal.module.css';
-import { ArrowRightCircle } from "react-feather";
+import styles from '../assets/css/components/request-form-modal.module.css';
+import { ArrowRightCircle, X, AlertCircle } from "react-feather";
 
 const SolicitudDocumentoModal = ({ tipoDocumento }) => {
   const [formData, setFormData] = useState({
@@ -9,13 +9,36 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
     nivelEstudios: "",
     periodoAcademico: "",
     correo: "",
+    archivos: []
   });
+
+  const [tipoDocumentoModal, setTipoDocumentoModal] = useState("");
+
+  const openModal = (tipoDocumento) => {
+    setTipoDocumentoModal(tipoDocumento);
+  };
 
   const niveles = ["Secundaria", "Bachillerato", "Licenciatura", "Maestría"];
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, files } = e.target;
+
+    if (name === "archivos") {
+      setFormData((prevState) => ({
+        ...prevState,
+        archivos: [...prevState.archivos, ...Array.from(files)],
+      }));
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const handleRemoveFile = (index) => {
+    setFormData((prevState) => {
+      const archivos = [...prevState.archivos];
+      archivos.splice(index, 1);
+      return { ...prevState, archivos };
+    });
   };
 
   const handleSubmit = (e) => {
@@ -31,7 +54,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
       aria-labelledby="solicitudModalLabel"
       aria-hidden="true"
     >
-      <div className="modal-dialog modal-lg modal-dialog-centered">
+      <div className="modal-dialog modal-lg modal-dialog-centered" style={{ maxHeight: '520px' }}>
         <div className="modal-content">
           {/* Header del Modal */}
           <div className={`modal-header ${styles['custom-header']}`}>
@@ -47,7 +70,16 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
           </div>
 
           {/* Cuerpo del Modal */}
-          <div className="modal-body">
+          <div className="modal-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+            {tipoDocumento === 'Título' && (
+              <div className="alert alert-warning d-flex gap-2 mx-2" role="alert">
+                <div className='d-flex align-items-center'>
+                  <AlertCircle className='me-2' />
+                </div>
+                <div>Para este documento necesitarás adjuntar <strong>formato de certificación de estudios, recibo de pago, constancia de no adeudo y carta de liberación de estadías.</strong></div>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit}>
               <div className="row px-2 mt-4">
                 {/* Tipo de Documento */}
@@ -125,7 +157,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
                 </div>
 
                 {/* Matrícula */}
-                <div className="col-md-6 mb-1">
+                <div className="col-md-6 mb-4">
                   <label htmlFor="matricula" className="form-label">
                     Matrícula:
                   </label>
@@ -143,7 +175,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
                 </div>
 
                 {/* Correo Electrónico */}
-                <div className="col-md-6 mb-1">
+                <div className="col-md-6 mb-4">
                   <label htmlFor="correo" className="form-label">
                     Correo Electrónico:
                   </label>
@@ -159,6 +191,43 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
                     required
                   />
                 </div>
+
+                {/* Archivos {solo para titulo} */}
+                {tipoDocumento === 'Título' && (
+                  <div className="col-md-12 mb-1">
+                    <label htmlFor="archivos" className="form-label">
+                      Subir Archivos:
+                    </label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="archivos"
+                      name="archivos"
+                      multiple
+                      onChange={handleChange}
+                      required
+                    />
+                    {formData.archivos.length > 0 && (
+                      <div className="mt-4">
+                        <p>Archivos seleccionados:</p>
+                        <ul>
+                          {formData.archivos.map((archivo, index) => (
+                            <li key={index} className="text-secondary">
+                              {archivo.name}
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveFile(index)}
+                                className="btn btn-sm ms-2 border-0 text-secondary"
+                              >
+                                <X size={15} />
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </form>
           </div>
