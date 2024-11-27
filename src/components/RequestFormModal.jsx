@@ -76,7 +76,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
                 <div className='d-flex align-items-center'>
                   <AlertCircle className='me-2' />
                 </div>
-                <div>Para este documento necesitarás adjuntar <strong>formato de certificación de estudios, recibo de pago, constancia de no adeudo y carta de liberacion de estadías.</strong></div>
+                <div>Para este documento necesitarás adjuntar <strong>formato de certificación de estudios, recibo de pago, constancia de no adeudo y carta de liberación de estadías.</strong></div>
               </div>
             )}
 
