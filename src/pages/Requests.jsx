@@ -10,15 +10,15 @@ const Requests = () => {
         { id: '3', title: 'Carta de recomendación', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
         { id: '4', title: 'Certificado de estudios', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
         { id: '5', title: 'Certificado de estudios', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
-        { id: '5', title: 'Kardex', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
-        { id: '5', title: 'Certificado de estudios', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
+        { id: '6', title: 'Kardex', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
+        { id: '7', title: 'Certificado de estudios', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
 
     ];
 
     return (
         <>
             <h1 className={`py-2 mb-4 ${styles['title']}`}>Mis solicitudes</h1>
-            <div className="container-fluid">
+            <div className={`container-fluid`}>
                 <div className="row">
                     {data.map((item) => (
                         <div key={item.id} className="col-12 col-sm-6 col-md-4 col-lg-3 mt-3 mb-1">

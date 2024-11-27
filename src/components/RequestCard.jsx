@@ -8,34 +8,7 @@ Solicitud en progreso: ffbf61
 Solicitud terminada: 00ab84
  */
 
-/*
-Kardex: 1985b6
-Constancia de estudios: 009475
-Cartas de recomendacion: ffd166
-Certificados de estudio: ffbf61
-Titulo: f25c54
- */
-
 function RequestCard({ title, description, status }) {
-
-    const getColorByTitle = (title) => {
-        switch (title) {
-            case 'Kardex':
-                return '#1985b6';
-            case 'Constancia de estudios':
-                return '#009475';
-            case 'Carta de recomendación':
-                return '#ffd166';
-            case 'Certificado de estudios':
-                return '#ffbf61';
-            case 'Titulo':
-                return '#f25c54';
-            default:
-                return '#A3AED0';
-        }
-    };
-
-    const iconColor = getColorByTitle(title);
 
     const getColorByStatus = (status) => {
         switch (status) {
@@ -55,10 +28,10 @@ function RequestCard({ title, description, status }) {
     return (
         <div className={styles.cardContainer}>
             {/* Icono circular superior */}
-            <div className={styles.iconCircle} style={{ backgroundColor: iconColor}}></div>
+            <div className={styles.iconCircle} style={{ backgroundColor: footerColor}}></div>
 
             {/* Título */}
-            <h4 className={styles.cardTitle}>{title}</h4>
+            <h4 className={`px-4 ${styles['cardTitle']}`}>{title}</h4>
 
             {/* Descripción */}
             <p className={styles.cardDescription}>{description}</p>
