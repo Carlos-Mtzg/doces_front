@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../public/css/components/request-form-modal.css";
+import styles from '../../public/css/components/request-form-modal.module.css';
 import { ArrowRightCircle } from "react-feather";
 
 const SolicitudDocumentoModal = ({ tipoDocumento }) => {
@@ -34,8 +34,8 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
       <div className="modal-dialog modal-lg modal-dialog-centered">
         <div className="modal-content">
           {/* Header del Modal */}
-          <div className="modal-header">
-            <h5 className="modal-title" id="solicitudModalLabel">
+          <div className={`modal-header ${styles['custom-header']}`}>
+            <h5 className="modal-title fw-bold fs-3 px-2" id="solicitudModalLabel">
               Solicitud de Documento
             </h5>
             <button
@@ -49,7 +49,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
           {/* Cuerpo del Modal */}
           <div className="modal-body">
             <form onSubmit={handleSubmit}>
-              <div className="row p-3 mt-4">
+              <div className="row px-2 mt-4">
                 {/* Tipo de Documento */}
                 <div className="col-md-6 mb-4">
                   <label htmlFor="tipoDocumento" className="form-label">
@@ -162,18 +162,14 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
               </div>
             </form>
           </div>
-          <div className="modal-footer d-flex justify-content-end">
+          <div className="modal-footer d-flex justify-content-end px-3">
             {/* Botón para Enviar */}
-            <button
-              type="submit"
-              style={{
-                borderRadius: "8px",
-                padding: "6px 12px",
-              }}
-              className="btn-siguiente w-25 d-flex align-items-center justify-content-center"
-            >
-              Siguiente <i className="ms-2 bi bi-arrow-right"></i>
-              <ArrowRightCircle size={18} style={{}} />
+            <button type='button' className={`p-2 px-4 ${styles['next-btn']}`}>
+              <div className={`d-flex gap-2 justify-content-evenly align-items-center ${styles['next-content']}`}>
+                Siguiente
+                <ArrowRightCircle size={18} />
+              </div>
+              <span></span>
             </button>
           </div>
         </div>
