@@ -12,6 +12,7 @@ import AxiosClient from '../config/htttp-client/axios-client'
 const Login = () => {
     const { dispatch } = useContext(AuthContext)
     const navigate = useNavigate();
+    const VALIDATION_ERROR = 'Campo obligatorio *';
 
     const formik = useFormik({
         initialValues: {
@@ -19,8 +20,8 @@ const Login = () => {
             password: ''
         },
         validationSchema: yup.object().shape({
-            email: yup.string().email().required('Campo obligatorio *'),
-            password: yup.string().required('Campo obligatorio *')
+            email: yup.string().email('Ingresa un correo electrónico válido').required(VALIDATION_ERROR),
+            password: yup.string().required(VALIDATION_ERROR)
         }),
         onSubmit: async (values, { setSubmitting }) => {
             try {
@@ -30,18 +31,15 @@ const Login = () => {
                 });
                 if (response && response.accessToken) {
                     console.log(response.data);
-
-
                     localStorage.setItem('token', response.accessToken);
                     localStorage.setItem('role', response.role);
                     sessionStorage.setItem('userId', response.id);
                     dispatch({ type: 'SIGNIN', payload: response.data });
+                    alert('Registro exitoso')
                     navigate('/', { replace: true });
                     sessionStorage.setItem('user', JSON.stringify(response.data.id));
-
                 } else
                     throw Error('Error')
-
             } catch (error) {
                 console.log(response.data);
             }
@@ -56,14 +54,14 @@ const Login = () => {
             <div className={`h-100 col-12 col-md-4 d-flex justify-content-center flex-column p-5 ${styles['login-container']}`}>
                 <h1 className={`fw-semibold pb-5 ${styles['title']}`}>Inicio de Sesion</h1>
                 {/* Formulario */}
-                <form onSubmit={formik.handleSubmit}>
+                <form onSubmit={formik.handleSubmit} noValidate>
                     <div className="form-group mb-4">
                         <label htmlFor="email-input" className={`form-label fw-normal ${styles['email-label']}`}>Correo Electrónico</label>
                         <input name='email' type="text"
                             value={formik.values.email}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            className={`form-control ${styles['email-input']}`}
+                            className={`form-control ${formik.touched.email && formik.errors.email ? 'is-invalid' : ''} ${styles['email-input']}`}
                             placeholder='Escribe aqui tu correo electrónico' />
                         {formik.touched.email && formik.errors.email ? (
                             <div className="text-danger mt-1" style={{ fontSize: '15px' }}>{formik.errors.email}</div>
@@ -75,8 +73,8 @@ const Login = () => {
                             value={formik.values.password}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            className={`form-control ${styles['password-input']}`}
-                            placeholder='********' />
+                            className={`form-control ${formik.touched.password && formik.errors.password ? 'is-invalid' : ''} ${styles['password-input']}`}
+                            placeholder='****************' />
                         {formik.touched.password && formik.errors.password ? (
                             <div className="text-danger mt-1" style={{ fontSize: '15px' }}>{formik.errors.password}</div>
                         ) : null}
