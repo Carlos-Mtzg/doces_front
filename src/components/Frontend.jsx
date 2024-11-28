@@ -1,9 +1,27 @@
-import { useState } from "react";
-import { Outlet, Link } from "react-router-dom"
+import React, { useState, useContext } from "react";
+import { Outlet, Link, useNavigate } from "react-router-dom"
 import { Home, FileText, LogOut, Menu, Folder, FolderPlus } from "react-feather"
 import '../assets/css/sidebar.css'
+import AuthContext from '../config/context/auth-context';
 
 const Frontend = () => {
+    const { dispatch } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('role')
+        localStorage.removeItem('token')
+        localStorage.removeItem('userId')
+
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('role');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('userId');
+        
+        dispatch({ type: 'SIGNOUT'})
+        navigate('/auth/login');
+    };
 
     const [isExpanded, setIsExpanded] = useState(true);
 
@@ -64,7 +82,7 @@ const Frontend = () => {
                     </li> */}
                 </ul>
                 <div className="sidebar-footer">
-                    <Link to="#" className="sidebar-link sign-out">
+                    <Link to="#" className="sidebar-link sign-out" onClick={handleLogout}>
                         <LogOut />
                         <span>Cerrar Sesión</span>
                     </Link>
