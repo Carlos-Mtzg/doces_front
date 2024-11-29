@@ -14,13 +14,11 @@ const Frontend = () => {
         localStorage.removeItem('token')
         localStorage.removeItem('userId')
 
-        sessionStorage.removeItem('user');
-        sessionStorage.removeItem('role');
-        sessionStorage.removeItem('token');
+        
         sessionStorage.removeItem('userId');
         
         dispatch({ type: 'SIGNOUT'})
-        navigate('/auth/login');
+        navigate('/login');
     };
 
     const [isExpanded, setIsExpanded] = useState(true);
@@ -29,6 +27,7 @@ const Frontend = () => {
         setIsExpanded(!isExpanded);
     };
 
+    const role = localStorage.getItem('role');
     return (
         <div className="wrapper">
             <aside id="sidebar" className={isExpanded ? "expand" : ""}>
@@ -41,6 +40,8 @@ const Frontend = () => {
                     </div>
                 </div>
                 <ul className="sidebar-nav">
+                    {role === 'ROLE_USER' && (
+                        <>
                     <li className="sidebar-item">
                         <Link to="/" className="sidebar-link">
                             < Home />
@@ -53,18 +54,23 @@ const Frontend = () => {
                             <span>Mis solicitudes</span>
                         </Link>
                     </li>
+                    </>
+                    )}
+                    {role === 'ROLE_ADMIN' && (
+                        <>
                     <li className="sidebar-item">
-                        <Link to="/admin/" className="sidebar-link">
+                        <Link to="/" className="sidebar-link">
                             <Folder />
                             <span>Solicitudes</span>
                         </Link>
                     </li>
                     <li className="sidebar-item">
-                        <Link to="/admin/requestsSelected" className="sidebar-link">
+                        <Link to="/requestsSelected" className="sidebar-link">
                             <FolderPlus />
                             <span>Solicitudes Seleccionadas</span>
                         </Link>
                     </li>
+                    </>)}
                     {/* <li className="sidebar-item">
                         <Link to="#" className="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                             data-bs-target="#auth" aria-expanded="false" aria-controls="auth">

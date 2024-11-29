@@ -35,7 +35,6 @@ const Login = () => {
                     localStorage.setItem('role', response.role);
                     sessionStorage.setItem('userId', response.id);
                     dispatch({ type: 'SIGNIN', payload: response.data });
-                    alert('Registro exitoso')
                     navigate('/', { replace: true });
                     sessionStorage.setItem('user', JSON.stringify(response.data.id));
                 } else
@@ -93,7 +92,7 @@ const Login = () => {
                             <span></span>
                         </button>
 
-                        <Link className={`text-center ${styles['register-now']}`} to="/auth/register">Registrarme ahora</Link>
+                        <Link className={`text-center ${styles['register-now']}`} to="/register">Registrarme ahora</Link>
                     </div>
                 </form>
                 {/* Formulario */}

@@ -47,7 +47,7 @@ const Register = () => {
         if (response.status === 200) {
           dispatch({ type: 'SIGNIN', payload: response.data });
           alert('Registro exitoso');
-          navigate('/auth/login', { replace: true });
+          navigate('/login', { replace: true });
         } else
           throw Error('Error')
       } catch (error) {
@@ -65,7 +65,7 @@ const Register = () => {
         <h1 className={`fw-semibold ${styles['title']}`}>Registro</h1>
         <nav aria-label="breadcrumb pb-5">
           <ol className="breadcrumb">
-            <li className="breadcrumb-item"><Link className={styles['back-link']} to="/auth/login">Volver</Link></li>
+            <li className="breadcrumb-item"><Link className={styles['back-link']} to="/login">Volver</Link></li>
             <li className="breadcrumb-item active" aria-current="page">Registro</li>
           </ol>
         </nav>
