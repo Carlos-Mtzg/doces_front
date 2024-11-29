@@ -30,18 +30,15 @@ const Login = () => {
                     password: values.password
                 });
                 if (response && response.accessToken) {
-                    console.log(response.data);
                     localStorage.setItem('token', response.accessToken);
                     localStorage.setItem('role', response.role);
                     sessionStorage.setItem('userId', response.id);
-                    dispatch({ type: 'SIGNIN', payload: response.data });
-                    alert('Registro exitoso')
+                    dispatch({ type: 'SIGNIN', payload: response });
                     navigate('/', { replace: true });
-                    sessionStorage.setItem('user', JSON.stringify(response.data.id));
                 } else
                     throw Error('Error')
             } catch (error) {
-                console.log(response.data);
+                console.log(error);
             }
             finally {
                 setSubmitting(false);
@@ -93,7 +90,7 @@ const Login = () => {
                             <span></span>
                         </button>
 
-                        <Link className={`text-center ${styles['register-now']}`} to="/auth/register">Registrarme ahora</Link>
+                        <Link className={`text-center ${styles['register-now']}`} to="/register">Registrarme ahora</Link>
                     </div>
                 </form>
                 {/* Formulario */}

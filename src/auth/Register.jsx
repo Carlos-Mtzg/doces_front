@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import styles from "../assets/css/auth/register.module.css";
 import { LogIn } from 'react-feather'
 
@@ -12,6 +12,7 @@ const Register = () => {
   const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
   const VALIDATION_ERROR = 'Campo obligatorio *';
+  const [registered, setRegistered] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -45,9 +46,10 @@ const Register = () => {
         console.log('Response', response);
 
         if (response.status === 200) {
-          dispatch({ type: 'SIGNIN', payload: response.data });
+          setRegistered(true);
+          // dispatch({ type: 'SIGNIN', payload: response.data });
           alert('Registro exitoso');
-          navigate('/auth/login', { replace: true });
+          navigate('/login', { replace: true });
         } else
           throw Error('Error')
       } catch (error) {
@@ -59,13 +61,17 @@ const Register = () => {
     }
   });
 
+  if (registered) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <div className="container-fluid d-flex px-0 h-100">
       <div className={`h-100 col-12 col-md-4 d-flex justify-content-center flex-column px-5 py-3 ${styles['register-container']}`}>
         <h1 className={`fw-semibold ${styles['title']}`}>Registro</h1>
         <nav aria-label="breadcrumb pb-5">
           <ol className="breadcrumb">
-            <li className="breadcrumb-item"><Link className={styles['back-link']} to="/auth/login">Volver</Link></li>
+            <li className="breadcrumb-item"><Link className={styles['back-link']} to="/login">Volver</Link></li>
             <li className="breadcrumb-item active" aria-current="page">Registro</li>
           </ol>
         </nav>
