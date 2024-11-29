@@ -7,6 +7,7 @@ import * as yup from 'yup'
 import { useFormik } from 'formik'
 import AuthContext from '../config/context/auth-context'
 import AxiosClient from '../config/htttp-client/axios-client'
+import Swal from "sweetalert2";
 
 const Register = () => {
   const { dispatch } = useContext(AuthContext);
@@ -44,26 +45,34 @@ const Register = () => {
           password: values.password,
         });
         console.log('Response', response);
-
         if (response.status === 200) {
           setRegistered(true);
-          // dispatch({ type: 'SIGNIN', payload: response.data });
-          alert('Registro exitoso');
-          navigate('/login', { replace: true });
+          Swal.fire({
+            title: 'Registro exitoso',
+            text: 'Te has registrado correctamente. Ahora puedes iniciar sesión.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#002E5D',
+          }).then(() => {
+            navigate('/login', { replace: true });
+          });
         } else
           throw Error('Error')
       } catch (error) {
         console.log(response.data);
+        Swal.fire({
+          title: 'Error',
+          text: 'Hubo un problema al registrar tu cuenta. Por favor, intenta nuevamente.',
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#002E5D',
+        });
       }
       finally {
         setSubmitting(false);
       }
     }
   });
-
-  if (registered) {
-    return <Navigate to="/login" replace />;
-  }
 
   return (
     <div className="container-fluid d-flex px-0 h-100">

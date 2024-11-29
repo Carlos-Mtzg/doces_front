@@ -7,6 +7,7 @@ import * as yup from 'yup'
 import { useFormik } from 'formik'
 import AuthContext from '../config/context/auth-context'
 import AxiosClient from '../config/htttp-client/axios-client'
+import Swal from "sweetalert2";
 
 
 const Login = () => {
@@ -33,12 +34,25 @@ const Login = () => {
                     localStorage.setItem('token', response.accessToken);
                     localStorage.setItem('role', response.role);
                     sessionStorage.setItem('userId', response.id);
-                    dispatch({ type: 'SIGNIN', payload: response });
-                    navigate('/', { replace: true });
+                    Swal.fire({
+                        title: 'Has iniciado sesión correctamente.',
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar',
+                        confirmButtonColor: '#002E5D'
+                    }).then(()=> {
+                        dispatch({ type: 'SIGNIN', payload: response });
+                        navigate('/', { replace: true });
+                    })
                 } else
                     throw Error('Error')
             } catch (error) {
-                console.log(error);
+                Swal.fire({
+                    title: 'Error en el inicio de sesión',
+                    text: 'Las credenciales proporcionadas son incorrectas. Por favor, verifica tu correo y contraseña.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#002E5D'
+                  });
             }
             finally {
                 setSubmitting(false);
