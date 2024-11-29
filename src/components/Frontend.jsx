@@ -3,19 +3,39 @@ import { Outlet, Link, useNavigate } from "react-router-dom"
 import { Home, FileText, LogOut, Menu, Folder, FolderPlus } from "react-feather"
 import '../assets/css/sidebar.css'
 import AuthContext from '../config/context/auth-context';
+import Swal from "sweetalert2";
 
 const Frontend = () => {
     const { dispatch } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem('user');
-        localStorage.removeItem('role');
-        localStorage.removeItem('token');
-        sessionStorage.removeItem('userId');
+        Swal.fire({
+            title: "¿Deseas cerrar sesión?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, cerrar sesión',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true,
+            confirmButtonColor: '#002E5D',
+            iconColor: '#c9dae1'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem('user');
+                localStorage.removeItem('role');
+                localStorage.removeItem('token');
+                sessionStorage.removeItem('userId');
 
-        dispatch({ type: 'SIGNOUT' })
-        navigate('/login', { replace: true });
+                dispatch({ type: 'SIGNOUT' })
+                navigate('/login', { replace: true });
+                Swal.fire({
+                    title: '¡Sesión cerrada!',
+                    text: 'Has cerrado sesión correctamente',
+                    icon: 'success',
+                    confirmButtonColor: '#002E5D'
+                });
+            }
+        })
     };
 
     const [isExpanded, setIsExpanded] = useState(true);
