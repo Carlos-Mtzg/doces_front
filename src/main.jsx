@@ -1,4 +1,4 @@
-import React, { useContext,useEffect } from "react"
+import React, { useContext, useEffect } from "react"
 import ReactDOM from 'react-dom/client'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
@@ -12,10 +12,10 @@ import Login from "./auth/Login"
 import Register from "./auth/Register"
 import AdminRequests from "./pages/admin/Requests"
 import RequestsSelected from "./pages/admin/RequestsSelected"
-import { AuthProvider,AuthContext } from "./config/context/auth-context"
+import { AuthProvider, AuthContext } from "./config/context/auth-context"
 
 const AppRouter = () => {
-  const { state,dispatch} = useContext(AuthContext);
+  const { state, dispatch } = useContext(AuthContext);
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
   const userId = sessionStorage.getItem('userId');
@@ -36,21 +36,21 @@ const AppRouter = () => {
     switch (role) {
       case 'ROLE_ADMIN':
         return (
-          <>
-            <Route path="/" element={<Frontend />}>
-              <Route index element={<AdminRequests />} />
-              <Route path="/requestsSelected" element={<RequestsSelected />} />
-            </Route>
-          </>
+          // <>
+          <Route path="/" element={<Frontend />}>
+            <Route index element={<AdminRequests />} />
+            <Route path="/requestsSelected" element={<RequestsSelected />} />
+          </Route>
+          // </>
         );
       case 'ROLE_USER':
         return (
-          <>
-            <Route path="/" element={<Frontend />}>
-              <Route index element={<Home />} />
-              <Route path="requests" element={<Requests />} />
-            </Route>
-          </>
+          // <>
+          <Route path="/" element={<Frontend />}>
+            <Route index element={<Home />} />
+            <Route path="requests" element={<Requests />} />
+          </Route>
+          // </>
         );
       default:
         return null;
@@ -67,7 +67,7 @@ const AppRouter = () => {
         ) : (
           <>
             <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+            <Route path="/register" element={<Register />} />
           </>
         )}
         <Route path="/*" element={<>404 not found</>} />

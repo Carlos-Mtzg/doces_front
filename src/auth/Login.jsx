@@ -30,17 +30,15 @@ const Login = () => {
                     password: values.password
                 });
                 if (response && response.accessToken) {
-                    console.log(response.data);
                     localStorage.setItem('token', response.accessToken);
                     localStorage.setItem('role', response.role);
                     sessionStorage.setItem('userId', response.id);
-                    dispatch({ type: 'SIGNIN', payload: response.data });
+                    dispatch({ type: 'SIGNIN', payload: response });
                     navigate('/', { replace: true });
-                    sessionStorage.setItem('user', JSON.stringify(response.data.id));
                 } else
                     throw Error('Error')
             } catch (error) {
-                console.log(response.data);
+                console.log(error);
             }
             finally {
                 setSubmitting(false);

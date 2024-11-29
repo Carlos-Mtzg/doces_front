@@ -10,15 +10,12 @@ const Frontend = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('user');
-        localStorage.removeItem('role')
-        localStorage.removeItem('token')
-        localStorage.removeItem('userId')
-
-        
+        localStorage.removeItem('role');
+        localStorage.removeItem('token');
         sessionStorage.removeItem('userId');
-        
-        dispatch({ type: 'SIGNOUT'})
-        navigate('/login');
+
+        dispatch({ type: 'SIGNOUT' })
+        navigate('/login', { replace: true });
     };
 
     const [isExpanded, setIsExpanded] = useState(true);
@@ -42,35 +39,35 @@ const Frontend = () => {
                 <ul className="sidebar-nav">
                     {role === 'ROLE_USER' && (
                         <>
-                    <li className="sidebar-item">
-                        <Link to="/" className="sidebar-link">
-                            < Home />
-                            <span>Inicio</span>
-                        </Link>
-                    </li>
-                    <li className="sidebar-item">
-                        <Link to="/requests" className="sidebar-link">
-                            <FileText />
-                            <span>Mis solicitudes</span>
-                        </Link>
-                    </li>
-                    </>
+                            <li className="sidebar-item">
+                                <Link to="/" className="sidebar-link">
+                                    < Home />
+                                    <span>Inicio</span>
+                                </Link>
+                            </li>
+                            <li className="sidebar-item">
+                                <Link to="/requests" className="sidebar-link">
+                                    <FileText />
+                                    <span>Mis solicitudes</span>
+                                </Link>
+                            </li>
+                        </>
                     )}
                     {role === 'ROLE_ADMIN' && (
                         <>
-                    <li className="sidebar-item">
-                        <Link to="/" className="sidebar-link">
-                            <Folder />
-                            <span>Solicitudes</span>
-                        </Link>
-                    </li>
-                    <li className="sidebar-item">
-                        <Link to="/requestsSelected" className="sidebar-link">
-                            <FolderPlus />
-                            <span>Solicitudes Seleccionadas</span>
-                        </Link>
-                    </li>
-                    </>)}
+                            <li className="sidebar-item">
+                                <Link to="/" className="sidebar-link">
+                                    <Folder />
+                                    <span>Solicitudes</span>
+                                </Link>
+                            </li>
+                            <li className="sidebar-item">
+                                <Link to="/requestsSelected" className="sidebar-link">
+                                    <FolderPlus />
+                                    <span>Solicitudes Seleccionadas</span>
+                                </Link>
+                            </li>
+                        </>)}
                     {/* <li className="sidebar-item">
                         <Link to="#" className="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                             data-bs-target="#auth" aria-expanded="false" aria-controls="auth">

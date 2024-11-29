@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import styles from "../assets/css/auth/register.module.css";
 import { LogIn } from 'react-feather'
 
@@ -12,6 +12,7 @@ const Register = () => {
   const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
   const VALIDATION_ERROR = 'Campo obligatorio *';
+  const [registered, setRegistered] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -45,7 +46,8 @@ const Register = () => {
         console.log('Response', response);
 
         if (response.status === 200) {
-          dispatch({ type: 'SIGNIN', payload: response.data });
+          setRegistered(true);
+          // dispatch({ type: 'SIGNIN', payload: response.data });
           alert('Registro exitoso');
           navigate('/login', { replace: true });
         } else
@@ -58,6 +60,10 @@ const Register = () => {
       }
     }
   });
+
+  if (registered) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <div className="container-fluid d-flex px-0 h-100">
