@@ -18,7 +18,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
     setTipoDocumentoModal(tipoDocumento);
   };
 
-  const niveles = ["Secundaria", "Bachillerato", "Licenciatura", "Maestría"];
+  const niveles = ["TSU", "Ingenieria", "Licenciatura"];
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -149,7 +149,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
                     id="periodoAcademico"
                     name="periodoAcademico"
                     style={{ height: "48px" }}
-                    placeholder="Selecciona tu nivel de estudios"
+                    placeholder="Ingresa aqui tu cuatrimestre"
                     value={formData.periodoAcademico}
                     onChange={handleChange}
                     required
@@ -167,7 +167,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
                     id="matricula"
                     name="matricula"
                     style={{ height: "48px" }}
-                    placeholder="Escribe aquí tu matrícula"
+                    placeholder="Ingresa aquí tu matrícula"
                     value={formData.matricula}
                     onChange={handleChange}
                     required
@@ -185,7 +185,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
                     id="correo"
                     name="correo"
                     style={{ height: "48px" }}
-                    placeholder="Selecciona tu nivel de estudios"
+                    placeholder="Ingresa aqui tu correo electronico"
                     value={formData.correo}
                     onChange={handleChange}
                     required
