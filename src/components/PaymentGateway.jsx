@@ -1,18 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import styles from '../assets/css/components/payment-gateway.module.css';
 import { paymentSchema } from '../schemas/paymentSchema.js';
+import AxiosClient from '../config/htttp-client/axios-client.js';
 
-const onSubmit = async (values, actions) => {
-  console.log('onSubmit called');
-  console.log(values);
-  console.log(actions);
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  actions.resetForm();
-  console.log('submitted');
-};
+
 
 export default function PaymentGateway(props) {
+
+  const onSubmit = async (values, actions) => {
+
+    try {
+      const token = localStorage.getItem('token')
+      let userId = sessionStorage.getItem('userId')
+      const response = await AxiosClient.post(`/documentRequest/${userId}/${props.documentName}`, {}, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log('onSubmit called');
+    console.log(values);
+    console.log(actions);
+    //await new Promise((resolve) => setTimeout(resolve, 2000));
+    actions.resetForm();
+    console.log('submitted');
+  };
+
   const { values, errors, touched, isSubmitting, handleBlur, handleChange, handleSubmit } = useFormik({
     initialValues: {
       cardNumber: '',
@@ -22,6 +39,11 @@ export default function PaymentGateway(props) {
     validationSchema: paymentSchema,
     onSubmit
   });
+
+
+
+
+
 
   return (
     <>
@@ -85,13 +107,13 @@ export default function PaymentGateway(props) {
             <div style={{ fontSize: 18, marginBottom: 50 }}>Detalles</div>
             <div className={styles['detailsContainer']}>
               <div style={{ fontSize: 32, color: 'gray' }}>Domcumento: {props.documentName}</div>
-              <div style={{ fontSize: 20 }}>${props.documentPrice}00.00</div>
+              <div style={{ fontSize: 20 }}>${props.price}</div>
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'end', width: '100%', height: '100%' }}>
                 <hr />
                 <div style={{ justifyContent: 'flex-end' }}>
                   <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <div>Total:</div>
-                    <div>$00.00</div>
+                    <div>${props.price}</div>
                   </div>
                 </div>
               </div>
