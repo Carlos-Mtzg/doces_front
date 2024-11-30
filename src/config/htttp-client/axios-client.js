@@ -7,7 +7,7 @@ const AxiosClient = axios.create({
     baseURL: SERVER_URL,
 });
 
-const requestHamdler = (req) => {
+const requestHandler = (req) => {
     req.headers['Accept'] = APP_JSON;
     req.headers['Content-Type'] = APP_JSON;
     const session = JSON.parse(localStorage.getItem('user'));
@@ -16,7 +16,7 @@ const requestHamdler = (req) => {
 };
 
 AxiosClient.interceptors.request.use(
-    (req) => requestHamdler(req),
+    (req) => requestHandler(req),
     (error) => Promise.reject(error)
 );
 
