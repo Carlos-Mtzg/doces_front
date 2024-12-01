@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import './index.css'
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, useNavigate } from 'react-router-dom';
 
 import Frontend from "./components/Frontend"
 import Home from "./pages/Home"
@@ -13,6 +13,7 @@ import Register from "./auth/Register"
 import AdminRequests from "./pages/admin/Requests"
 import RequestsSelected from "./pages/admin/RequestsSelected"
 import { AuthProvider, AuthContext } from "./config/context/auth-context"
+import ResetPassword from "./auth/ResetPassword"
 
 const AppRouter = () => {
   const { state, dispatch } = useContext(AuthContext);
@@ -68,6 +69,7 @@ const AppRouter = () => {
           <>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
           </>
         )}
         <Route path="/*" element={<>404 not found</>} />

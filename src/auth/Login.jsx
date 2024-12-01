@@ -1,13 +1,14 @@
 import React, { useContext } from 'react'
-import { Form, Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styles from '../assets/css/auth/login.module.css'
-import { LogIn, Send, AlertCircle } from 'react-feather'
+import { LogIn } from 'react-feather'
 
 import * as yup from 'yup'
 import { useFormik } from 'formik'
 import AuthContext from '../config/context/auth-context'
 import AxiosClient from '../config/htttp-client/axios-client'
 import Swal from "sweetalert2";
+import RecoverPasswordModal from './components/RecoverPasswordModal'
 
 
 const Login = () => {
@@ -52,7 +53,7 @@ const Login = () => {
                     icon: 'error',
                     confirmButtonText: 'Aceptar',
                     confirmButtonColor: '#002E5D'
-                  });
+                });
             }
             finally {
                 setSubmitting(false);
@@ -111,40 +112,7 @@ const Login = () => {
             </div>
             <div className='col-8'></div>
             {/* Modal */}
-            <div className="modal fade" id="recover-password" aria-hidden="true"
-                aria-labelledby="label-modal-1">
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content">
-                        <div className={`modal-header ${styles['modal-header']}`}>
-                            <h5 className={`modal-title fw-semibold ${styles['modal-title']}`}>Recuperar Contraseña</h5>
-                            <button className="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                        </div>
-                        <Form>
-                            <div className="modal-body">
-                                <div className="form-group mb-4">
-                                    <label htmlFor="email-modal-input" className={`form-label fw-normal ${styles['email-label']}`}>Correo Electrónico</label>
-                                    <input name='email-modal-input' type="text" className={`form-control ${styles['email-input']}`} placeholder='Escribe aqui tu correo electrónico' />
-                                </div>
-                                <div className="alert alert-warning d-flex gap-2" role="alert">
-                                    <div className='d-flex align-items-center'>
-                                        <AlertCircle className='me-2' />
-                                    </div>
-                                    <div>Te enviaremos un enlace con las instrucciones para restablecer tu contraseña.</div>
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type='Submit' className={`py-2 ${styles['send-email-btn']}`}>
-                                    <div className={`${styles['send-email-content']}`}>
-                                        Enviar Correo
-                                        <Send className="ms-2" width={18} />
-                                    </div>
-                                    <span></span>
-                                </button>
-                            </div>
-                        </Form>
-                    </div>
-                </div>
-            </div>
+            <RecoverPasswordModal />
             {/* Modal */}
         </div>
     )

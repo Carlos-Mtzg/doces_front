@@ -44,7 +44,6 @@ const Register = () => {
           email: values.email,
           password: values.password,
         });
-        console.log('Response', response);
         if (response.status === 200) {
           setRegistered(true);
           Swal.fire({
