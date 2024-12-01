@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from '../assets/css/auth/login.module.css'
 import { LogIn } from 'react-feather'
@@ -9,9 +9,12 @@ import AuthContext from '../config/context/auth-context'
 import AxiosClient from '../config/htttp-client/axios-client'
 import Swal from "sweetalert2";
 import RecoverPasswordModal from './components/RecoverPasswordModal'
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 
 const Login = () => {
+    const [alert, setAlert] = useState({ open: false, severity: '', message: '', title: '' });
     const { dispatch } = useContext(AuthContext)
     const navigate = useNavigate();
     const VALIDATION_ERROR = 'Campo obligatorio *';
@@ -47,12 +50,10 @@ const Login = () => {
                 } else
                     throw Error('Error')
             } catch (error) {
-                Swal.fire({
-                    title: 'Error en el inicio de sesión',
-                    text: 'Las credenciales proporcionadas son incorrectas. Por favor, verifica tu correo y contraseña.',
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar',
-                    confirmButtonColor: '#002E5D'
+                setAlert({
+                    open: true,
+                    severity: 'error',
+                    title: 'Correo y/o contraseña incorrectos. Por favor, verifica tus datos.',
                 });
             }
             finally {
@@ -68,6 +69,16 @@ const Login = () => {
                 {/* Formulario */}
                 <form onSubmit={formik.handleSubmit} noValidate>
                     <div className="form-group mb-4">
+                        {alert.open && (
+                            <Alert
+                                severity={alert.severity}
+                                onClose={() => setAlert({ ...alert, open: false })}
+                                style={{ marginBottom: '20px' }}
+                            >
+                                <AlertTitle>{alert.title}</AlertTitle>
+                                {alert.message}
+                            </Alert>
+                        )}
                         <label htmlFor="email-input" className={`form-label fw-normal ${styles['email-label']}`}>Correo Electrónico</label>
                         <input name='email' type="text"
                             value={formik.values.email}
