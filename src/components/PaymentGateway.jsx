@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import styles from '../assets/css/components/payment-gateway.module.css';
 import { paymentSchema } from '../schemas/paymentSchema.js';
-import AxiosClient from '../config/htttp-client/axios-client.js';
-
+import AxiosClientFormData from '../config/htttp-client/axios-fortmData.js';
 
 
 export default function PaymentGateway(props) {
@@ -28,7 +27,7 @@ export default function PaymentGateway(props) {
       const token = localStorage.getItem('token')
       let userId = sessionStorage.getItem('userId')
 
-      const response = await AxiosClient.post(`/documentRequest/${userId}/${props.documentName}`, formData, {
+      const response = await AxiosClientFormData.post(`/documentRequest/${userId}/${props.documentName}`, formData, {
         headers: {
           "Content-Type" : "multipart/form-data",
           Authorization: `Bearer ${token}`
