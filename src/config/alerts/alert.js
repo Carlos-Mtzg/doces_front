@@ -15,6 +15,18 @@ export const customAlert=(title, text, icon)=>{
     });
 };
 
+export const carga=(title, text,)=>{
+    return SweetAlert.fire({
+        title ,
+        text,
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading(); // Spinner de carga
+        },
+    });
+};
+
+
 
 export const SuccesAlert=(title, text, icon)=>{
     return SweetAlert.fire({

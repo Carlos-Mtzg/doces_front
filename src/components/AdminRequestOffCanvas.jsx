@@ -5,21 +5,28 @@ import StatusBadge from './StatusBadge'
 import PriorityBadge from './PriorityBadge'
 import { useLocation, useNavigate } from 'react-router-dom';
 import AxiosMultipartClient from '../config/htttp-client/axios-client-multipart'
-import AxiosClient from '../config/htttp-client/axios-client'
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { customAlert } from '../config/alerts/alert'
+import { customAlert, carga } from '../config/alerts/alert'
+import Swal from 'sweetalert2';
+
 
 const AdminRequestOffCanvas = ({ request }) => {
+
     const fileInputRef = useRef(null);
-    const [fileName, setFileName] = useState('Selecciona un archivo');
     const navigate = useNavigate();
 
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [file, setFile] = useState("");;
 
     // Manejar el cambio en el input de archivo
+
     const handleFileChange = (event) => {
-        setSelectedFile(event.target.files[0]); // Guardar el archivo en el estado
+        if (file.size > 10 * 1024 * 1024) { // 10MB
+            alert("El archivo es demasiado grande. Máximo permitido: 10MB");
+            return;
+        }
+        setFile(event.target.files); // Guarda los archivos seleccionados
+
     };
 
     const handleButtonClick = () => {
@@ -35,7 +42,7 @@ const AdminRequestOffCanvas = ({ request }) => {
         formik.handleChange(e);
     };
 
-   
+
 
     const { priority, deliveryDate, type: fileType, status, userData: user } = request || {};
 
@@ -50,48 +57,110 @@ const AdminRequestOffCanvas = ({ request }) => {
         }),
         onSubmit: async (values) => {
             try {
+                carga(
+                    'Enviando',
+                    'El correo se esta enviando',
+                )
+
                 const formData = new FormData();
-    
+
                 formData.append('toEmail', "20223tn139@utez.edu.mx");
-                formData.append('subject', ""); 
-                formData.append('title', "");  
+                formData.append('subject', "");
+                formData.append('title', "");
                 formData.append('messageContent', values.messageContent);
                 formData.append('type', 0);
-    
-            
 
-                const token = localStorage.getItem('token');
-             
-                const response = await AxiosClient.post('/sendEmail-alert',formData,{
+                let token = localStorage.getItem('token');
+                console.log(token);
 
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'multipart/form-data'
-                      },
+                const response = await AxiosMultipartClient.post('/sendEmail-alert', formData, {
+                    headers: {'Authorization': `Bearer ${token}`},
                 })
 
-                
-
                 console.log(response);
-    
+
                 if (!response.error) {
-                    customAlert(
-                        'Envio exitoso',
+                    Swal.close(); 
+                    Swal.fire(
+                        '¡Correo enviado!',
                         'El correo se envió correctamente',
                         'success'
                     );
                 }
             } catch (error) {
-                customAlert(
-                    'Ocurrió un error',
-                    error,
+                Swal.close(); 
+                Swal.fire(
+                    'Error',
+                    error.message,
                     'error'
                 );
                 console.log(error);
             }
         },
     });
-    
+
+
+    const formikFile = useFormik({
+        initialValues: {
+
+        },
+        validationSchema: yup.object({
+            messageContent: yup.string()
+                .max(500, 'El mensaje no puede superar los 500 caracteres'),
+        }),
+        onSubmit: async (values) => {
+            try {
+                if (!file || file.length === 0) {
+                    customAlert('Error', 'Debe seleccionar un archivo', 'error');
+                    return;
+                }
+
+                carga('Enviando','El correo se esta enviando')
+
+                const formData = new FormData();
+
+                formData.append('toEmail', "20223tn139@utez.edu.mx");
+                formData.append('subject', "");
+                formData.append('title', "");
+                formData.append('messageContent', "");
+                formData.append('type', 1);
+                formData.append('file', file[0]);
+                formData.append('name', "");
+
+
+                let token = localStorage.getItem('token');
+                console.log(token);
+
+
+                const response = await AxiosMultipartClient.post('/sendEmail', formData, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                })
+
+
+                console.log(response);
+
+                if (!response.error) {
+                    Swal.close(); 
+                    Swal.fire(
+                        '¡Correo enviado!',
+                        'El correo se envió correctamente',
+                        'success'
+                    );
+                }
+            } catch (error) {
+                Swal.close(); 
+                Swal.fire(
+                    'Error',
+                    'Hubo un problema al enviar el correo. Inténtalo nuevamente.',
+                    'error'
+                );
+                console.log(error);
+            }
+        },
+    });
+
 
 
 
@@ -163,7 +232,7 @@ const AdminRequestOffCanvas = ({ request }) => {
                             style={{ resize: 'none', boxShadow: 'none' }}
                         ></textarea>
                         {formik.touched.messageContent && formik.errors.messageContent && (
-                            <div className="text-danger">{formik.errors.messageContent}</div>
+                            <div className="text-danger">{formik.errors.messageContent}  </div>
                         )}
                     </div>
                     <div className="col-1 d-flex align-items-center">
@@ -176,18 +245,18 @@ const AdminRequestOffCanvas = ({ request }) => {
                     <Paperclip size={15} className='me-2' />
                     Cargar archivo
                 </div>
-                <form>
+                <form onSubmit={formikFile.handleSubmit}>
                     <div className="input-group mb-3">
                         <button className="btn border fs-6 text-secondary" type="button" onClick={handleButtonClick}>
                             Examinar...
                         </button>
                         <label htmlFor="file-input" className="form-control rounded-end text-secondary fs-6" style={{ cursor: "pointer" }}>
-                            {fileName}
+                            {file ? file[0]?.name : "Seleccione un archivo"}
                         </label>
-                        <input id="file-input" type="file" ref={fileInputRef} style={{ display: "none" }} onChange={handleFileChange} />
+                        <input id="file-input" type="file" style={{ display: "none" }} onChange={handleFileChange} />
                     </div>
                     <div className="position-relative d-flex justify-content-end mt-4">
-                        <button type='button' className={`p-2 px-4 ${styles['send-document-btn']}`}>
+                        <button type='submit' className={`p-2 px-4 ${styles['send-document-btn']}`}>
                             <div className={`d-flex gap-2 justify-content-evenly align-items-center ${styles['send-document-content']}`}>
                                 Enviar Documento
                                 <File size={15} />
