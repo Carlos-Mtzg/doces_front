@@ -3,25 +3,97 @@ import { ChevronsRight, BarChart2, AlertCircle, FileText, Calendar, Send, Paperc
 import styles from '../assets/css/components/offcanvas-requests.module.css'
 import StatusBadge from './StatusBadge'
 import PriorityBadge from './PriorityBadge'
+import { useLocation, useNavigate } from 'react-router-dom';
+import AxiosMultipartClient from '../config/htttp-client/axios-client-multipart'
+import AxiosClient from '../config/htttp-client/axios-client'
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { customAlert } from '../config/alerts/alert'
 
 const AdminRequestOffCanvas = ({ request }) => {
     const fileInputRef = useRef(null);
     const [fileName, setFileName] = useState('Selecciona un archivo');
+    const navigate = useNavigate();
+
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    // Manejar el cambio en el input de archivo
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]); // Guardar el archivo en el estado
+    };
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setFileName(file.name);
-        } else {
-            setFileName('Selecciona un archivo');
-        }
+    const handleInputChange = (e) => {
+        const { id, value } = e.target;
+        setHasContent((prevState) => ({
+            ...prevState,
+            [id]: value !== ''
+        }));
+        formik.handleChange(e);
     };
 
+   
+
     const { priority, deliveryDate, type: fileType, status, userData: user } = request || {};
+
+
+    const formik = useFormik({
+        initialValues: {
+            messageContent: '', // Campo inicial para el textarea
+        },
+        validationSchema: yup.object({
+            messageContent: yup.string()
+                .max(500, 'El mensaje no puede superar los 500 caracteres'),
+        }),
+        onSubmit: async (values) => {
+            try {
+                const formData = new FormData();
+    
+                formData.append('toEmail', "20223tn139@utez.edu.mx");
+                formData.append('subject', ""); 
+                formData.append('title', "");  
+                formData.append('messageContent', values.messageContent);
+                formData.append('type', 0);
+    
+            
+
+                const token = localStorage.getItem('token');
+             
+                const response = await AxiosClient.post('/sendEmail-alert',formData,{
+
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data'
+                      },
+                })
+
+                
+
+                console.log(response);
+    
+                if (!response.error) {
+                    customAlert(
+                        'Envio exitoso',
+                        'El correo se envió correctamente',
+                        'success'
+                    );
+                }
+            } catch (error) {
+                customAlert(
+                    'Ocurrió un error',
+                    error,
+                    'error'
+                );
+                console.log(error);
+            }
+        },
+    });
+    
+
+
 
     return (
         <div className={`${styles['custom-offcanvas']} offcanvas offcanvas-end`} tabIndex="-1" id="offCanvasRequests" aria-labelledby="offCanvasRequestsLabel">
@@ -77,16 +149,28 @@ const AdminRequestOffCanvas = ({ request }) => {
                         {user || 'Sin información'}
                     </div>
                 </div>
-                <form className={`d-flex justify-content-between mt-5 mb-5 py-2 ${styles['text-container']}`}>
+                <form className={`d-flex justify-content-between mt-5 mb-5 py-2 ${styles['text-container']}`} onSubmit={formik.handleSubmit}>
                     <div className="col-10">
-                        <textarea className='form-control border-0' rows={1} placeholder='Notificar de información errónea...' style={{ resize: 'none', boxShadow: 'none' }}></textarea>
+                        <textarea
+                            id="messageContent"
+                            name="messageContent"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.messageContent}
+                            className='form-control border-0'
+                            rows={1}
+                            placeholder='Notificar de información errónea...'
+                            style={{ resize: 'none', boxShadow: 'none' }}
+                        ></textarea>
+                        {formik.touched.messageContent && formik.errors.messageContent && (
+                            <div className="text-danger">{formik.errors.messageContent}</div>
+                        )}
                     </div>
                     <div className="col-1 d-flex align-items-center">
                         <button className='btn text-secondary' type='submit'>
                             <Send size={20} />
                         </button>
                     </div>
-
                 </form>
                 <div className='fs-6 text-secondary mb-2'>
                     <Paperclip size={15} className='me-2' />
