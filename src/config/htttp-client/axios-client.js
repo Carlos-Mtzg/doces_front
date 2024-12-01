@@ -7,18 +7,16 @@ const AxiosClient = axios.create({
     baseURL: SERVER_URL,
 });
 
-const requestHandler = (req) => {
+const requestHamdler = (req) => {
     req.headers['Accept'] = APP_JSON;
-    if (!(req.data instanceof FormData)) {
-        req.headers['Content-Type'] = APP_JSON;
-    }
+    req.headers['Content-Type'] = APP_JSON;
     const session = JSON.parse(localStorage.getItem('user'));
     if (session?.token) req.headers['Authorization'] = `Bearer ${session.token}`;
     return req;
 };
 
 AxiosClient.interceptors.request.use(
-    (req) => requestHandler(req),
+    (req) => requestHamdler(req),
     (error) => Promise.reject(error)
 );
 
