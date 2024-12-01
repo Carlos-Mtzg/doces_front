@@ -51,7 +51,6 @@ function DocumentCard() {
                             <span></span>
                         </button>
                     </div>
-                    <p style={{ color: 'rgba(0, 0, 0, 0.5)', marginTop: 16}}>$100.00</p>
                 </div>
             </div>
             {/* Constancia de estudios */}
@@ -77,7 +76,6 @@ function DocumentCard() {
                             <span></span>
                         </button>
                     </div>
-                    <p style={{ color: 'rgba(0, 0, 0, 0.5)', marginTop: 16}}>$150.00</p>
                 </div>
             </div>
 
@@ -104,7 +102,6 @@ function DocumentCard() {
                             <span></span>
                         </button>
                     </div>
-                    <p style={{ color: 'rgba(0, 0, 0, 0.5)', marginTop: 16}}>$250.00</p>
                 </div>
             </div>
 
@@ -131,7 +128,6 @@ function DocumentCard() {
                             <span></span>
                         </button>
                     </div>
-                    <p style={{ color: 'rgba(0, 0, 0, 0.5)', marginTop: 16}}>$200.00</p>
                 </div>
             </div>
 
@@ -158,7 +154,6 @@ function DocumentCard() {
                             <span></span>
                         </button>
                     </div>
-                    <p style={{ color: 'rgba(0, 0, 0, 0.5)', marginTop: 16}}>$300.00</p>
                 </div>
             </div>
             <RequestFormModal tipoDocumento={selectedDocument} />
