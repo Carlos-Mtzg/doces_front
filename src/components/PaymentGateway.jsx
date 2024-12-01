@@ -3,6 +3,9 @@ import { useFormik } from 'formik';
 import styles from '../assets/css/components/payment-gateway.module.css';
 import { paymentSchema } from '../schemas/paymentSchema.js';
 
+import AxiosClientFormData from '../config/htttp-client/axios-fortmData.js';
+
+
 const onSubmit = async (values, actions) => {
   console.log('onSubmit called');
   console.log(values);
@@ -13,6 +16,44 @@ const onSubmit = async (values, actions) => {
 };
 
 export default function PaymentGateway(props) {
+
+  const [files, setFiles] = useState(props.archivos);
+
+  // useEffect(() => {
+  //   if (files != null) {
+  //     files.forEach(element => {
+  //       console.log("Archivo: ", element.name);
+  //     });
+  //   }
+  // }, [files]);
+
+
+  const onSubmit = async (values, actions) => {
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('files', file);
+    });
+
+    try {
+      const token = localStorage.getItem('token')
+      let userId = sessionStorage.getItem('userId')
+
+      const response = await AxiosClientFormData.post(`/documentRequest/${userId}/${props.documentName}`, formData, {
+        headers: {
+          "Content-Type" : "multipart/form-data",
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log('Files uploaded successfully:', response.data);
+    } catch (error) {
+      console.log(error);
+    }
+
+    actions.resetForm();
+    console.log('submitted');
+  };
+
+
   const { values, errors, touched, isSubmitting, handleBlur, handleChange, handleSubmit } = useFormik({
     initialValues: {
       cardNumber: '',
