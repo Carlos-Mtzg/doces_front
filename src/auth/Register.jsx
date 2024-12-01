@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import styles from "../assets/css/auth/register.module.css";
 import { LogIn } from 'react-feather'
 
@@ -7,11 +7,13 @@ import * as yup from 'yup'
 import { useFormik } from 'formik'
 import AuthContext from '../config/context/auth-context'
 import AxiosClient from '../config/htttp-client/axios-client'
+import Swal from "sweetalert2";
 
 const Register = () => {
   const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
   const VALIDATION_ERROR = 'Campo obligatorio *';
+  const [registered, setRegistered] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -42,16 +44,28 @@ const Register = () => {
           email: values.email,
           password: values.password,
         });
-        console.log('Response', response);
-
         if (response.status === 200) {
-          dispatch({ type: 'SIGNIN', payload: response.data });
-          alert('Registro exitoso');
-          navigate('/auth/login', { replace: true });
+          setRegistered(true);
+          Swal.fire({
+            title: 'Registro exitoso',
+            text: 'Te has registrado correctamente. Ahora puedes iniciar sesión.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#002E5D',
+          }).then(() => {
+            navigate('/login', { replace: true });
+          });
         } else
           throw Error('Error')
       } catch (error) {
         console.log(response.data);
+        Swal.fire({
+          title: 'Error',
+          text: 'Hubo un problema al registrar tu cuenta. Por favor, intenta nuevamente.',
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#002E5D',
+        });
       }
       finally {
         setSubmitting(false);
@@ -65,7 +79,7 @@ const Register = () => {
         <h1 className={`fw-semibold ${styles['title']}`}>Registro</h1>
         <nav aria-label="breadcrumb pb-5">
           <ol className="breadcrumb">
-            <li className="breadcrumb-item"><Link className={styles['back-link']} to="/auth/login">Volver</Link></li>
+            <li className="breadcrumb-item"><Link className={styles['back-link']} to="/login">Volver</Link></li>
             <li className="breadcrumb-item active" aria-current="page">Registro</li>
           </ol>
         </nav>

@@ -3,24 +3,39 @@ import { Outlet, Link, useNavigate } from "react-router-dom"
 import { Home, FileText, LogOut, Menu, Folder, FolderPlus } from "react-feather"
 import '../assets/css/sidebar.css'
 import AuthContext from '../config/context/auth-context';
+import Swal from "sweetalert2";
 
 const Frontend = () => {
     const { dispatch } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem('user');
-        localStorage.removeItem('role')
-        localStorage.removeItem('token')
-        localStorage.removeItem('userId')
+        Swal.fire({
+            title: "¿Deseas cerrar sesión?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, cerrar sesión',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true,
+            confirmButtonColor: '#002E5D',
+            iconColor: '#c9dae1'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem('user');
+                localStorage.removeItem('role');
+                localStorage.removeItem('token');
+                sessionStorage.removeItem('userId');
 
-        sessionStorage.removeItem('user');
-        sessionStorage.removeItem('role');
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('userId');
-        
-        dispatch({ type: 'SIGNOUT'})
-        navigate('/auth/login');
+                dispatch({ type: 'SIGNOUT' })
+                navigate('/login', { replace: true });
+                Swal.fire({
+                    title: '¡Sesión cerrada!',
+                    text: 'Has cerrado sesión correctamente',
+                    icon: 'success',
+                    confirmButtonColor: '#002E5D'
+                });
+            }
+        })
     };
 
     const [isExpanded, setIsExpanded] = useState(true);
@@ -29,6 +44,7 @@ const Frontend = () => {
         setIsExpanded(!isExpanded);
     };
 
+    const role = localStorage.getItem('role');
     return (
         <div className="wrapper">
             <aside id="sidebar" className={isExpanded ? "expand" : ""}>
@@ -41,30 +57,37 @@ const Frontend = () => {
                     </div>
                 </div>
                 <ul className="sidebar-nav">
-                    <li className="sidebar-item">
-                        <Link to="/" className="sidebar-link">
-                            < Home />
-                            <span>Inicio</span>
-                        </Link>
-                    </li>
-                    <li className="sidebar-item">
-                        <Link to="/requests" className="sidebar-link">
-                            <FileText />
-                            <span>Mis solicitudes</span>
-                        </Link>
-                    </li>
-                    <li className="sidebar-item">
-                        <Link to="/admin/" className="sidebar-link">
-                            <Folder />
-                            <span>Solicitudes</span>
-                        </Link>
-                    </li>
-                    <li className="sidebar-item">
-                        <Link to="/admin/requestsSelected" className="sidebar-link">
-                            <FolderPlus />
-                            <span>Solicitudes Seleccionadas</span>
-                        </Link>
-                    </li>
+                    {role === 'ROLE_USER' && (
+                        <>
+                            <li className="sidebar-item">
+                                <Link to="/" className="sidebar-link">
+                                    < Home />
+                                    <span>Inicio</span>
+                                </Link>
+                            </li>
+                            <li className="sidebar-item">
+                                <Link to="/requests" className="sidebar-link">
+                                    <FileText />
+                                    <span>Mis solicitudes</span>
+                                </Link>
+                            </li>
+                        </>
+                    )}
+                    {role === 'ROLE_ADMIN' && (
+                        <>
+                            <li className="sidebar-item">
+                                <Link to="/" className="sidebar-link">
+                                    <Folder />
+                                    <span>Solicitudes</span>
+                                </Link>
+                            </li>
+                            <li className="sidebar-item">
+                                <Link to="/requestsSelected" className="sidebar-link">
+                                    <FolderPlus />
+                                    <span>Solicitudes Seleccionadas</span>
+                                </Link>
+                            </li>
+                        </>)}
                     {/* <li className="sidebar-item">
                         <Link to="#" className="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                             data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
