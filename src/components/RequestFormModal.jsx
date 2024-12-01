@@ -280,7 +280,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento }) => {
 
       {/* PaymentGatewayModal */}
       {showPaymentGateway && (
-        <PaymentGateway documentName={tipoDocumento} formData={formData} price={price} />
+        <PaymentGateway documentName={tipoDocumento} formData={formData} archivos={formData.archivos} price={price} />
       )}
 
 

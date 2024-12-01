@@ -9,7 +9,9 @@ const AxiosClient = axios.create({
 
 const requestHandler = (req) => {
     req.headers['Accept'] = APP_JSON;
-    req.headers['Content-Type'] = APP_JSON;
+    if (!(req.data instanceof FormData)) {
+        req.headers['Content-Type'] = APP_JSON;
+    }
     const session = JSON.parse(localStorage.getItem('user'));
     if (session?.token) req.headers['Authorization'] = `Bearer ${session.token}`;
     return req;

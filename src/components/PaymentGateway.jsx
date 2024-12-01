@@ -7,25 +7,38 @@ import AxiosClient from '../config/htttp-client/axios-client.js';
 
 
 export default function PaymentGateway(props) {
+  const [files, setFiles] = useState(props.archivos);
+
+  // useEffect(() => {
+  //   if (files != null) {
+  //     files.forEach(element => {
+  //       console.log("Archivo: ", element.name);
+  //     });
+  //   }
+  // }, [files]);
+
 
   const onSubmit = async (values, actions) => {
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('files', file);
+    });
 
     try {
       const token = localStorage.getItem('token')
       let userId = sessionStorage.getItem('userId')
-      const response = await AxiosClient.post(`/documentRequest/${userId}/${props.documentName}`, {}, {
+
+      const response = await AxiosClient.post(`/documentRequest/${userId}/${props.documentName}`, formData, {
         headers: {
-            Authorization: `Bearer ${token}`
+          "Content-Type" : "multipart/form-data",
+          Authorization: `Bearer ${token}`
         }
-    });
+      });
+      console.log('Files uploaded successfully:', response.data);
     } catch (error) {
       console.log(error);
     }
 
-    console.log('onSubmit called');
-    console.log(values);
-    console.log(actions);
-    //await new Promise((resolve) => setTimeout(resolve, 2000));
     actions.resetForm();
     console.log('submitted');
   };
