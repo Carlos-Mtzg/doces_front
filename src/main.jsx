@@ -72,6 +72,7 @@ const AppRouter = () => {
             <Route path="/reset-password/:token" element={<ResetPassword />} />
           </>
         )}
+        <Route path="/" element={<Login />} />
         <Route path="/*" element={<>404 not found</>} />
       </>
     )
