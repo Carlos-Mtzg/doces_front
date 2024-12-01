@@ -3,10 +3,11 @@ import { ChevronsRight, BarChart2, AlertCircle, FileText, Calendar, Send, Paperc
 import styles from '../assets/css/components/offcanvas-requests.module.css'
 import StatusBadge from './StatusBadge'
 import PriorityBadge from './PriorityBadge'
-
+import AxiosClient from '../config/htttp-client/axios-client'
 const AdminRequestOffCanvas = ({ request }) => {
     const fileInputRef = useRef(null);
     const [fileName, setFileName] = useState('Selecciona un archivo');
+
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
@@ -21,7 +22,25 @@ const AdminRequestOffCanvas = ({ request }) => {
         }
     };
 
-    const { priority, deliveryDate, type: fileType, status, userData: user } = request || {};
+
+    const handlechageId = async () => {
+        const adminId = sessionStorage.setItem('userId');
+        const token = localStorage.setItem('token');
+        try {
+            const response = await AxiosClient.put(`/admin/${request.id}/${adminId}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log('Admin ID updated:', response);
+        } catch (error) {
+            console.error('Error updating admin ID:', error);
+        }
+
+
+    };
+
+    const { priority, type: fileType, status, userData: user } = request || {};
 
     return (
         <div className={`${styles['custom-offcanvas']} offcanvas offcanvas-end`} tabIndex="-1" id="offCanvasRequests" aria-labelledby="offCanvasRequestsLabel">
@@ -41,15 +60,7 @@ const AdminRequestOffCanvas = ({ request }) => {
                         <PriorityBadge priority={priority} />
                     </div>
                 </div>
-                <div className="row d-flex mb-4">
-                    <div className="col-6 fs-6 text-secondary fw-bold">
-                        <Calendar size={20} className='me-2' />
-                        Fecha de Entrega
-                    </div>
-                    <div className="col-6">
-                        {deliveryDate || 'No especificada'}
-                    </div>
-                </div>
+
                 <div className="row d-flex mb-4">
                     <div className="col-6 fs-6 text-secondary fw-bold">
                         <FileText size={20} className='me-2' />
@@ -102,13 +113,19 @@ const AdminRequestOffCanvas = ({ request }) => {
                         </label>
                         <input id="file-input" type="file" ref={fileInputRef} style={{ display: "none" }} onChange={handleFileChange} />
                     </div>
-                    <div className="position-relative d-flex justify-content-end mt-4">
-                        <button type='button' className={`p-2 px-4 ${styles['send-document-btn']}`}>
-                            <div className={`d-flex gap-2 justify-content-evenly align-items-center ${styles['send-document-content']}`}>
+
+                    <div className="position-relative d-flex justify-content-end gap-3 mt-4">
+                        <button type="button" className={`btn btn-primary ${styles['send-document-btn']}`} onClick={handlechageId}>
+                            <div className={`d-flex gap-2 align-items-center ${styles['send-document-content']}`}>
+                                Seleccionar Solicitud
+                                <File size={15} />
+                            </div>
+                        </button>
+                        <button type="button" className={`btn btn-secondary ${styles['send-document-btn']}`}>
+                            <div className={`d-flex gap-2 align-items-center ${styles['send-document-content']}`}>
                                 Enviar Documento
                                 <File size={15} />
                             </div>
-                            <span></span>
                         </button>
                     </div>
                 </form>

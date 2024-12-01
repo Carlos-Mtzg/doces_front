@@ -1,36 +1,42 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from '../../assets/css/admin/requests.module.css'
 import AdminRequestTable from '../../components/AdminRequestTable'
 import AdminRequestOffCanvas from '../../components/AdminRequestOffCanvas';
+import AxiosClient from '../../config/htttp-client/axios-client';
 
 
 const RequestsSelected = () => {
-    const [requests] = useState([
-        {
-            id: 1,
-            type: "Certificado",
-            deliveryDate: "12/12/2024",
-            priority: "hight",
-            status: "in-progress",
-            userData: "Usuario 1"
-        },
-        {
-            id: 2,
-            type: "Titulo",
-            deliveryDate: "11/11/2024",
-            priority: "medium",
-            status: "pending",
-            userData: "Usuario 2"
-        },
-        {
-            id: 3,
-            type: "Kardex",
-            deliveryDate: "09/11/2024",
-            priority: "down",
-            status: "completed",
-            userData: "Usuario 2"
-        }
-    ]);
+const [requests, setRequests] = useState([]);
+const token = localStorage.getItem('token');
+
+
+    useEffect(() => {
+
+        const Requests = async () => {
+            try {
+                const response = await AxiosClient.get('/documentRequest/', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                console.log(response);
+                
+                const formattedRequests = response.map((request) => ({
+                    id: request.id,
+                    type: request.documentName,
+                    priority: request.priority,
+                    status: request.status,
+                    userData: `Usuario ${request.user_id}`
+                }));
+                setRequests(formattedRequests);
+            } catch (error) {
+                console.error("error al trare la infor", error);
+
+            }
+        };
+
+        Requests();
+    }, [token]);
 
     const [selectedRequest, setSelectedRequest] = useState(null);
 

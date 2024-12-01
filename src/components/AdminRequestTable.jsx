@@ -1,10 +1,11 @@
 import React from 'react'
 import styles from '../assets/css/components/admin-requests.module.css'
-import { BarChart2, AlertCircle, FileText, ChevronsLeft, Calendar } from 'react-feather'
+import { BarChart2, AlertCircle, FileText, ChevronsLeft } from 'react-feather'
 import PriorityBadge from './PriorityBadge'
 import StatusBadge from './StatusBadge'
 
 const AdminRequestTable = ({ requests, onRequestSelect }) => {
+    
     return (
         <div className="table-responsive">
             <table className="table table-bordered caption-top table-hover text-center">
@@ -14,10 +15,6 @@ const AdminRequestTable = ({ requests, onRequestSelect }) => {
                         <th className='text-secondary fw-bold'>
                             <FileText style={{ width: '18px', marginRight: '8px' }}></FileText>
                             Tipo de Documento
-                        </th>
-                        <th className="border-end border-secondary-subtle text-secondary fw-bold">
-                            <Calendar style={{ width: '18px', marginRight: '8px' }}></Calendar>
-                            Fecha de Entrega
                         </th>
                         <th className="border-end border-secondary-subtle text-secondary fw-bold">
                             <AlertCircle style={{ width: '18px', marginRight: '8px' }}></AlertCircle>
@@ -33,9 +30,11 @@ const AdminRequestTable = ({ requests, onRequestSelect }) => {
                 <tbody>
                     {requests.map((request) => (
                         <tr key={request.id} className="text-center">
+
+                           
                             <td style={{ borderLeft: 'none' }} className='text-secondary fw-bold'>{request.id}</td>
                             <td className='text-secondary'>{request.type}</td>
-                            <td className='text-secondary'>{request.deliveryDate}</td>
+                            
                             <td>
                                 <PriorityBadge priority={request.priority} />
                             </td>
