@@ -36,6 +36,7 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                 }
             })
             const user = userResponse;
+            localStorage.setItem('user-id', user.id);
 
             const formData = new FormData();
             formData.append('toEmail', user.email);
