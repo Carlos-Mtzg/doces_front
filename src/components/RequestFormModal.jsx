@@ -13,32 +13,25 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
   const VALIDATION_ERROR = 'Campo obligatorio *';
   const [currentSection, setCurrentSection] = useState(1);
   const [alert, setAlert] = useState({ open: false, severity: '', message: '', title: '' });
+  const niveles = ["TSU", "Ingenieria", "Licenciatura"];
   const [formData, setFormData] = useState({
     archivos: []
   });
 
-  const niveles = ["TSU", "Ingenieria", "Licenciatura"];
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-
-    if (name === "archivos") {
-      setFormData((prevState) => ({
-        ...prevState,
-        archivos: [...prevState.archivos, ...Array.from(files)],
-      }));
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    const { files } = e.target;
+    const archivosSeleccionados = Array.from(files);
+    formik.setFieldValue("archivos", archivosSeleccionados);
   };
-
+  
   const handleRemoveFile = (index) => {
-    setFormData((prevState) => {
-      const archivos = [...prevState.archivos];
-      archivos.splice(index, 1);
-      return { ...prevState, archivos };
-    });
+    const nuevosArchivos = [...formik.values.archivos];
+    nuevosArchivos.splice(index, 1);
+    formik.setFieldValue("archivos", nuevosArchivos);
   };
+  
+  
 
   const formik = useFormik({
     initialValues: {
@@ -71,26 +64,59 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
         .required('El CVV es requerido')
         .matches(/^\d{3,4}$/, 'El CVV debe tener 3 o 4 dígitos')
     }),
-
     onSubmit: async (values, { setSubmitting }) => {
-
-      //const formData2 = new FormData();
-      values.archivos.forEach(file => {
-        formData.append('files', file);
-      });
-
-
+      const formData = new FormData();
+    
+      // Agregar archivos al FormData
+      if (values.archivos && values.archivos.length > 0) {
+        values.archivos.forEach((file) => {
+          formData.append("files", file);
+        });
+      } else {
+        setAlert({
+          open: true,
+          severity: 'error',
+          title: 'Error',
+          message: 'Debe seleccionar al menos un archivo.',
+        });
+        setSubmitting(false);
+        return;
+      }
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+      
+      formData.append("nombre", values.nombre);
+      formData.append("matricula", values.matricula);
+      formData.append("nivelEstudios", values.nivelEstudios);
+      formData.append("periodoAcademico", values.periodoAcademico);
+      formData.append("correo", values.correo);
+      formData.append("cardNumber", values.cardNumber);
+      formData.append("expirationDate", values.expirationDate);
+      formData.append("cvv", values.cvv);
+    
       try {
-        const token = localStorage.getItem('token')
-        let userId = sessionStorage.getItem('userId')
-
+        const token = localStorage.getItem('token');
+        const userId = sessionStorage.getItem('userId');
+        
+        if (!userId) {
+          setAlert({
+            open: true,
+            severity: 'error',
+            title: 'Error',
+            message: 'No se pudo encontrar el ID de usuario.',
+          });
+          setSubmitting(false);
+          return;
+        }
+    
         const response = await AxiosClientFormData.post(`/documentRequest/${userId}/${tipoDocumento}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`
-          }
-
+            Authorization: `Bearer ${token}`,
+          },
         });
+    
         if (response) {
           setAlert({
             open: true,
@@ -104,22 +130,24 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
             open: true,
             severity: 'error',
             title: 'Error',
-            message: '¡Ocurrió un error inesperado!, verifica tus datos e inténtalo de nuevo más tarde'
+            message: '¡Ocurrió un error inesperado!, verifica tus datos e inténtalo de nuevo más tarde',
           });
           formik.resetForm();
         }
       } catch (error) {
-        console.log(error);
-
+        console.error(error);
         setAlert({
           open: true,
           severity: 'error',
-          title: '¡Ocurrió un error inesperado!, verifica tus datos e inténtalo de nuevo más tarde',
+          title: 'Error',
+          message: '¡Ocurrió un error inesperado!',
         });
       } finally {
         setSubmitting(false);
       }
     }
+    
+    
   });
 
   const handleNext = () => {
