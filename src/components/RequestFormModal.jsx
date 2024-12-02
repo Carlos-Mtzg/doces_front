@@ -68,7 +68,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
       const formData = new FormData();
     
       // Agregar archivos al FormData
-      if (values.archivos && values.archivos.length > 0) {
+      if (values.archivos && values.archivos.length >= 0) {
         values.archivos.forEach((file) => {
           formData.append("files", file);
         });
