@@ -4,7 +4,6 @@ import { ArrowRightCircle, X, AlertCircle, ArrowLeftCircle } from "react-feather
 import PropTypes from 'prop-types';
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-import AxiosClient from '../config/htttp-client/axios-client'
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import AxiosClientFormData from "../config/htttp-client/axios-fortmData";
@@ -14,32 +13,25 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
   const VALIDATION_ERROR = 'Campo obligatorio *';
   const [currentSection, setCurrentSection] = useState(1);
   const [alert, setAlert] = useState({ open: false, severity: '', message: '', title: '' });
+  const niveles = ["TSU", "Ingenieria", "Licenciatura"];
   const [formData, setFormData] = useState({
     archivos: []
   });
 
-  const niveles = ["TSU", "Ingenieria", "Licenciatura"];
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-
-    if (name === "archivos") {
-      setFormData((prevState) => ({
-        ...prevState,
-        archivos: [...prevState.archivos, ...Array.from(files)],
-      }));
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    const { files } = e.target;
+    const archivosSeleccionados = Array.from(files);
+    formik.setFieldValue("archivos", archivosSeleccionados);
   };
-
+  
   const handleRemoveFile = (index) => {
-    setFormData((prevState) => {
-      const archivos = [...prevState.archivos];
-      archivos.splice(index, 1);
-      return { ...prevState, archivos };
-    });
+    const nuevosArchivos = [...formik.values.archivos];
+    nuevosArchivos.splice(index, 1);
+    formik.setFieldValue("archivos", nuevosArchivos);
   };
+  
+  
 
   const formik = useFormik({
     initialValues: {
@@ -72,33 +64,68 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
         .required('El CVV es requerido')
         .matches(/^\d{3,4}$/, 'El CVV debe tener 3 o 4 dígitos')
     }),
-
     onSubmit: async (values, { setSubmitting }) => {
-
-      //const formData2 = new FormData();
-      values.archivos.forEach(file => {
-        formData.append('files', file);
-      });
-
-
+      const formData = new FormData();
+    
+      // Agregar archivos al FormData
+      if (values.archivos && values.archivos.length > 0) {
+        values.archivos.forEach((file) => {
+          formData.append("files", file); // El nombre "files" debe coincidir con @RequestParam en el backend
+        });
+      } else {
+        // Si no se proporcionan archivos, mostrar una alerta (opcional)
+        setAlert({
+          open: true,
+          severity: 'error',
+          title: 'Error',
+          message: 'Debe seleccionar al menos un archivo.',
+        });
+        setSubmitting(false); // Finalizar el envío sin realizar la solicitud
+        return;
+      }
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+      
+      // Agregar otros campos del formulario
+      formData.append("nombre", values.nombre);
+      formData.append("matricula", values.matricula);
+      formData.append("nivelEstudios", values.nivelEstudios);
+      formData.append("periodoAcademico", values.periodoAcademico);
+      formData.append("correo", values.correo);
+      formData.append("cardNumber", values.cardNumber);
+      formData.append("expirationDate", values.expirationDate);
+      formData.append("cvv", values.cvv);
+    
       try {
-        const token = localStorage.getItem('token')
-        let userId = sessionStorage.getItem('userId')
-
+        const token = localStorage.getItem('token');
+        const userId = sessionStorage.getItem('userId');
+        
+        if (!userId) {
+          setAlert({
+            open: true,
+            severity: 'error',
+            title: 'Error',
+            message: 'No se pudo encontrar el ID de usuario.',
+          });
+          setSubmitting(false);
+          return;
+        }
+    
         const response = await AxiosClientFormData.post(`/documentRequest/${userId}/${tipoDocumento}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`
-          }
-
+            Authorization: `Bearer ${token}`,
+          },
         });
+    
         if (response) {
           console.log('Files uploaded successfully:', response.data);
           setAlert({
             open: true,
             severity: 'success',
             title: 'Solicitud creada exitosamente',
-            message: 'Su solicitud ha sido registrada y será gestionada por el personal de servicios escolares. Le recomendamos estar atento a su correo electrónico para recibir actualizaciones sobre el proceso.',
+            message: 'Su solicitud ha sido registrada.',
           });
           formik.resetForm();
         } else {
@@ -106,22 +133,23 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
             open: true,
             severity: 'error',
             title: 'Error',
-            message: '¡Ocurrió un error inesperado!, verifica tus datos e inténtalo de nuevo más tarde'
+            message: '¡Ocurrió un error inesperado!',
           });
-          formik.resetForm();
         }
       } catch (error) {
-        console.log(error);
-
+        console.error(error);
         setAlert({
           open: true,
           severity: 'error',
-          title: '¡Ocurrió un error inesperado!, verifica tus datos e inténtalo de nuevo más tarde',
+          title: 'Error',
+          message: '¡Ocurrió un error inesperado!',
         });
       } finally {
-        setSubmitting(false);
+        setSubmitting(false); // Asegurarse de que el formulario no se quede en estado de envío
       }
     }
+    
+    
   });
 
   const handleNext = () => {
