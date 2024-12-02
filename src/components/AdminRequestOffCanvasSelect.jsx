@@ -41,7 +41,8 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
 
     const handleButtonError = async (event) => {
         event.preventDefault();
-        const user_id = request.userData.match(/\d+/)[0];
+        //const user_id = request.userData.match(/\d+/)[0];
+        const user_id = data.id;
         try {
             const userResponse = await AxiosClient.get(`/user/${user_id}`, {
                 headers: {
@@ -151,7 +152,8 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
     const handleSendEmail = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('token');
-        const user_id = request.userData.match(/\d+/)[0];
+        //const user_id = request.userData.match(/\d+/)[0];
+        const user_id = data.id;
         console.log("user_id", user_id);
 
         try {
