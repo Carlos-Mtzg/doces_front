@@ -1,20 +1,32 @@
-import React, { useRef, useState } from 'react'
-import { ChevronsRight, BarChart2, AlertCircle, FileText, Send, Paperclip, File } from 'react-feather'
-import styles from '../assets/css/components/offcanvas-requests.module.css'
-import StatusBadge from './StatusBadge'
-import PriorityBadge from './PriorityBadge'
-import AxiosClient from '../config/htttp-client/axios-client'
-import AxiosFormData from '../config/htttp-client/axios-fortmData'
-import Swal from 'sweetalert2'
-const AdminRequestOffCanvas = ({ request }) => {
+import React, { useRef, useState,useEffect } from 'react';
+import { ChevronsRight, BarChart2, AlertCircle, FileText, Calendar, Send, Paperclip, File } from 'react-feather';
+import styles from '../assets/css/components/offcanvas-requests.module.css';
+import Swal from "sweetalert2";
+import AxiosClient from '../config/htttp-client/axios-client';
+import AxiosFormData from '../config/htttp-client/axios-fortmData';
+
+const AdminRequestOffCanvasSelect = ({ request }) => {
     const fileInputRef = useRef(null);
     const [fileName, setFileName] = useState('Selecciona un archivo');
+    const [priority, setPriority] = useState( '');
+    const [status, setStatus] = useState('');
     const [messageContent, setMessageContent] = useState('');
     const token = localStorage.getItem('token');
     const [file, setFile] = useState(null);
 
+
+    useEffect(() => {
+        if (request) {
+            setPriority(request.priority || 'Baja');
+            setStatus(request.status || 'Pendiente');
+        }
+    }, [request]);
+
+    const handleButtonClick = () => {
+        fileInputRef.current.click();
+    };
+
     const handleButtonError = async (event) => {
-        
         event.preventDefault();
         const user_id = request.userData.match(/\d+/)[0];
         try {
@@ -55,12 +67,8 @@ const AdminRequestOffCanvas = ({ request }) => {
                 confirmButtonColor: '#002E5D'
             });
         }
+   
     }
-
-    const handleButtonClick = () => {
-        fileInputRef.current.click();
-    };
-
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -72,44 +80,74 @@ const AdminRequestOffCanvas = ({ request }) => {
         }
     };
 
+    const handlePriorityChange = async(event) => {
 
-    const handlechageId = async () => {
-        const adminId = sessionStorage.getItem('userId');
+        const newPriority=(event.target.value);
+        setPriority(newPriority);
 
-        const result = await Swal.fire({
-            title: '¿Estás seguro?',
-            text: "No podrás revertir esto",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#002E5D',
-            cancelButtonColor: '#707372',
-            confirmButtonText: 'Seleccionar',
-            cancelButtonText: 'Cancelar'
-        });
-        if (result.isConfirmed) {
-            try {
-                const response = await AxiosClient.put(`documentRequest/admin/${request.id}/${adminId}`, {}, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }).then(() => {
-                    window.location.reload();
-                });
-
-            } catch (error) {
-                console.error('Error updating admin ID:', error);
-            }
+        try {
+            const response= await AxiosClient.put(`/documentRequest/priority/${request.id}/${newPriority}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+                
+            });            
+            Swal.fire({
+                title: 'La prioridad cambio correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#002E5D'
+            }).then(() => {
+                window.location.reload();
+            });
+            
+        } catch (error) {
+            Swal.fire({
+                title: 'Error al cambiar la prioridad.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#002E5D'
+            }) ;
         }
-
 
     };
 
-  
+    const handleStatusChange = (event) => {
+
+        const newStatus =(event.target.value);
+        setStatus(newStatus);
+
+        try {
+            
+            const response= AxiosClient.put(`/documentRequest/status/${request.id}/${newStatus}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            Swal.fire({
+                title: 'El estatus cambio correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#002E5D'
+            }).then(() => {
+                window.location.reload();
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'Error al cambiar el estatus.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#002E5D'
+            });
+        }
+
+    };
+
     const hanldeSendEmail = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('token');
-        const user_id = request.userData.match(/\d+/)[0]; 
-console.log("user_id",user_id);
+        const user_id = request.userData.match(/\d+/)[0];
+        console.log("user_id", user_id);
 
         try {
             const userResponse = await AxiosClient.get(`/user/${user_id}`, {
@@ -117,7 +155,7 @@ console.log("user_id",user_id);
             });
 
 
-            const user = userResponse; 
+            const user = userResponse;
             const formData = new FormData();
             formData.append('toEmail', user.email);
             formData.append('subject', 'Asunto del correo');
@@ -152,7 +190,7 @@ console.log("user_id",user_id);
         }
     };
 
-    const { priority, type: fileType, status, userData: user } = request || {};
+    const { type: fileType, userData: user } = request || {};
 
     return (
         <div className={`${styles['custom-offcanvas']} offcanvas offcanvas-end`} tabIndex="-1" id="offCanvasRequests" aria-labelledby="offCanvasRequestsLabel">
@@ -169,7 +207,11 @@ console.log("user_id",user_id);
                         Prioridad
                     </div>
                     <div className="col-6">
-                        <PriorityBadge priority={priority} />
+                        <select className="form-select" value={priority} onChange={handlePriorityChange}>
+                            <option value="Alta">Alta</option>
+                            <option value="Media">Media</option>
+                            <option value="Baja">Baja</option>
+                        </select>
                     </div>
                 </div>
 
@@ -188,7 +230,11 @@ console.log("user_id",user_id);
                         Status
                     </div>
                     <div className="col-6">
-                        <StatusBadge status={status} />
+                        <select className="form-select" value={status} onChange={handleStatusChange}>
+                            <option value="En progreso">En Progreso</option>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Completada">Completada</option>
+                        </select>
                     </div>
                 </div>
                 <div className="row d-flex mb-4">
@@ -202,21 +248,16 @@ console.log("user_id",user_id);
                 </div>
                 <form className={`d-flex justify-content-between mt-5 mb-5 py-2 ${styles['text-container']}`}>
                     <div className="col-10">
-                        <textarea
-                            className='form-control border-0'
-                            rows={1}
-                            placeholder='Notificar de información errónea...'
-                            style={{ resize: 'none', boxShadow: 'none' }}
+                        <textarea className='form-control border-0' rows={1} placeholder='Notificar de información errónea...' 
                             value={messageContent}
-                            onChange={(e) => setMessageContent(e.target.value)}
-                        ></textarea>
+                            onChange={(e) => setMessageContent(e.target.value)} 
+                            style={{ resize: 'none', boxShadow: 'none' }}></textarea>
                     </div>
                     <div className="col-1 d-flex align-items-center">
                         <button className='btn text-secondary' type='submit' onClick={handleButtonError}>
                             <Send size={20} />
                         </button>
                     </div>
-
                 </form>
                 <div className='fs-6 text-secondary mb-2'>
                     <Paperclip size={15} className='me-2' />
@@ -228,29 +269,24 @@ console.log("user_id",user_id);
                             Examinar...
                         </button>
                         <label htmlFor="file-input" className="form-control rounded-end text-secondary fs-6" style={{ cursor: "pointer" }}>
-                            {fileName }
+                            {fileName}
                         </label>
                         <input id="file-input" type="file" ref={fileInputRef} style={{ display: "none" }} onChange={handleFileChange} />
                     </div>
-
-                    <div className="position-relative d-flex justify-content-end gap-3 mt-4">
-                        <button type="button" className={`btn btn-primary ${styles['send-document-btn']}`} onClick={handlechageId}>
-                            <div className={`d-flex gap-2 align-items-center ${styles['send-document-content']}`}>
-                                Seleccionar Solicitud
-                                <File size={15} />
-                            </div>
-                        </button>
-                        <button type="button" className={`btn btn-secondary ${styles['send-document-btn']}`} onClick={hanldeSendEmail}>
-                            <div className={`d-flex gap-2 align-items-center ${styles['send-document-content']}`}>
+                    <div className="position-relative d-flex justify-content-end mt-4" >
+                        <button type='button' className={`p-2 px-4 ${styles['send-document-btn']}`} onClick={hanldeSendEmail}>
+                            <div className={`d-flex gap-2 justify-content-evenly align-items-center ${styles['send-document-content']}`}>
                                 Enviar Documento
                                 <File size={15} />
                             </div>
+                            <span></span>
                         </button>
                     </div>
                 </form>
             </div>
+            
         </div>
-    )
-}
+    );
+};
 
-export default AdminRequestOffCanvas
+export default AdminRequestOffCanvasSelect;
