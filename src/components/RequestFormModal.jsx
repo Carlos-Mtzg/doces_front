@@ -4,7 +4,6 @@ import { ArrowRightCircle, X, AlertCircle, ArrowLeftCircle } from "react-feather
 import PropTypes from 'prop-types';
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-import AxiosClient from '../config/htttp-client/axios-client'
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import AxiosClientFormData from "../config/htttp-client/axios-fortmData";
@@ -93,7 +92,6 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
 
         });
         if (response) {
-          console.log('Files uploaded successfully:', response.data);
           setAlert({
             open: true,
             severity: 'success',
