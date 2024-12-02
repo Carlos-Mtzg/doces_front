@@ -13,14 +13,26 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
     const [messageContent, setMessageContent] = useState('');
     const token = localStorage.getItem('token');
     const [file, setFile] = useState(null);
-
+    const [data, setData] = useState(null);
 
     useEffect(() => {
-        if (request) {
-            setPriority(request.priority || 'Baja');
-            setStatus(request.status || 'Pendiente');
-            console.log(request);
-        }
+        const fetchData = async () => {
+            if (request) {
+                setPriority(request.priority || 'Baja');
+                setStatus(request.status || 'Pendiente');
+                const userId = request.id;
+                try {
+                    const userResponse = await AxiosClient.get(`/documentRequest/user/byDocumentRequest/${userId}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    setData(userResponse);
+                    console.log(userResponse);
+                } catch (error) {
+                    console.error('Error al consumir el endpoint:', error);
+                }
+            }
+        };
+        fetchData();
     }, [request]);
 
     const handleButtonClick = () => {
