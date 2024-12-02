@@ -8,7 +8,7 @@ const StatusBadge = ({ status, customColors }) => {
     switch (status) {
         case 'En progreso':
             statusClass = 'badge';
-            statusText = 'En Progreso';
+            statusText = 'En progreso';
             customStyle = customColors?.inProgress || { backgroundColor: '#84a4c3', color: 'white' };
             break;
         case 'Pendiente':

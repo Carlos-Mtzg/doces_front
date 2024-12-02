@@ -232,7 +232,7 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                     </div>
                     <div className="col-6">
                         <select className="form-select" value={status} onChange={handleStatusChange}>
-                            <option value="En progreso">En Progreso</option>
+                            <option value="En progreso">En progreso</option>
                             <option value="Pendiente">Pendiente</option>
                             <option value="Completada">Completada</option>
                         </select>
