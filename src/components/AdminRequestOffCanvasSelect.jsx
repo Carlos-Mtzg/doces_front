@@ -13,7 +13,7 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
     const [messageContent, setMessageContent] = useState('');
     const token = localStorage.getItem('token');
     const [file, setFile] = useState(null);
-    const [data, setData] = useState(null);
+    const [data, setData] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -25,7 +25,7 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                     const userResponse = await AxiosClient.get(`/documentRequest/user/byDocumentRequest/${userId}`, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
-                    setData(userResponse);
+                    setData(userResponse || 'No se encontró la información');
                     console.log(userResponse);
                 } catch (error) {
                     console.error('Error al consumir el endpoint:', error);
@@ -242,13 +242,23 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                         </select>
                     </div>
                 </div>
-                <div className="row d-flex mb-4">
+                <div className="row d-flex mb-4 flex-column">
                     <div className="col-6 fs-6 text-secondary fw-bold">
                         <FileText size={20} className='me-2' />
                         Datos del usuario
                     </div>
-                    <div className="col-6">
-                        {user || 'Sin información'}
+                    <div className="col-6 pt-3 ms-5">
+                        {data ? (
+                            <div>
+                                <p className="text-secondary"><strong>Nombre:</strong> {data.name} {data.lastname}</p>
+                                <p className="text-secondary"><strong>Grupo:</strong> {data.grupo}</p>
+                                <p className="text-secondary"><strong>Cuatrimestre:</strong> {data.cuatrimestre}</p>
+                                <p className="text-secondary"><strong>Matrícula:</strong> {data.matricula}</p>
+                                <p className="text-secondary"><strong>Email:</strong> {data.email}</p>
+                            </div>
+                        ) : (
+                            <p>Cargando información del usuario...</p>
+                        )}
                     </div>
                 </div>
                 <form className={`d-flex justify-content-between mt-5 mb-5 py-2 ${styles['text-container']}`}>
