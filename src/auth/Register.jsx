@@ -20,12 +20,17 @@ const Register = () => {
       name: '',
       lastname: '',
       matricula: '',
+      grupo: '',
+      cuatrimestre: '',
       email: '',
       password: '',
     },
     validationSchema: yup.object().shape({
       name: yup.string().matches(/^[A-Za-záéíóúÁÉÍÓÚ\s]+$/, 'El nombre solo puede contener letras y espacios').required(VALIDATION_ERROR),
       lastname: yup.string().matches(/^[A-Za-záéíóúÁÉÍÓÚ\s]+$/, 'Este campo solo puede contener letras y espacios').required(VALIDATION_ERROR),
+      matricula: yup.string().required(VALIDATION_ERROR),
+      grupo: yup.string().length(1, 'El grupo debe ser un solo carácter').required(VALIDATION_ERROR),
+      cuatrimestre: yup.string().matches(/^\d{1,2}$/, 'El cuatrimestre debe ser un número de máximo 2 dígitos').required(VALIDATION_ERROR),
       email: yup.string().email('Ingresa un correo electrónico válido').required(VALIDATION_ERROR),
       password: yup
         .string()
@@ -41,6 +46,9 @@ const Register = () => {
         const response = await AxiosClient.post('/register', {
           name: values.name,
           lastname: values.lastname,
+          matricula: values.matricula,
+          grupo: values.grupo,
+          cuatrimestre: values.cuatrimestre,
           email: values.email,
           password: values.password,
         });
@@ -85,33 +93,88 @@ const Register = () => {
         </nav>
         {/* Formulario */}
         <form onSubmit={formik.handleSubmit} className="d-flex flex-column gap-3" style={{ minHeight: '75vh' }} noValidate>
-          <div className="form-group">
-            <label htmlFor="name-input" className={`form-label fw-normal ${styles['form-label']}`}>Nombre</label>
-            <input name='name' type="text"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className={`form-control ${formik.touched.name && formik.errors.name ? 'is-invalid' : ''} ${styles['form-input']}`}
-              placeholder='Nombre/s...' />
-            {formik.touched.name && formik.errors.name ? (
-              <div className="text-danger mt-1" style={{ fontSize: '15px' }}>{formik.errors.name}</div>
-            ) : null}
+          <div className="d-flex justify-content-between gap-3">
+            <div className="form-group">
+              <label htmlFor="name-input" className={`form-label fw-normal ${styles['form-label']}`}>Nombre</label>
+              <input name='name' type="text"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`form-control ${formik.touched.name && formik.errors.name ? 'is-invalid' : ''} ${styles['form-input']}`}
+                placeholder='Nombre/s...' />
+              {formik.touched.name && formik.errors.name ? (
+                <div className="text-danger mt-1" style={{ fontSize: '15px' }}>{formik.errors.name}</div>
+              ) : null}
+            </div>
+            <div className="form-group">
+              <label htmlFor="lastname-input" className={`form-label fw-normal ${styles['form-label']}`}>Apellidos</label>
+              <input
+                name='lastname'
+                type="text"
+                value={formik.values.lastname}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`form-control ${formik.touched.lastname && formik.errors.lastname ? 'is-invalid' : ''} ${styles['form-input']}`}
+                placeholder='Apellido/s...'
+              />
+              {formik.touched.lastname && formik.errors.lastname ? (
+                <div className="text-danger mt-1" style={{ fontSize: '15px' }}>{formik.errors.lastname}</div>
+              ) : null}
+            </div>
           </div>
+
           <div className="form-group">
-            <label htmlFor="lastname-input" className={`form-label fw-normal ${styles['form-label']}`}>Apellidos</label>
+            <label htmlFor="lastname-input" className={`form-label fw-normal ${styles['form-label']}`}>Matricula</label>
             <input
-              name='lastname'
+              name='matricula'
               type="text"
-              value={formik.values.lastname}
+              value={formik.values.matricula}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`form-control ${formik.touched.lastname && formik.errors.lastname ? 'is-invalid' : ''} ${styles['form-input']}`}
+              className={`form-control ${formik.touched.matricula && formik.errors.matricula ? 'is-invalid' : ''} ${styles['form-input']}`}
               placeholder='Apellido/s...'
             />
-            {formik.touched.lastname && formik.errors.lastname ? (
-              <div className="text-danger mt-1" style={{ fontSize: '15px' }}>{formik.errors.lastname}</div>
+            {formik.touched.matricula && formik.errors.matricula ? (
+              <div className="text-danger mt-1" style={{ fontSize: '15px' }}>{formik.errors.matricula}</div>
             ) : null}
           </div>
+
+          <div className="d-flex justify-content-between gap-3">
+            <div className="form-group">
+              <label htmlFor="lastname-input" className={`form-label fw-normal ${styles['form-label']}`}>Cuatrimestre</label>
+              <input
+                name='cuatrimestre'
+                type="text"
+                value={formik.values.cuatrimestre}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`form-control ${formik.touched.cuatrimestre && formik.errors.cuatrimestre ? 'is-invalid' : ''} ${styles['form-input']}`}
+                placeholder='Cuatrimestre...'
+                maxLength={2}
+              />
+              {formik.touched.cuatrimestre && formik.errors.cuatrimestre ? (
+                <div className="text-danger mt-1" style={{ fontSize: '15px' }}>{formik.errors.cuatrimestre}</div>
+              ) : null}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="lastname-input" className={`form-label fw-normal ${styles['form-label']}`}>Grupo</label>
+              <input
+                name='grupo'
+                type="text"
+                value={formik.values.grupo}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`form-control ${formik.touched.grupo && formik.errors.grupo ? 'is-invalid' : ''} ${styles['form-input']}`}
+                placeholder='Grupo...'
+                maxLength={1}
+              />
+              {formik.touched.grupo && formik.errors.grupo ? (
+                <div className="text-danger mt-1" style={{ fontSize: '15px' }}>{formik.errors.grupo}</div>
+              ) : null}
+            </div>
+          </div>
+
           <div className="form-group">
             <label htmlFor="email-input" className={`form-label fw-normal ${styles['form-label']}`}>Correo electrónico</label>
             <input
