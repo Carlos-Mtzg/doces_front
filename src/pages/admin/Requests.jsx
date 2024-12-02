@@ -19,7 +19,7 @@ const token = localStorage.getItem('token');
                         Authorization: `Bearer ${token}`
                     }
                 });
-                console.log(response);
+              
                 if (response){
                     const filteredRequests = response.filter(request => request.admin_id === null && request.status!="Completada");
                     const formattedRequests = filteredRequests.map((request) => ({

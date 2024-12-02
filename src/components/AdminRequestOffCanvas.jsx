@@ -17,7 +17,6 @@ const AdminRequestOffCanvas = ({ request }) => {
         
         event.preventDefault();
         const user_id = request.userData.match(/\d+/)[0];
-
         try {
             const userResponse = await AxiosClient.get(`/user/${user_id}`, {
                 headers: {
@@ -103,51 +102,56 @@ const AdminRequestOffCanvas = ({ request }) => {
         }
 
 
-    };/*
-   const  hanldeSendEmail= async (event)=> {
-    event.preventDefault();
-       const user_id = request.userData.match(/\d+/)[0]; // Extraer el número de usuario
+    };
 
-       try {
-           const userResponse = await AxiosClient.get(`/user/${user_id}`, {
-               headers: {
-                   Authorization: `Bearer ${token}`
-               }
-           });
-           const user = userResponse;
-           const formData = new FormData();
-           formData.append('toEmail', user.email);
-           formData.append('subject', 'Asunto del correo');
-           formData.append('title', 'Error encontrado en tu solicitud');
-           formData.append('messageContent', messageContent);
-           formData.append('file', file);
-           const emailResponse = await AxiosClient.post('/sendEmail', formData, {
-               headers: {
-                   Authorization: `Bearer ${token}`,
-                   'Content-Type': 'multipart/form-data'
-               }
-           });
-console.log(emailResponse ,"nndjkfndrfj");
+  
+    const hanldeSendEmail = async (event) => {
+        event.preventDefault();
+        const token = localStorage.getItem('token');
+        const user_id = request.userData.match(/\d+/)[0]; 
+console.log("user_id",user_id);
 
-           Swal.fire({
-               title: 'Correo enviado correctamente.',
-               icon: 'success',
-               confirmButtonText: 'Aceptar',
-               confirmButtonColor: '#002E5D'
-           }).then(() => {
-               window.location.reload();
-           });
-       } catch (error) {
-           console.log('Error al enviar el correo:', error);
-           Swal.fire({
-               title: 'Error al enviar el correo.',
-               icon: 'error',
-               confirmButtonText: 'Aceptar',
-               confirmButtonColor: '#002E5D'
-           });
-   }
+        try {
+            const userResponse = await AxiosClient.get(`/user/${user_id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
 
-};*/
+
+            const user = userResponse; 
+            const formData = new FormData();
+            formData.append('toEmail', user.email);
+            formData.append('subject', 'Asunto del correo');
+            formData.append('title', 'Archivo de tu solicitud');
+            formData.append('messageContent', "messageContent");
+            if (file) formData.append('file', file);
+
+            const emailResponse = await AxiosFormData.post('/sendEmail', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }, maxContentLength: Infinity,
+                maxBodyLength: Infinity
+            });
+
+            Swal.fire({
+                title: 'Correo enviado correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#002E5D'
+            }).then(() => {
+                window.location.reload();
+            });
+        } catch (error) {
+            console.error('Error al enviar el correo:', error);
+            Swal.fire({
+                title: 'Error al enviar el correo.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#002E5D'
+            });
+        }
+    };
+
     const { priority, type: fileType, status, userData: user } = request || {};
 
     return (
@@ -224,7 +228,7 @@ console.log(emailResponse ,"nndjkfndrfj");
                             Examinar...
                         </button>
                         <label htmlFor="file-input" className="form-control rounded-end text-secondary fs-6" style={{ cursor: "pointer" }}>
-                            {fileName}
+                            {fileName }
                         </label>
                         <input id="file-input" type="file" ref={fileInputRef} style={{ display: "none" }} onChange={handleFileChange} />
                     </div>

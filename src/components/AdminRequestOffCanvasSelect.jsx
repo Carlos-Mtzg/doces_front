@@ -3,6 +3,7 @@ import { ChevronsRight, BarChart2, AlertCircle, FileText, Calendar, Send, Paperc
 import styles from '../assets/css/components/offcanvas-requests.module.css';
 import Swal from "sweetalert2";
 import AxiosClient from '../config/htttp-client/axios-client';
+import AxiosFormData from '../config/htttp-client/axios-fortmData';
 
 const AdminRequestOffCanvasSelect = ({ request }) => {
     const fileInputRef = useRef(null);
@@ -11,6 +12,7 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
     const [status, setStatus] = useState('');
     const [messageContent, setMessageContent] = useState('');
     const token = localStorage.getItem('token');
+    const [file, setFile] = useState(null);
 
 
     useEffect(() => {
@@ -25,10 +27,8 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
     };
 
     const handleButtonError = async (event) => {
-      
         event.preventDefault();
         const user_id = request.userData.match(/\d+/)[0];
-
         try {
             const userResponse = await AxiosClient.get(`/user/${user_id}`, {
                 headers: {
@@ -67,13 +67,16 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                 confirmButtonColor: '#002E5D'
             });
         }
+   
     }
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
             setFileName(file.name);
+            setFile(file);
         } else {
             setFileName('Selecciona un archivo');
+            setFile(null);
         }
     };
 
@@ -138,6 +141,53 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
             });
         }
 
+    };
+
+    const hanldeSendEmail = async (event) => {
+        event.preventDefault();
+        const token = localStorage.getItem('token');
+        const user_id = request.userData.match(/\d+/)[0];
+        console.log("user_id", user_id);
+
+        try {
+            const userResponse = await AxiosClient.get(`/user/${user_id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+
+            const user = userResponse;
+            const formData = new FormData();
+            formData.append('toEmail', user.email);
+            formData.append('subject', 'Asunto del correo');
+            formData.append('title', 'Archivo de tu solicitud');
+            formData.append('messageContent', "messageContent");
+            if (file) formData.append('file', file);
+
+            const emailResponse = await AxiosFormData.post('/sendEmail', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }, maxContentLength: Infinity,
+                maxBodyLength: Infinity
+            });
+
+            Swal.fire({
+                title: 'Correo enviado correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#002E5D'
+            }).then(() => {
+                window.location.reload();
+            });
+        } catch (error) {
+            console.error('Error al enviar el correo:', error);
+            Swal.fire({
+                title: 'Error al enviar el correo.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#002E5D'
+            });
+        }
     };
 
     const { type: fileType, userData: user } = request || {};
@@ -223,8 +273,8 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                         </label>
                         <input id="file-input" type="file" ref={fileInputRef} style={{ display: "none" }} onChange={handleFileChange} />
                     </div>
-                    <div className="position-relative d-flex justify-content-end mt-4">
-                        <button type='button' className={`p-2 px-4 ${styles['send-document-btn']}`}>
+                    <div className="position-relative d-flex justify-content-end mt-4" >
+                        <button type='button' className={`p-2 px-4 ${styles['send-document-btn']}`} onClick={hanldeSendEmail}>
                             <div className={`d-flex gap-2 justify-content-evenly align-items-center ${styles['send-document-content']}`}>
                                 Enviar Documento
                                 <File size={15} />

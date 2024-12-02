@@ -18,7 +18,7 @@ const Requests = () => {
                             Authorization: `Bearer ${token}`
                         }
                     });
-                    console.log('Response:', response);
+                 
 
                     if (response) {
                         const filteredRequests = response.filter(request => request.admin_id === parseInt(id));
