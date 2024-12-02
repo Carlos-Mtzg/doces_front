@@ -6,7 +6,7 @@ import Swal from 'sweetalert2'
 import RequestFormModal from './RequestFormModal'
 
 function DocumentCard() {
-    const [selectedDocument, setSelectedDocument] = useState('');
+    const [selectedDocument, setSelectedDocument] = useState({ title: '', price: '' });
 
     const handleClick = () => {
         const arrowRight = ReactDOMServer.renderToString(<ArrowRight size={18} style={{ color: '#002E5D' }} />)
@@ -22,8 +22,8 @@ function DocumentCard() {
         });
     }
 
-    const openModal = (documentTitle) => {
-        setSelectedDocument(documentTitle);
+    const openModal = (documentTitle, documentPrice) => {
+        setSelectedDocument({ title: documentTitle, price: documentPrice });
     };
 
     return (
@@ -34,7 +34,7 @@ function DocumentCard() {
                 <FileText size={80} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 30 }}>
                     <h4>Kardex</h4>
-                    <p style={{ color: 'rgba(0, 0, 0, 0.5)' }}>Descripcion...</p>
+                    <p style={{ color: 'rgba(0, 0, 0, 0.5)' }}>$ 100.00</p>
                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 196, height: 24 }}>
                         <button type='button' className={`${styles['requirements-btn']}`} onClick={handleClick}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['requirements-content']}`}>
@@ -43,7 +43,7 @@ function DocumentCard() {
                             </div>
                             <span></span>
                         </button>
-                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Kardex')}>
+                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Kardex', '$100.00')}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['request-document-content']}`}>
                                 <FilePlus size={15} />
                                 Solicitar
@@ -59,7 +59,7 @@ function DocumentCard() {
                 <FileText size={80} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 30 }}>
                     <h4>Constancia de estudios</h4>
-                    <p style={{ color: 'rgba(0, 0, 0, 0.5)' }}>Descripcion...</p>
+                    <p style={{ color: 'rgba(0, 0, 0, 0.5)' }}>$ 75.00</p>
                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 196, height: 24 }}>
                         <button type='button' className={`${styles['requirements-btn']}`} onClick={handleClick}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['requirements-content']}`}>
@@ -68,7 +68,7 @@ function DocumentCard() {
                             </div>
                             <span></span>
                         </button>
-                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Constancia de estudios')}>
+                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Constancia de estudios', '$75.00')}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['request-document-content']}`}>
                                 <FilePlus size={15} />
                                 Solicitar
@@ -82,10 +82,10 @@ function DocumentCard() {
             {/* Certificado de estudios */}
             <div className={`${styles['card']}`}>
                 <div className={`${styles['colorLabel']}`} style={{ backgroundColor: '#00AB84' }} />
-                <FileText size={80} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
+                <Award size={80} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 30 }}>
-                    <h4>Constancia de estudios</h4>
-                    <p style={{ color: 'rgba(0, 0, 0, 0.5)' }}>Descripcion...</p>
+                    <h4>Certificado de estudios</h4>
+                    <p style={{ color: 'rgba(0, 0, 0, 0.5)' }}>$ 250.00</p>
                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 196, height: 24 }}>
                         <button type='button' className={`${styles['requirements-btn']}`} onClick={handleClick}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['requirements-content']}`}>
@@ -94,7 +94,7 @@ function DocumentCard() {
                             </div>
                             <span></span>
                         </button>
-                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Constancia de estudios')}>
+                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Certificado de estudios', '$250.00')}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['request-document-content']}`}>
                                 <FilePlus size={15} />
                                 Solicitar
@@ -111,7 +111,7 @@ function DocumentCard() {
                 <FileText size={80} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 30 }}>
                     <h4>Carta de recomendación</h4>
-                    <p style={{ color: 'rgba(0, 0, 0, 0.5)' }}>Descripcion...</p>
+                    <p style={{ color: 'rgba(0, 0, 0, 0.5)' }}>$ 150.00</p>
                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 196, height: 24 }}>
                         <button type='button' className={`${styles['requirements-btn']}`} onClick={handleClick}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['requirements-content']}`}>
@@ -120,7 +120,7 @@ function DocumentCard() {
                             </div>
                             <span></span>
                         </button>
-                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Carta de recomendación')}>
+                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Carta de recomendación', '$150.00')}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['request-document-content']}`}>
                                 <FilePlus size={15} />
                                 Solicitar
@@ -137,7 +137,7 @@ function DocumentCard() {
                 <Award size={80} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 30 }}>
                     <h4>Título</h4>
-                    <p style={{ color: 'rgba(0, 0, 0, 0.5)' }}>Descripcion...</p>
+                    <p style={{ color: 'rgba(0, 0, 0, 0.5)' }}>$ 750.00</p>
                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 196, height: 24 }}>
                         <button type='button' className={`${styles['requirements-btn']}`} onClick={handleClick}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['requirements-content']}`}>
@@ -146,7 +146,7 @@ function DocumentCard() {
                             </div>
                             <span></span>
                         </button>
-                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Título')}>
+                        <button type='button' className={`${styles['request-document-btn']}`} data-bs-toggle="modal" data-bs-target="#solicitudModal" onClick={() => openModal('Título', '$750.00')}>
                             <div className={`d-flex justify-content-evenly align-items-center ${styles['request-document-content']}`}>
                                 <FilePlus size={15} />
                                 Solicitar
@@ -156,7 +156,7 @@ function DocumentCard() {
                     </div>
                 </div>
             </div>
-            <RequestFormModal tipoDocumento={selectedDocument} />
+            <RequestFormModal tipoDocumento={selectedDocument.title} precioDocumento={selectedDocument.price} />
         </div>
     )
 }
