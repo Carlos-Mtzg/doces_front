@@ -132,7 +132,7 @@ const Register = () => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={`form-control ${formik.touched.matricula && formik.errors.matricula ? 'is-invalid' : ''} ${styles['form-input']}`}
-              placeholder='Apellido/s...'
+              placeholder='Matricula'
             />
             {formik.touched.matricula && formik.errors.matricula ? (
               <div className="text-danger mt-1" style={{ fontSize: '15px' }}>{formik.errors.matricula}</div>
