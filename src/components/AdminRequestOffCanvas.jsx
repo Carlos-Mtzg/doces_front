@@ -105,11 +105,11 @@ const AdminRequestOffCanvas = ({ request }) => {
     };
 
   
-    const hanldeSendEmail = async (event) => {
+    const hadleSendEmail = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('token');
         const user_id = request.userData.match(/\d+/)[0]; 
-console.log("user_id",user_id);
+        console.log("user_id",user_id);
 
         try {
             const userResponse = await AxiosClient.get(`/user/${user_id}`, {
@@ -240,7 +240,7 @@ console.log("user_id",user_id);
                                 <File size={15} />
                             </div>
                         </button>
-                        <button type="button" className={`btn btn-secondary ${styles['send-document-btn']}`} onClick={hanldeSendEmail}>
+                        <button type="button" className={`btn btn-secondary ${styles['send-document-btn']}`} onClick={hadleSendEmail}>
                             <div className={`d-flex gap-2 align-items-center ${styles['send-document-content']}`}>
                                 Enviar Documento
                                 <File size={15} />
