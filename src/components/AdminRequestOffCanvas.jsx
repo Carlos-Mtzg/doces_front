@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { ChevronsRight, BarChart2, AlertCircle, FileText, Send, Paperclip, File } from 'react-feather'
+import { ChevronsRight, BarChart2, AlertCircle, FileText, Send, Paperclip, File, User, AlignLeft } from 'react-feather'
 import styles from '../assets/css/components/offcanvas-requests.module.css'
 import StatusBadge from './StatusBadge'
 import PriorityBadge from './PriorityBadge'
@@ -193,11 +193,24 @@ console.log("user_id",user_id);
                 </div>
                 <div className="row d-flex mb-4">
                     <div className="col-6 fs-6 text-secondary fw-bold">
-                        <FileText size={20} className='me-2' />
+                        <User size={20} className='me-2' />
                         Datos del usuario
+                        <div><br /></div>
+
+                        <div>Nombre: {}</div>
+                        <div>Correo: {}</div>
+                        <div>Matricula: {}</div>
+                        <div>Cuatrimestre: {}</div>
+                        
                     </div>
                     <div className="col-6">
-                        {user || 'Sin información'}
+                        {/* {user || 'Sin información'} */}
+                        <AlignLeft size={20} className='me-2' />
+                        <div><br />{}</div>
+                        <div>Jayr Gil Galicia Jimenez{}</div>
+                        <div>20223tn052@utez.edu.mx{}</div>
+                        <div>20223tn052{}</div>
+                        <div>7B{}</div>
                     </div>
                 </div>
                 <form className={`d-flex justify-content-between mt-5 mb-5 py-2 ${styles['text-container']}`}>
