@@ -1,4 +1,4 @@
-import React, { useRef, useState,useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { ChevronsRight, BarChart2, AlertCircle, FileText, Calendar, Send, Paperclip, File } from 'react-feather';
 import styles from '../assets/css/components/offcanvas-requests.module.css';
 import Swal from "sweetalert2";
@@ -8,18 +8,31 @@ import AxiosFormData from '../config/htttp-client/axios-fortmData';
 const AdminRequestOffCanvasSelect = ({ request }) => {
     const fileInputRef = useRef(null);
     const [fileName, setFileName] = useState('Selecciona un archivo');
-    const [priority, setPriority] = useState( '');
+    const [priority, setPriority] = useState('');
     const [status, setStatus] = useState('');
     const [messageContent, setMessageContent] = useState('');
     const token = localStorage.getItem('token');
     const [file, setFile] = useState(null);
-
+    const [data, setData] = useState("");
 
     useEffect(() => {
-        if (request) {
-            setPriority(request.priority || 'Baja');
-            setStatus(request.status || 'Pendiente');
-        }
+        const fetchData = async () => {
+            if (request) {
+                setPriority(request.priority || 'Baja');
+                setStatus(request.status || 'Pendiente');
+                const userId = request.id;
+                try {
+                    const userResponse = await AxiosClient.get(`/documentRequest/user/byDocumentRequest/${userId}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    setData(userResponse || 'No se encontró la información');
+                    console.log(userResponse);
+                } catch (error) {
+                    console.error('Error al consumir el endpoint:', error);
+                }
+            }
+        };
+        fetchData();
     }, [request]);
 
     const handleButtonClick = () => {
@@ -43,8 +56,6 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
             formData.append('subject', 'Asunto del correo');
             formData.append('title', 'Error encontrado en tu solicitud');
             formData.append('messageContent', messageContent);
-
-
             const emailReponse = await AxiosFormData.post(`/documentRequest/sendEmail`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -68,8 +79,9 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                 confirmButtonColor: '#002E5D'
             });
         }
-   
+
     }
+
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -81,18 +93,15 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
         }
     };
 
-    const handlePriorityChange = async(event) => {
-
-        const newPriority=(event.target.value);
+    const handlePriorityChange = async (event) => {
+        const newPriority = (event.target.value);
         setPriority(newPriority);
-
         try {
-            const response= await AxiosClient.put(`/documentRequest/priority/${request.id}/${newPriority}`, {}, {
+            const response = await AxiosClient.put(`/documentRequest/priority/${request.id}/${newPriority}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
-                
-            });            
+            });
             Swal.fire({
                 title: 'La prioridad cambio correctamente.',
                 icon: 'success',
@@ -101,26 +110,21 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
             }).then(() => {
                 window.location.reload();
             });
-            
         } catch (error) {
             Swal.fire({
                 title: 'Error al cambiar la prioridad.',
                 icon: 'error',
                 confirmButtonText: 'Aceptar',
                 confirmButtonColor: '#002E5D'
-            }) ;
+            });
         }
-
     };
 
     const handleStatusChange = (event) => {
-
-        const newStatus =(event.target.value);
+        const newStatus = (event.target.value);
         setStatus(newStatus);
-
         try {
-            
-            const response= AxiosClient.put(`/documentRequest/status/${request.id}/${newStatus}`, {}, {
+            const response = AxiosClient.put(`/documentRequest/status/${request.id}/${newStatus}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -144,7 +148,7 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
 
     };
 
-    const hanldeSendEmail = async (event) => {
+    const handleSendEmail = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('token');
         const user_id = request.userData.match(/\d+/)[0];
@@ -238,20 +242,30 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                         </select>
                     </div>
                 </div>
-                <div className="row d-flex mb-4">
+                <div className="row d-flex mb-4 flex-column">
                     <div className="col-6 fs-6 text-secondary fw-bold">
                         <FileText size={20} className='me-2' />
                         Datos del usuario
                     </div>
-                    <div className="col-6">
-                        {user || 'Sin información'}
+                    <div className="col-6 pt-3 ms-5">
+                        {data ? (
+                            <div>
+                                <p className="text-secondary"><strong>Nombre:</strong> {data.name} {data.lastname}</p>
+                                <p className="text-secondary"><strong>Grupo:</strong> {data.grupo}</p>
+                                <p className="text-secondary"><strong>Cuatrimestre:</strong> {data.cuatrimestre}</p>
+                                <p className="text-secondary"><strong>Matrícula:</strong> {data.matricula}</p>
+                                <p className="text-secondary"><strong>Email:</strong> {data.email}</p>
+                            </div>
+                        ) : (
+                            <p>Cargando información del usuario...</p>
+                        )}
                     </div>
                 </div>
                 <form className={`d-flex justify-content-between mt-5 mb-5 py-2 ${styles['text-container']}`}>
                     <div className="col-10">
-                        <textarea className='form-control border-0' rows={1} placeholder='Notificar de información errónea...' 
+                        <textarea className='form-control border-0' rows={1} placeholder='Notificar de información errónea...'
                             value={messageContent}
-                            onChange={(e) => setMessageContent(e.target.value)} 
+                            onChange={(e) => setMessageContent(e.target.value)}
                             style={{ resize: 'none', boxShadow: 'none' }}></textarea>
                     </div>
                     <div className="col-1 d-flex align-items-center">
@@ -275,7 +289,7 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                         <input id="file-input" type="file" ref={fileInputRef} style={{ display: "none" }} onChange={handleFileChange} />
                     </div>
                     <div className="position-relative d-flex justify-content-end mt-4" >
-                        <button type='button' className={`p-2 px-4 ${styles['send-document-btn']}`} onClick={hanldeSendEmail}>
+                        <button type='button' className={`p-2 px-4 ${styles['send-document-btn']}`} onClick={handleSendEmail}>
                             <div className={`d-flex gap-2 justify-content-evenly align-items-center ${styles['send-document-content']}`}>
                                 Enviar Documento
                                 <File size={15} />
@@ -285,7 +299,6 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                     </div>
                 </form>
             </div>
-            
         </div>
     );
 };
