@@ -6,17 +6,17 @@ const StatusBadge = ({ status, customColors }) => {
     let customStyle = {};
 
     switch (status) {
-        case 'in-progress':
+        case 'En progreso':
             statusClass = 'badge';
             statusText = 'En Progreso';
             customStyle = customColors?.inProgress || { backgroundColor: '#84a4c3', color: 'white' };
             break;
-        case 'pending':
+        case 'Pendiente':
             statusClass = 'badge';
-            statusText = 'En Espera';
+            statusText = 'Pendiente';
             customStyle = customColors?.pending || { backgroundColor: '#b89769', color: 'white' };
             break;
-        case 'completed':
+        case 'Completada':
             statusClass = 'badge';
             statusText = 'Completada';
             customStyle = customColors?.completed || { backgroundColor: '#9ac091', color: 'white' };
