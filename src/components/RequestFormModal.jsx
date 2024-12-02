@@ -70,24 +70,22 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
       // Agregar archivos al FormData
       if (values.archivos && values.archivos.length > 0) {
         values.archivos.forEach((file) => {
-          formData.append("files", file); // El nombre "files" debe coincidir con @RequestParam en el backend
+          formData.append("files", file);
         });
       } else {
-        // Si no se proporcionan archivos, mostrar una alerta (opcional)
         setAlert({
           open: true,
           severity: 'error',
           title: 'Error',
           message: 'Debe seleccionar al menos un archivo.',
         });
-        setSubmitting(false); // Finalizar el envío sin realizar la solicitud
+        setSubmitting(false);
         return;
       }
       for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
       }
       
-      // Agregar otros campos del formulario
       formData.append("nombre", values.nombre);
       formData.append("matricula", values.matricula);
       formData.append("nivelEstudios", values.nivelEstudios);
@@ -125,7 +123,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
             open: true,
             severity: 'success',
             title: 'Solicitud creada exitosamente',
-            message: 'Su solicitud ha sido registrada.',
+            message: 'Su solicitud ha sido registrada y será gestionada por el personal de servicios escolares. Le recomendamos estar atento a su correo electrónico para recibir actualizaciones sobre el proceso.',
           });
           formik.resetForm();
         } else {
@@ -133,8 +131,9 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
             open: true,
             severity: 'error',
             title: 'Error',
-            message: '¡Ocurrió un error inesperado!',
+            message: '¡Ocurrió un error inesperado!, verifica tus datos e inténtalo de nuevo más tarde',
           });
+          formik.resetForm();
         }
       } catch (error) {
         console.error(error);
@@ -145,7 +144,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
           message: '¡Ocurrió un error inesperado!',
         });
       } finally {
-        setSubmitting(false); // Asegurarse de que el formulario no se quede en estado de envío
+        setSubmitting(false);
       }
     }
     
