@@ -82,9 +82,9 @@ function DocumentCard() {
             {/* Certificado de estudios */}
             <div className={`${styles['card']}`}>
                 <div className={`${styles['colorLabel']}`} style={{ backgroundColor: '#00AB84' }} />
-                <FileText size={80} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
+                <Award size={80} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 30 }}>
-                    <h4>Constancia de estudios</h4>
+                    <h4>Certificado de estudios</h4>
                     <p style={{ color: 'rgba(0, 0, 0, 0.5)' }}>$ 250.00</p>
                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: 196, height: 24 }}>
                         <button type='button' className={`${styles['requirements-btn']}`} onClick={handleClick}>
