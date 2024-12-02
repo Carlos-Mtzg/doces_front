@@ -7,6 +7,7 @@ import { useFormik } from 'formik'
 import AxiosClient from '../config/htttp-client/axios-client'
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import AxiosClientFormData from "../config/htttp-client/axios-fortmData";
 
 
 const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
@@ -14,15 +15,10 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
   const [currentSection, setCurrentSection] = useState(1);
   const [alert, setAlert] = useState({ open: false, severity: '', message: '', title: '' });
   const [formData, setFormData] = useState({
-    nombre: "",
-    matricula: "",
-    nivelEstudios: "",
-    periodoAcademico: "",
-    correo: "",
     archivos: []
   });
 
-  const niveles = ["Secundaria", "Bachillerato", "Licenciatura", "Maestría"];
+  const niveles = ["TSU", "Ingenieria", "Licenciatura"];
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -76,20 +72,28 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
         .required('El CVV es requerido')
         .matches(/^\d{3,4}$/, 'El CVV debe tener 3 o 4 dígitos')
     }),
+
     onSubmit: async (values, { setSubmitting }) => {
+
+      //const formData2 = new FormData();
+      values.archivos.forEach(file => {
+        formData.append('files', file);
+      });
+
+
       try {
-        const response = await AxiosClient.post('/', {
-          nombre: values.nombre,
-          matricula: values.matricula,
-          nivelEstudios: values.nivelEstudios,
-          periodoAcademico: values.periodoAcademico,
-          correo: values.correo,
-          archivos: values.archivos,
-          cardNumber: values.cardNumber,
-          expirationDate: values.expirationDate,
-          cvv: values.cvv
+        const token = localStorage.getItem('token')
+        let userId = sessionStorage.getItem('userId')
+
+        const response = await AxiosClientFormData.post(`/documentRequest/${userId}/${tipoDocumento}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`
+          }
+
         });
         if (response) {
+          console.log('Files uploaded successfully:', response.data);
           setAlert({
             open: true,
             severity: 'success',
@@ -107,6 +111,8 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
           formik.resetForm();
         }
       } catch (error) {
+        console.log(error);
+
         setAlert({
           open: true,
           severity: 'error',
