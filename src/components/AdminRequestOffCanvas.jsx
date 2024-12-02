@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ChevronsRight, BarChart2, AlertCircle, FileText, Send, Paperclip, File } from 'react-feather'
 import styles from '../assets/css/components/offcanvas-requests.module.css'
 import StatusBadge from './StatusBadge'
@@ -12,9 +12,29 @@ const AdminRequestOffCanvas = ({ request }) => {
     const [messageContent, setMessageContent] = useState('');
     const token = localStorage.getItem('token');
     const [file, setFile] = useState(null);
+    const [data, setData] = useState("");
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (request) {
+                const userId = request.id;
+                console.log(userId);
+                try {
+                    const userResponse = await AxiosClient.get(`/documentRequest/user/byDocumentRequest/${userId}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    setData(userResponse || 'No se encontró la información');
+                    console.log(userResponse);
+                } catch (error) {
+                    console.error('Error al consumir el endpoint:', error);
+                }
+            }
+        };
+        fetchData();
+    }, [request]);
 
     const handleButtonError = async (event) => {
-        
+
         event.preventDefault();
         const user_id = request.userData.match(/\d+/)[0];
         try {
@@ -104,12 +124,12 @@ const AdminRequestOffCanvas = ({ request }) => {
 
     };
 
-  
+
     const hadleSendEmail = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('token');
-        const user_id = request.userData.match(/\d+/)[0]; 
-        console.log("user_id",user_id);
+        const user_id = request.userData.match(/\d+/)[0];
+        console.log("user_id", user_id);
 
         try {
             const userResponse = await AxiosClient.get(`/user/${user_id}`, {
@@ -117,7 +137,7 @@ const AdminRequestOffCanvas = ({ request }) => {
             });
 
 
-            const user = userResponse; 
+            const user = userResponse;
             const formData = new FormData();
             formData.append('toEmail', user.email);
             formData.append('subject', 'Asunto del correo');
@@ -191,13 +211,23 @@ const AdminRequestOffCanvas = ({ request }) => {
                         <StatusBadge status={status} />
                     </div>
                 </div>
-                <div className="row d-flex mb-4">
+                <div className="row d-flex mb-4 flex-column">
                     <div className="col-6 fs-6 text-secondary fw-bold">
                         <FileText size={20} className='me-2' />
                         Datos del usuario
                     </div>
-                    <div className="col-6">
-                        {user || 'Sin información'}
+                    <div className="col-6 pt-3 ms-5">
+                        {data ? (
+                            <div>
+                                <p className="text-secondary"><strong>Nombre:</strong> {data.name} {data.lastname}</p>
+                                <p className="text-secondary"><strong>Grupo:</strong> {data.grupo}</p>
+                                <p className="text-secondary"><strong>Cuatrimestre:</strong> {data.cuatrimestre}</p>
+                                <p className="text-secondary"><strong>Matrícula:</strong> {data.matricula}</p>
+                                <p className="text-secondary"><strong>Email:</strong> {data.email}</p>
+                            </div>
+                        ) : (
+                            <p>Cargando información del usuario...</p>
+                        )}
                     </div>
                 </div>
                 <form className={`d-flex justify-content-between mt-5 mb-5 py-2 ${styles['text-container']}`}>
@@ -228,7 +258,7 @@ const AdminRequestOffCanvas = ({ request }) => {
                             Examinar...
                         </button>
                         <label htmlFor="file-input" className="form-control rounded-end text-secondary fs-6" style={{ cursor: "pointer" }}>
-                            {fileName }
+                            {fileName}
                         </label>
                         <input id="file-input" type="file" ref={fileInputRef} style={{ display: "none" }} onChange={handleFileChange} />
                     </div>
