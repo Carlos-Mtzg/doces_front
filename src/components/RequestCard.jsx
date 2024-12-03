@@ -12,11 +12,11 @@ function RequestCard({ title, description, status }) {
 
     const getColorByStatus = (status) => {
         switch (status) {
-            case 'Solicitud en espera':
+            case 'Pendiente':
                 return '#f25c54';
-            case 'Solicitud en progreso':
+            case 'En progreso':
                 return '#ffbf61';
-            case 'Solicitud terminada':
+            case 'Completada':
                 return '#00ab84';
             default:
                 return '#A3AED0';

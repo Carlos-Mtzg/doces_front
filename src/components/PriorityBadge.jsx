@@ -6,17 +6,17 @@ const PriorityBadge = ({ priority, customColors }) => {
     let customStyle = {};
 
     switch (priority) {
-        case 'hight':
+        case 'Alta':
             priorityClass = 'badge';
             priorityText = 'Alta';
             customStyle = customColors?.hight || { backgroundColor: '#b86869', color: 'white' };
             break;
-        case 'medium':
+        case 'Media':
             priorityClass = 'badge';
             priorityText = 'Media';
             customStyle = customColors?.medium || { backgroundColor: '#b89769', color: 'white' };
             break;
-        case 'down':
+        case 'Baja':
             priorityClass = 'badge';
             customStyle = customColors?.down || { backgroundColor: '#84a4c3', color: 'white' };
             priorityText = 'Baja';
