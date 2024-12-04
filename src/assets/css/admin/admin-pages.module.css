@@ -11,3 +11,11 @@
     color: var(--azul-utez);
     border-bottom: 2px solid var(--azul-utez);
 }
+
+.leftBtn {
+    transition: all 0.3s !important;
+}
+
+.leftBtn:hover {
+    color: var(--azul-utez) !important;
+}

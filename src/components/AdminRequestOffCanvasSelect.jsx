@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronsRight, BarChart2, AlertCircle, FileText, Send, Paperclip, File } from 'react-feather';
-import styles from '../assets/css/components/offcanvas-requests.module.css';
+import styles from '../assets/css/admin/admin-offcanvas.module.css';
 import Swal from "sweetalert2";
 import AxiosClient from '../config/htttp-client/axios-client';
 import AxiosFormData from '../config/htttp-client/axios-fortmData';
@@ -27,7 +27,6 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     setData(userResponse || 'No se encontró la información');
-                    console.log(userResponse);
                 } catch (error) {
                     console.error('Error al consumir el endpoint:', error);
                 }
@@ -157,7 +156,6 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
         event.preventDefault();
         const token = localStorage.getItem('token');
         const user_id = data.id;
-        console.log("user_id", user_id);
 
         try {
             const userResponse = await AxiosClient.get(`/user/${user_id}`, {

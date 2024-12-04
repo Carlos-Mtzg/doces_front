@@ -1,5 +1,5 @@
 import React, {useEffect,useState}from 'react'
-import styles from '../../assets/css/admin/selected.module.css'
+import styles from '../../assets/css/admin/admin-pages.module.css'
 import AdminRequestTable from '../../components/AdminRequestTable'
 import AxiosClient from '../../config/htttp-client/axios-client'
 import AdminRequestOffCanvasSelect from '../../components/AdminRequestOffCanvasSelect';

@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '../assets/css/components/admin-requests.module.css'
+import styles from '../assets/css/admin/admin-pages.module.css'
 import { BarChart2, AlertCircle, FileText, ChevronsLeft } from 'react-feather'
 import PriorityBadge from './PriorityBadge'
 import StatusBadge from './StatusBadge'
@@ -30,11 +30,8 @@ const AdminRequestTable = ({ requests, onRequestSelect }) => {
                 <tbody>
                     {requests.map((request) => (
                         <tr key={request.id} className="text-center">
-
-
                             <td style={{ borderLeft: 'none' }} className='text-secondary fw-bold'>{request.id}</td>
                             <td className='text-secondary'>{request.type}</td>
-
                             <td>
                                 <PriorityBadge priority={request.priority} />
                             </td>
