@@ -3,9 +3,9 @@ import styles from '../assets/css/components/admin-requests.module.css'
 import { BarChart2, AlertCircle, FileText, ChevronsLeft } from 'react-feather'
 import PriorityBadge from './PriorityBadge'
 import StatusBadge from './StatusBadge'
-
+import PropTypes from 'prop-types'
 const AdminRequestTable = ({ requests, onRequestSelect }) => {
-    
+
     return (
         <div className="table-responsive">
             <table className="table table-bordered caption-top table-hover text-center">
@@ -31,10 +31,10 @@ const AdminRequestTable = ({ requests, onRequestSelect }) => {
                     {requests.map((request) => (
                         <tr key={request.id} className="text-center">
 
-                           
+
                             <td style={{ borderLeft: 'none' }} className='text-secondary fw-bold'>{request.id}</td>
                             <td className='text-secondary'>{request.type}</td>
-                            
+
                             <td>
                                 <PriorityBadge priority={request.priority} />
                             </td>
@@ -60,5 +60,17 @@ const AdminRequestTable = ({ requests, onRequestSelect }) => {
         </div>
     )
 }
+
+AdminRequestTable.propTypes = {
+    requests: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            type: PropTypes.string.isRequired,
+            priority: PropTypes.string.isRequired,
+            status: PropTypes.string.isRequired,
+        })
+    ).isRequired,
+    onRequestSelect: PropTypes.func.isRequired,
+};
 
 export default AdminRequestTable;

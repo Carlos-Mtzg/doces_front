@@ -133,11 +133,10 @@ const AdminRequestOffCanvas = ({ request }) => {
 
 AdminRequestOffCanvas.propTypes = {
     request: PropTypes.shape({
-        id: PropTypes.number.isRequired,
+        id: PropTypes.number,
         priority: PropTypes.string,
         status: PropTypes.string,
-        // Agrega más propiedades según sea necesario
-    }).isRequired,
+    }),
 };
 
 export default AdminRequestOffCanvas
