@@ -1,0 +1,171 @@
+:root {
+    --azul-utez: #002E5D;
+    --verde-utez: #00AB84;
+    --gris-utez: #707372;
+    --color-texto: #5E6366;
+    --sign-out: rgb(138, 0, 0);
+}
+
+.login-container {
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.10);
+    min-height: 100vh;
+}
+
+.title {
+    font-size: 42px;
+    color: var(--verde-utez);
+}
+
+.modal-title {
+    color: var(--azul-utez);
+    font-size: 28px;
+}
+
+.email-label,
+.password-label {
+    font-size: 18px;
+    color: var(--azul-utez);
+}
+
+.email-input,
+.password-input {
+    color: var(--color-texto);
+    height: 55px;
+}
+
+.forget-password,
+.register-now {
+    font-size: 14px;
+    text-decoration: underline;
+    color: var(--gris-utez);
+    transition: all 0.3s;
+}
+
+.forget-password:hover,
+.register-now:hover {
+    color: var(--verde-utez);
+}
+
+.signIn-btn,
+.send-email-btn {
+    position: relative;
+    padding: 10px 20px;
+    border: none;
+    background-color: var(--verde-utez);
+    color: #fff;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.signIn-content,
+.send-email-content {
+    position: relative;
+    z-index: 2;
+}
+
+.signIn-btn span,
+.send-email-btn span {
+    position: absolute;
+    width: 100%;
+    height: 95px;
+    background-color: #002f5d8f;
+    top: -50%;
+    left: -100%;
+    transition: all 0.3s;
+    z-index: 1;
+}
+
+.signIn-btn:hover span,
+.send-email-btn:hover span {
+    left: -0%;
+}
+
+.register-container {
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.10);
+    min-height: 100vh;
+}
+
+
+.form-label {
+    font-size: 18px;
+    color: var(--azul-utez);
+}
+
+.form-input {
+    color: var(--color-texto);
+    height: 55px;
+}
+
+.register-btn {
+    position: relative;
+    padding: 10px 20px;
+    border: none;
+    background-color: var(--verde-utez);
+    color: #fff;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.register-content {
+    position: relative;
+    z-index: 2;
+}
+
+.register-btn span {
+    position: absolute;
+    width: 100%;
+    height: 95px;
+    background-color: #002f5d8f;
+    top: -50%;
+    left: -100%;
+    transition: all 0.3s;
+    z-index: 1;
+}
+
+.register-btn:hover span {
+    left: -0%;
+}
+
+.back-link {
+    color: var(--verde-utez);
+    transition: all 0.3s;
+}
+
+.header-custom {
+    background: none;
+    color: var(--azul-utez);
+}
+
+.confirm-btn {
+    position: relative;
+    padding: 10px 20px;
+    border: none;
+    background-color: var(--azul-utez);
+    color: #fff;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.confirm-content {
+    position: relative;
+    z-index: 2;
+}
+
+.confirm-btn span {
+    position: absolute;
+    width: 100%;
+    height: 95px;
+    background-color: #2d96ff23;
+    top: -50%;
+    left: -100%;
+    transition: all 0.3s;
+    z-index: 1;
+}
+
+.confirm-btn:hover span {
+    left: -0%;
+}

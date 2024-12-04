@@ -1,20 +1,70 @@
-import React, { useContext, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import styles from "../assets/css/auth/register.module.css";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styles from "../assets/css/auth/authentication.module.css";
 import { LogIn } from 'react-feather'
-
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-import AuthContext from '../config/context/auth-context'
 import AxiosClient from '../config/htttp-client/axios-client'
 import Swal from "sweetalert2";
 
-const Register = () => {
-  const { dispatch } = useContext(AuthContext);
-  const navigate = useNavigate();
-  const VALIDATION_ERROR = 'Campo obligatorio *';
-  const [registered, setRegistered] = useState(false);
+const REQUIRED_FIELDS = 'Campo obligatorio *';
 
+const validationSchema = yup.object().shape({
+  name: yup.string().matches(/^[A-Za-záéíóúÁÉÍÓÚ\s]+$/, 'El nombre solo puede contener letras y espacios').required(REQUIRED_FIELDS),
+  lastname: yup.string().matches(/^[A-Za-záéíóúÁÉÍÓÚ\s]+$/, 'Este campo solo puede contener letras y espacios').required(REQUIRED_FIELDS),
+  matricula: yup.string().required(REQUIRED_FIELDS),
+  grupo: yup.string().length(1, 'El grupo debe ser un solo carácter').required(REQUIRED_FIELDS),
+  cuatrimestre: yup.string().matches(/^\d{1,2}$/, 'El cuatrimestre debe ser un número de máximo 2 dígitos').required(REQUIRED_FIELDS),
+  email: yup.string().email('Ingresa un correo electrónico válido').required(REQUIRED_FIELDS),
+  password: yup
+    .string()
+    .required('La contraseña es obligatoria')
+    .min(8, 'La contraseña debe tener al menos 8 caracteres')
+    .matches(/[A-Z]/, 'La contraseña debe contener al menos una letra mayúscula')
+    .matches(/[a-z]/, 'La contraseña debe contener al menos una letra minúscula')
+    .matches(/[\W_]/, 'La contraseña debe contener al menos un carácter especial (como !, @, #, $, etc.)')
+    .trim(),
+});
+
+const handleSubmit = async (values, { setSubmitting }, navigate) => {
+  try {
+    const response = await AxiosClient.post('/register', values);
+    if (response.status === 200) {
+      showSuccessMessage(navigate)
+    } else {
+      throw Error('Error');
+    }
+  } catch (error) {
+    showErrorMessage();
+  } finally {
+    setSubmitting(false);
+  }
+};
+
+const showSuccessMessage = (navigate) => {
+  Swal.fire({
+    title: 'Registro exitoso',
+    text: 'Te has registrado correctamente. Ahora puedes iniciar sesión.',
+    icon: 'success',
+    confirmButtonText: 'Aceptar',
+    confirmButtonColor: '#002E5D',
+  }).then(() => {
+    navigate('/login', { replace: true });
+  });
+};
+
+const showErrorMessage = () => {
+  Swal.fire({
+    title: 'Error',
+    text: 'Hubo un problema al registrar tu cuenta. Por favor, intenta nuevamente.',
+    icon: 'error',
+    confirmButtonText: 'Aceptar',
+    confirmButtonColor: '#002E5D',
+  });
+};
+
+const Register = () => {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -25,60 +75,8 @@ const Register = () => {
       email: '',
       password: '',
     },
-    validationSchema: yup.object().shape({
-      name: yup.string().matches(/^[A-Za-záéíóúÁÉÍÓÚ\s]+$/, 'El nombre solo puede contener letras y espacios').required(VALIDATION_ERROR),
-      lastname: yup.string().matches(/^[A-Za-záéíóúÁÉÍÓÚ\s]+$/, 'Este campo solo puede contener letras y espacios').required(VALIDATION_ERROR),
-      matricula: yup.string().required(VALIDATION_ERROR),
-      grupo: yup.string().length(1, 'El grupo debe ser un solo carácter').required(VALIDATION_ERROR),
-      cuatrimestre: yup.string().matches(/^\d{1,2}$/, 'El cuatrimestre debe ser un número de máximo 2 dígitos').required(VALIDATION_ERROR),
-      email: yup.string().email('Ingresa un correo electrónico válido').required(VALIDATION_ERROR),
-      password: yup
-        .string()
-        .required('La contraseña es obligatoria')
-        .min(8, 'La contraseña debe tener al menos 8 caracteres')
-        .matches(/[A-Z]/, 'La contraseña debe contener al menos una letra mayúscula')
-        .matches(/[a-z]/, 'La contraseña debe contener al menos una letra minúscula')
-        .matches(/[\W_]/, 'La contraseña debe contener al menos un carácter especial (como !, @, #, $, etc.)')
-        .trim(),
-    }),
-    onSubmit: async (values, { setSubmitting }) => {
-      try {
-        const response = await AxiosClient.post('/register', {
-          name: values.name,
-          lastname: values.lastname,
-          matricula: values.matricula,
-          grupo: values.grupo,
-          cuatrimestre: values.cuatrimestre,
-          email: values.email,
-          password: values.password,
-        });
-        if (response.status === 200) {
-          setRegistered(true);
-          Swal.fire({
-            title: 'Registro exitoso',
-            text: 'Te has registrado correctamente. Ahora puedes iniciar sesión.',
-            icon: 'success',
-            confirmButtonText: 'Aceptar',
-            confirmButtonColor: '#002E5D',
-          }).then(() => {
-            navigate('/login', { replace: true });
-          });
-        } else
-          throw Error('Error')
-      } catch (error) {
-        console.log(response.data);
-        Swal.fire({
-          title: 'Error',
-          text: 'Hubo un problema al registrar tu cuenta. Por favor, intenta nuevamente.',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
-          confirmButtonColor: '#002E5D',
-        });
-      }
-      finally {
-        setSubmitting(false);
-      }
-    }
+    validationSchema,
+    onSubmit: (values, actions) => handleSubmit(values, actions, navigate),
   });
 
   return (
@@ -106,6 +104,7 @@ const Register = () => {
                 <div className="text-danger mt-1" style={{ fontSize: '15px' }}>{formik.errors.name}</div>
               ) : null}
             </div>
+
             <div className="form-group">
               <label htmlFor="lastname-input" className={`form-label fw-normal ${styles['form-label']}`}>Apellidos</label>
               <input

@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import styles from '../assets/css/auth/login.module.css'
+import styles from '../assets/css/auth/authentication.module.css'
 import { LogIn } from 'react-feather'
-
 import * as yup from 'yup'
 import { useFormik } from 'formik'
 import AuthContext from '../config/context/auth-context'
@@ -17,7 +16,7 @@ const Login = () => {
     const [alert, setAlert] = useState({ open: false, severity: '', message: '', title: '' });
     const { dispatch } = useContext(AuthContext)
     const navigate = useNavigate();
-    const VALIDATION_ERROR = 'Campo obligatorio *';
+    const REQUIRED_FIELDS = 'Campo obligatorio *';
 
     const formik = useFormik({
         initialValues: {
@@ -25,8 +24,8 @@ const Login = () => {
             password: ''
         },
         validationSchema: yup.object().shape({
-            email: yup.string().email('Ingresa un correo electrónico válido').required(VALIDATION_ERROR),
-            password: yup.string().required(VALIDATION_ERROR)
+            email: yup.string().email('Ingresa un correo electrónico válido').required(REQUIRED_FIELDS),
+            password: yup.string().required(REQUIRED_FIELDS)
         }),
         onSubmit: async (values, { setSubmitting }) => {
             try {
@@ -34,7 +33,7 @@ const Login = () => {
                     email: values.email,
                     password: values.password
                 });
-                if (response && response.accessToken) {
+                if (response?.accessToken) {
                     localStorage.setItem('token', response.accessToken);
                     localStorage.setItem('role', response.role);
                     sessionStorage.setItem('userId', response.id);
@@ -43,7 +42,7 @@ const Login = () => {
                         icon: 'success',
                         confirmButtonText: 'Aceptar',
                         confirmButtonColor: '#002E5D'
-                    }).then(()=> {
+                    }).then(() => {
                         dispatch({ type: 'SIGNIN', payload: response });
                         navigate('/', { replace: true });
                     })

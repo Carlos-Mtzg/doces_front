@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import styles from '../../assets/css/auth/login.module.css';
+import styles from '../../assets/css/auth/authentication.module.css';
 import { AlertCircle, Send } from 'react-feather';
-
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import AxiosClient from '../../config/htttp-client/axios-client';
@@ -54,7 +53,7 @@ const RecoverPasswordModal = () => {
         }
 
     });
-    
+
     const handleCloseModal = () => {
         formik.resetForm();
         setAlert({ ...alert, open: false });
