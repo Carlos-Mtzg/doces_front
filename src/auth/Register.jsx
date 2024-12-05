@@ -205,26 +205,25 @@ const Register = () => {
             ) : null}
           </div>
           <div className="form-group d-flex flex-column mt-auto">
-            <button className={`${styles['register-btn']}`} type="submit"
-              disabled={formik.isSubmitting}
-            >
-              <div className={`${styles['register-content']}`}>
-                {formik.isSubmitting ? (
-                  <>
-                    Cargando...
-                    <output className="spinner-border ms-4" style={{ width: '1.25rem', height: '1.25rem' }}>
-                      <span className="visually-hidden"></span>
-                    </output>
-                  </>
-                ) : (
-                  <>
-                    Registrarme
-                    <LogIn className="ms-2" />
-                  </>
-                )}
-              </div>
-              <span></span>
-            </button>
+            {formik.isSubmitting ? (
+              <button className={`${styles['register-btn']}`} type="submit" disabled>
+                <div className={`${styles['register-content']}`}>
+                  Cargando...
+                  <output className="spinner-border ms-4" style={{ width: '1.25rem', height: '1.25rem' }}>
+                    <span className="visually-hidden"></span>
+                  </output>
+                </div>
+                <span></span>
+              </button>
+            ) : (
+              <button className={`${styles['register-btn']}`} type="submit" disabled={formik.isSubmitting}>
+                <div className={`${styles['register-content']}`}>
+                  Registrarme
+                  <LogIn className="ms-2" />
+                </div>
+                <span></span>
+              </button>
+            )}
           </div>
         </form>
         {/* Formulario */}

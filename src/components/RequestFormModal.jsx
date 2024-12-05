@@ -18,20 +18,17 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
     archivos: []
   });
 
-
   const handleChange = (e) => {
     const { files } = e.target;
     const archivosSeleccionados = Array.from(files);
     formik.setFieldValue("archivos", archivosSeleccionados);
   };
-  
+
   const handleRemoveFile = (index) => {
     const nuevosArchivos = [...formik.values.archivos];
     nuevosArchivos.splice(index, 1);
     formik.setFieldValue("archivos", nuevosArchivos);
   };
-  
-  
 
   const formik = useFormik({
     initialValues: {
@@ -66,7 +63,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
     }),
     onSubmit: async (values, { setSubmitting }) => {
       const formData = new FormData();
-    
+
       // Agregar archivos al FormData
       if (values.archivos && values.archivos.length >= 0) {
         values.archivos.forEach((file) => {
@@ -85,7 +82,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
       for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
       }
-      
+
       formData.append("nombre", values.nombre);
       formData.append("matricula", values.matricula);
       formData.append("nivelEstudios", values.nivelEstudios);
@@ -94,11 +91,11 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
       formData.append("cardNumber", values.cardNumber);
       formData.append("expirationDate", values.expirationDate);
       formData.append("cvv", values.cvv);
-    
+
       try {
         const token = localStorage.getItem('token');
         const userId = sessionStorage.getItem('userId');
-        
+
         if (!userId) {
           setAlert({
             open: true,
@@ -109,14 +106,15 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
           setSubmitting(false);
           return;
         }
-    
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
         const response = await AxiosClientFormData.post(`/documentRequest/${userId}/${tipoDocumento}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         });
-    
+
         if (response) {
           setAlert({
             open: true,
@@ -125,6 +123,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
             message: 'Su solicitud ha sido registrada y será gestionada por el personal de servicios escolares. Le recomendamos estar atento a su correo electrónico para recibir actualizaciones sobre el proceso.',
           });
           formik.resetForm();
+          setCurrentSection(1);
         } else {
           setAlert({
             open: true,
@@ -146,8 +145,6 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
         setSubmitting(false);
       }
     }
-    
-    
   });
 
   const handleNext = () => {
@@ -509,14 +506,25 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
                     </div>
                     <span></span>
                   </button>
-
-                  <button type='submit' className={`p-2 px-4 ${styles['next-btn']}`}>
-                    <div className={`d-flex gap-2 justify-content-evenly align-items-center ${styles['next-content']}`} disabled={formik.isSubmitting}>
-                      Enviar
-                      <ArrowRightCircle size={18} />
-                    </div>
-                    <span></span>
-                  </button>
+                  {formik.isSubmitting ? (
+                    <button type='submit' disabled className={`p-2 px-4 ${styles['next-btn']}`}>
+                      <div className={`d-flex gap-2 justify-content-evenly align-items-center ${styles['next-content']}`} disabled>
+                        Cargando...
+                        <output className="spinner-border ms-1" style={{ width: '1.25rem', height: '1.25rem' }}>
+                          <span className="visually-hidden"></span>
+                        </output>
+                      </div>
+                      <span></span>
+                    </button>
+                  ) : (
+                    <button type='submit' className={`p-2 px-4 ${styles['next-btn']}`}>
+                      <div className={`d-flex gap-2 justify-content-evenly align-items-center ${styles['next-content']}`} disabled={formik.isSubmitting}>
+                        Enviar
+                        <ArrowRightCircle size={18} />
+                      </div>
+                      <span></span>
+                    </button>
+                  )}
                 </>
               )}
             </div>

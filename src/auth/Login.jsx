@@ -106,27 +106,25 @@ const Login = () => {
                         <Link className={`${styles['forget-password']}`} to="" data-bs-toggle="modal" data-bs-target="#recover-password">¿Olvidaste tu contraseña?</Link>
                     </div>
                     <div className="form-group d-flex flex-column gap-3">
-                        <button className={`${styles['signIn-btn']}`} type='submit'
-                            disabled={formik.isSubmitting}
-                        >
-                            <div className={`${styles['signIn-content']}`}>
-                                {formik.isSubmitting ? (
-                                    <>
-                                        Cargando...
-                                        <output className="spinner-border ms-4" style={{ width: '1.25rem', height: '1.25rem' }}>
-                                            <span className="visually-hidden"></span>
-                                        </output>
-                                    </>
-                                ) : (
-                                    <>
-                                        Iniciar Sesión
-                                        <LogIn className="ms-2" />
-                                    </>
-                                )}
-                            </div>
-                            <span></span>
-                        </button>
-
+                        {formik.isSubmitting ? (
+                            <button className={`${styles['signIn-btn']}`} type='submit' disabled>
+                                <div className={`${styles['signIn-content']}`}>
+                                    Cargando...
+                                    <output className="spinner-border ms-1" style={{ width: '1.25rem', height: '1.25rem' }}>
+                                        <span className="visually-hidden"></span>
+                                    </output>
+                                </div>
+                                <span></span>
+                            </button>
+                        ) : (
+                            <button className={`${styles['signIn-btn']}`} type='submit' disabled={formik.isSubmitting}>
+                                <div className={`${styles['signIn-content']}`}>
+                                    Iniciar Sesión
+                                    <LogIn className="ms-2" />
+                                </div>
+                                <span></span>
+                            </button>
+                        )}
                         <Link className={`text-center ${styles['register-now']}`} to="/register">Registrarme ahora</Link>
                     </div>
                 </form>

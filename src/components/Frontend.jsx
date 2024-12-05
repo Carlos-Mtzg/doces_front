@@ -32,7 +32,9 @@ const Frontend = () => {
                     title: '¡Sesión cerrada!',
                     text: 'Has cerrado sesión correctamente',
                     icon: 'success',
-                    confirmButtonColor: '#002E5D'
+                    confirmButtonColor: '#002E5D',
+                    showConfirmButton: false,
+                    timer: 2000
                 });
             }
         })

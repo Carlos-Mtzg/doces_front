@@ -110,26 +110,26 @@ const ResetPassword = () => {
                   ) : null}
                 </div>
                 <div className="form-group d-flex flex-column mt-2">
-                  <button className={`${styles['confirm-btn']}`} type="submit"
-                    disabled={formik.isSubmitting}
-                  >
-                    <div className={`${styles['confirm-content']}`}>
-                      {formik.isSubmitting ? (
-                        <>
-                          Cargando...
-                          <output className="spinner-border ms-4" style={{ width: '1.25rem', height: '1.25rem' }}>
-                            <span className="visually-hidden"></span>
-                          </output>
-                        </>
-                      ) : (
-                        <>
-                          Confirmar
-                          <CheckSquare className="ms-2" size={15} />
-                        </>
-                      )}
-                    </div>
-                    <span></span>
-                  </button>
+                  {formik.isSubmitting ? (
+                    <button className={`${styles['confirm-btn']}`} type="submit" disabled>
+                      <div className={`${styles['confirm-content']}`}>
+                        Cargando...
+                        <output className="spinner-border ms-4" style={{ width: '1.25rem', height: '1.25rem' }}>
+                          <span className="visually-hidden"></span>
+                        </output>
+                      </div>
+                      <span></span>
+                    </button>
+                  ) : (
+                    <button className={`${styles['confirm-btn']}`} type="submit" disabled={formik.isSubmitting}>
+                      <div className={`${styles['confirm-content']}`}>
+                        Confirmar
+                        <CheckSquare className="ms-2" size={15} />
+                      </div>
+                      <span></span>
+                    </button>
+                  )}
+
                 </div>
               </form>
             </div>
