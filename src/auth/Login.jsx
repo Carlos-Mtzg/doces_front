@@ -29,6 +29,7 @@ const Login = () => {
         }),
         onSubmit: async (values, { setSubmitting }) => {
             try {
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 const response = await AxiosClient.post('/login', {
                     email: values.email,
                     password: values.password
@@ -40,8 +41,8 @@ const Login = () => {
                     Swal.fire({
                         title: 'Has iniciado sesión correctamente.',
                         icon: 'success',
-                        confirmButtonText: 'Aceptar',
-                        confirmButtonColor: '#002E5D'
+                        showConfirmButton: false,
+                        timer: 2000
                     }).then(() => {
                         dispatch({ type: 'SIGNIN', payload: response });
                         navigate('/', { replace: true });
@@ -109,8 +110,19 @@ const Login = () => {
                             disabled={formik.isSubmitting}
                         >
                             <div className={`${styles['signIn-content']}`}>
-                                Iniciar Sesión
-                                <LogIn className="ms-2" />
+                                {formik.isSubmitting ? (
+                                    <>
+                                        Cargando...
+                                        <output className="spinner-border ms-4" style={{ width: '1.25rem', height: '1.25rem' }}>
+                                            <span className="visually-hidden"></span>
+                                        </output>
+                                    </>
+                                ) : (
+                                    <>
+                                        Iniciar Sesión
+                                        <LogIn className="ms-2" />
+                                    </>
+                                )}
                             </div>
                             <span></span>
                         </button>

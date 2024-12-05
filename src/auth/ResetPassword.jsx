@@ -55,6 +55,7 @@ const ResetPassword = () => {
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
+        await new Promise(resolve => setTimeout(resolve, 2000));
         const response = await AxiosClient.post(`/reset-password/${token}`, {
           password: values.password,
           repeatPassword: values.repeatPassword
@@ -113,8 +114,19 @@ const ResetPassword = () => {
                     disabled={formik.isSubmitting}
                   >
                     <div className={`${styles['confirm-content']}`}>
-                      Confirmar
-                      <CheckSquare className="ms-2" size={15} />
+                      {formik.isSubmitting ? (
+                        <>
+                          Cargando...
+                          <output className="spinner-border ms-4" style={{ width: '1.25rem', height: '1.25rem' }}>
+                            <span className="visually-hidden"></span>
+                          </output>
+                        </>
+                      ) : (
+                        <>
+                          Confirmar
+                          <CheckSquare className="ms-2" size={15} />
+                        </>
+                      )}
                     </div>
                     <span></span>
                   </button>

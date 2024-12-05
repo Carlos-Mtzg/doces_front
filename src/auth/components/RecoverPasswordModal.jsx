@@ -19,6 +19,7 @@ const RecoverPasswordModal = () => {
         }),
         onSubmit: async (values, { setSubmitting }) => {
             try {
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 const response = await AxiosClient.post('/recover-password-email', {
                     email: values.email
                 });
@@ -105,8 +106,19 @@ const RecoverPasswordModal = () => {
                         <div className="modal-footer">
                             <button type='submit' className={`py-2 ${styles['send-email-btn']}`} disabled={formik.isSubmitting}>
                                 <div className={`${styles['send-email-content']}`}>
-                                    Enviar Correo
-                                    <Send className="ms-2" width={18} />
+                                    {formik.isSubmitting ? (
+                                        <>
+                                            Cargando...
+                                            <output className="spinner-border ms-4" style={{ width: '1.25rem', height: '1.25rem' }}>
+                                                <span className="visually-hidden"></span>
+                                            </output>
+                                        </>
+                                    ) : (
+                                        <>
+                                            Enviar Correo
+                                            <Send className="ms-2" width={18} />
+                                        </>
+                                    )}
                                 </div>
                                 <span></span>
                             </button>

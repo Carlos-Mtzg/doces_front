@@ -6,7 +6,6 @@ import * as yup from 'yup'
 import { useFormik } from 'formik'
 import AxiosClient from '../config/htttp-client/axios-client'
 import Swal from "sweetalert2";
-
 const REQUIRED_FIELDS = 'Campo obligatorio *';
 
 const validationSchema = yup.object().shape({
@@ -28,6 +27,7 @@ const validationSchema = yup.object().shape({
 
 const handleSubmit = async (values, { setSubmitting }, navigate) => {
   try {
+    await new Promise(resolve => setTimeout(resolve, 3000));
     const response = await AxiosClient.post('/register', values);
     if (response.status === 200) {
       showSuccessMessage(navigate)
@@ -209,8 +209,19 @@ const Register = () => {
               disabled={formik.isSubmitting}
             >
               <div className={`${styles['register-content']}`}>
-                Registrarme
-                <LogIn className="ms-2" />
+                {formik.isSubmitting ? (
+                  <>
+                    Cargando...
+                    <output className="spinner-border ms-4" style={{ width: '1.25rem', height: '1.25rem' }}>
+                      <span className="visually-hidden"></span>
+                    </output>
+                  </>
+                ) : (
+                  <>
+                    Registrarme
+                    <LogIn className="ms-2" />
+                  </>
+                )}
               </div>
               <span></span>
             </button>
