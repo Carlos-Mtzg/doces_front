@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { ChevronsRight, BarChart2, AlertCircle, FileText, File } from 'react-feather'
-import styles from '../assets/css/admin/admin-offcanvas.module.css'
-import StatusBadge from './StatusBadge'
-import PriorityBadge from './PriorityBadge'
-import AxiosClient from '../config/htttp-client/axios-client'
+import styles from '../../assets/css/admin/admin-offcanvas.module.css'
+import StatusBadge from './../StatusBadge'
+import PriorityBadge from './../PriorityBadge'
+import AxiosClient from '../../config/htttp-client/axios-client'
 import Swal from 'sweetalert2'
 import PropTypes from 'prop-types';
 

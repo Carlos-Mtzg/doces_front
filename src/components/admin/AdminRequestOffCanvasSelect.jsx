@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronsRight, BarChart2, AlertCircle, FileText, Send, Paperclip, File } from 'react-feather';
-import styles from '../assets/css/admin/admin-offcanvas.module.css';
+import styles from '../../assets/css/admin/admin-offcanvas.module.css';
 import Swal from "sweetalert2";
-import AxiosClient from '../config/htttp-client/axios-client';
-import AxiosFormData from '../config/htttp-client/axios-fortmData';
+import AxiosClient from '../../config/htttp-client/axios-client';
+import AxiosFormData from '../../config/htttp-client/axios-fortmData';
 import PropTypes from 'prop-types';
 
 const AdminRequestOffCanvasSelect = ({ request }) => {

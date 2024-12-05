@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const PriorityBadge = ({ priority, customColors }) => {
     let priorityClass = '';
@@ -25,8 +26,16 @@ const PriorityBadge = ({ priority, customColors }) => {
             priorityClass = 'badge bg-secondary';
             priorityText = 'Desconocido';
     }
-
     return <span className={priorityClass} style={customStyle}>{priorityText}</span>;
 }
+
+PriorityBadge.propTypes = {
+    priority: PropTypes.string,
+    customColors: PropTypes.shape({
+        hight: PropTypes.object,
+        medium: PropTypes.object,
+        down: PropTypes.object,
+    }),
+};
 
 export default PriorityBadge

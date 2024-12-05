@@ -1,12 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styles from '../assets/css/components/request-card.module.css';
 import { AlertCircle, FileText } from 'react-feather';
-
-/*
-Solicitud en espera: f25c54
-Solicitud en progreso: ffbf61
-Solicitud terminada: 00ab84
- */
 
 function RequestCard({ title, description, status }) {
 
@@ -28,19 +23,15 @@ function RequestCard({ title, description, status }) {
     return (
         <div className={styles.cardContainer}>
             {/* Icono circular superior */}
-            <div className={styles.iconCircle} style={{ backgroundColor: footerColor}}></div>
-
+            <div className={styles.iconCircle} style={{ backgroundColor: footerColor }}></div>
             {/* Título */}
             <h4 className={`px-4 ${styles['cardTitle']}`}>{title}</h4>
-
             {/* Descripción */}
             <p className={styles.cardDescription}>{description}</p>
-
             {/* Imagen */}
             <div className={styles.iconImage}>
                 <FileText size={100} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
             </div>
-
             {/* Pie de la card */}
             <div className={styles.footer} style={{ backgroundColor: footerColor }}>
                 <AlertCircle size={16} color="#FFFFFF" />
@@ -49,5 +40,11 @@ function RequestCard({ title, description, status }) {
         </div>
     );
 }
+
+RequestCard.propTypes = {
+    title: PropTypes.string,
+    description: PropTypes.string,
+    status: PropTypes.string,
+};
 
 export default RequestCard;

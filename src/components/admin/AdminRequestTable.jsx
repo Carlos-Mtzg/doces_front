@@ -1,8 +1,8 @@
 import React from 'react'
-import styles from '../assets/css/admin/admin-pages.module.css'
+import styles from '../../assets/css/admin/admin-pages.module.css'
 import { BarChart2, AlertCircle, FileText, ChevronsLeft } from 'react-feather'
-import PriorityBadge from './PriorityBadge'
-import StatusBadge from './StatusBadge'
+import PriorityBadge from './../PriorityBadge'
+import StatusBadge from './../StatusBadge'
 import PropTypes from 'prop-types'
 const AdminRequestTable = ({ requests, onRequestSelect }) => {
 
