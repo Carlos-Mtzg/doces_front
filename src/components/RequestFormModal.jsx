@@ -14,7 +14,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
   const [currentSection, setCurrentSection] = useState(1);
   const [alert, setAlert] = useState({ open: false, severity: '', message: '', title: '' });
   const niveles = ["TSU", "Ingenieria", "Licenciatura"];
-  const [formData, setFormData] = useState({
+  const [data, formData] = useState({
     archivos: []
   });
 
@@ -30,6 +30,54 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
     formik.setFieldValue("archivos", nuevosArchivos);
   };
 
+  const validationSchema = yup.object().shape({
+    // Primer seccion
+    nombre: yup.string().required(VALIDATION_ERROR),
+    matricula: yup.string().required(VALIDATION_ERROR),
+    nivelEstudios: yup.string().required(VALIDATION_ERROR),
+    periodoAcademico: yup.string().required(VALIDATION_ERROR),
+    correo: yup.string().email('Ingresa un correo electrónico válido').required(VALIDATION_ERROR),
+    archivos: yup.array().max(4, 'Solo se pueden adjuntar hasta 4 archivos'),
+    // Segunda seccion
+    cardNumber: yup.string()
+      .required('El número de tarjeta es requerido')
+      .matches(/^\d{16}$/, 'El número de tarjeta debe tener 16 dígitos'),
+    expirationDate: yup.string()
+      .required('La fecha de expiración es requerida')
+      .matches(/^(0[1-9]|1[0-2])\/?(\d{2})$/, 'La fecha de expiración debe estar en el formato MM/YY'),
+    cvv: yup.string()
+      .required('El CVV es requerido')
+      .matches(/^\d{3,4}$/, 'El CVV debe tener 3 o 4 dígitos')
+  });
+
+  const showSuccessMessage = () => {
+    setAlert({
+      open: true,
+      severity: 'success',
+      title: 'Solicitud creada exitosamente',
+      message: 'Su solicitud ha sido registrada y será gestionada por el personal de servicios escolares. Le recomendamos estar atento a su correo electrónico para recibir actualizaciones sobre el proceso.',
+    });
+  }
+
+  const showErrorMessage = (error) => {
+    console.error(error);
+    setAlert({
+      open: true,
+      severity: 'error',
+      title: 'Error',
+      message: '¡Ocurrió un error inesperado!',
+    });
+  }
+
+  const showErrorDataMessage = () => {
+    setAlert({
+      open: true,
+      severity: 'error',
+      title: 'Error',
+      message: '¡Ocurrió un error inesperado!, verifica tus datos e inténtalo de nuevo más tarde',
+    });
+  }
+
   const formik = useFormik({
     initialValues: {
       nombre: "",
@@ -42,30 +90,10 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
       expirationDate: '',
       cvv: ''
     },
-    validationSchema: yup.object().shape({
-      // Primer seccion
-      nombre: yup.string().required(VALIDATION_ERROR),
-      matricula: yup.string().required(VALIDATION_ERROR),
-      nivelEstudios: yup.string().required(VALIDATION_ERROR),
-      periodoAcademico: yup.string().required(VALIDATION_ERROR),
-      correo: yup.string().email('Ingresa un correo electrónico válido').required(VALIDATION_ERROR),
-      archivos: yup.array().max(4, 'Solo se pueden adjuntar hasta 4 archivos'),
-      // Segunda seccion
-      cardNumber: yup.string()
-        .required('El número de tarjeta es requerido')
-        .matches(/^\d{16}$/, 'El número de tarjeta debe tener 16 dígitos'),
-      expirationDate: yup.string()
-        .required('La fecha de expiración es requerida')
-        .matches(/^(0[1-9]|1[0-2])\/?(\d{2})$/, 'La fecha de expiración debe estar en el formato MM/YY'),
-      cvv: yup.string()
-        .required('El CVV es requerido')
-        .matches(/^\d{3,4}$/, 'El CVV debe tener 3 o 4 dígitos')
-    }),
+    validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       const formData = new FormData();
-
-      // Agregar archivos al FormData
-      if (values.archivos && values.archivos.length >= 0) {
+      if (values.archivos?.length >= 0) {
         values.archivos.forEach((file) => {
           formData.append("files", file);
         });
@@ -82,7 +110,6 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
       for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
       }
-
       formData.append("nombre", values.nombre);
       formData.append("matricula", values.matricula);
       formData.append("nivelEstudios", values.nivelEstudios);
@@ -116,31 +143,15 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
         });
 
         if (response) {
-          setAlert({
-            open: true,
-            severity: 'success',
-            title: 'Solicitud creada exitosamente',
-            message: 'Su solicitud ha sido registrada y será gestionada por el personal de servicios escolares. Le recomendamos estar atento a su correo electrónico para recibir actualizaciones sobre el proceso.',
-          });
+          showSuccessMessage();
           formik.resetForm();
           setCurrentSection(1);
         } else {
-          setAlert({
-            open: true,
-            severity: 'error',
-            title: 'Error',
-            message: '¡Ocurrió un error inesperado!, verifica tus datos e inténtalo de nuevo más tarde',
-          });
+          showErrorDataMessage();
           formik.resetForm();
         }
       } catch (error) {
-        console.error(error);
-        setAlert({
-          open: true,
-          severity: 'error',
-          title: 'Error',
-          message: '¡Ocurrió un error inesperado!',
-        });
+        showErrorMessage(error);
       } finally {
         setSubmitting(false);
       }
@@ -173,7 +184,7 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
     setCurrentSection(1);
     formik.resetForm();
     setAlert({ ...alert, open: false });
-  };
+  }
 
   return (
     <div
@@ -256,8 +267,8 @@ const SolicitudDocumentoModal = ({ tipoDocumento, precioDocumento }) => {
                         required
                       >
                         <option value="">Selecciona tu nivel de estudios</option>
-                        {niveles.map((nivel, index) => (
-                          <option key={index} value={nivel}>
+                        {niveles.map((nivel) => (
+                          <option key={nivel} value={nivel}>
                             {nivel}
                           </option>
                         ))}
