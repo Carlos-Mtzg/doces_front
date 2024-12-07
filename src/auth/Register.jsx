@@ -7,14 +7,15 @@ import { useFormik } from 'formik'
 import AxiosClient from '../config/htttp-client/axios-client'
 import Swal from "sweetalert2";
 const REQUIRED_FIELDS = 'Campo obligatorio *';
+const EMPTY_FIELDS = 'Este campo no puede contener espacios en blanco';
 
 const validationSchema = yup.object().shape({
-  name: yup.string().matches(/^[A-Za-záéíóúÁÉÍÓÚ\s]+$/, 'El nombre solo puede contener letras y espacios').required(REQUIRED_FIELDS),
-  lastname: yup.string().matches(/^[A-Za-záéíóúÁÉÍÓÚ\s]+$/, 'Este campo solo puede contener letras y espacios').required(REQUIRED_FIELDS),
-  matricula: yup.string().required(REQUIRED_FIELDS),
-  grupo: yup.string().length(1, 'El grupo debe ser un solo carácter').required(REQUIRED_FIELDS),
-  cuatrimestre: yup.string().matches(/^\d{1,2}$/, 'El cuatrimestre debe ser un número de máximo 2 dígitos').required(REQUIRED_FIELDS),
-  email: yup.string().email('Ingresa un correo electrónico válido').required(REQUIRED_FIELDS),
+  name: yup.string().matches(/^[A-Za-záéíóúÁÉÍÓÚ]+$/, 'El nombre solo puede contener letras y no debe tener espacios').required(REQUIRED_FIELDS).trim(),
+  lastname: yup.string().matches(/^[A-Za-záéíóúÁÉÍÓÚ]+$/, 'Este campo solo puede contener letras y no debe tener espacios').required(REQUIRED_FIELDS).trim(),
+  matricula: yup.string().matches(/^\S*$/, EMPTY_FIELDS).required(REQUIRED_FIELDS).trim(),
+  grupo: yup.string().length(1, 'El grupo debe ser un solo carácter').matches(/^\S*$/, EMPTY_FIELDS).required(REQUIRED_FIELDS).trim(),
+  cuatrimestre: yup.string().matches(/^\S*$/, EMPTY_FIELDS).required(REQUIRED_FIELDS).trim(),
+  email: yup.string().email('Ingresa un correo electrónico válido').matches(/^\S*$/, EMPTY_FIELDS).required(REQUIRED_FIELDS).trim(),
   password: yup
     .string()
     .required('La contraseña es obligatoria')
