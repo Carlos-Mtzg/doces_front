@@ -24,8 +24,8 @@ const Login = () => {
             password: ''
         },
         validationSchema: yup.object().shape({
-            email: yup.string().email('Ingresa un correo electrónico válido').required(REQUIRED_FIELDS),
-            password: yup.string().required(REQUIRED_FIELDS)
+            email: yup.string().email('Ingresa un correo electrónico válido').required(REQUIRED_FIELDS).trim(),
+            password: yup.string().required(REQUIRED_FIELDS).trim()
         }),
         onSubmit: async (values, { setSubmitting }) => {
             try {

@@ -84,7 +84,6 @@
 
 .register-container {
     box-shadow: 4px 0 8px rgba(0, 0, 0, 0.10);
-    min-height: 100vh;
 }
 
 
@@ -107,6 +106,7 @@
     cursor: pointer;
     overflow: hidden;
     border-radius: 8px;
+    height: 40px;
 }
 
 .register-content {
@@ -167,5 +167,38 @@
 }
 
 .confirm-btn:hover span {
+    left: -0%;
+}
+
+.back-btn {
+    position: relative;
+    background-color: var(--gris-utez);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 8px;
+    font-size: 15px;
+    width: 140px;
+    height: 40px;
+}
+
+.back-content {
+    position: relative;
+    z-index: 2;
+}
+
+.back-btn span {
+    position: absolute;
+    width: 100%;
+    height: 95px;
+    background-color: #3e3e3e23;
+    top: -50%;
+    left: -100%;
+    transition: all 0.3s;
+    z-index: 1;
+}
+
+.back-btn:hover span {
     left: -0%;
 }
