@@ -1,69 +1,76 @@
-import React, { useContext } from 'react'
-import styles from '../assets/css/auth/reset-password.module.css'
+import React from 'react'
+import styles from '../assets/css/auth/authentication.module.css'
 import { CheckSquare } from 'react-feather'
-
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-import AuthContext from '../config/context/auth-context'
 import AxiosClient from '../config/htttp-client/axios-client'
 import Swal from 'sweetalert2'
 import { useNavigate, useParams } from 'react-router-dom'
 
-const ResetPassword = () => {
-  const { dispatch } = useContext(AuthContext);
-  const navigate = useNavigate();
-  const VALIDATION_ERROR = 'Campo obligatorio';
-  const { token } = useParams();
+const REQUIRED_FIELDS = 'Campo obligatorio';
 
+const validationSchema = yup.object().shape({
+  password: yup.string()
+    .required(REQUIRED_FIELDS)
+    .min(8, 'La contraseña debe tener al menos 8 caracteres')
+    .matches(/[A-Z]/, 'La contraseña debe contener al menos una letra mayúscula')
+    .matches(/[a-z]/, 'La contraseña debe contener al menos una letra minúscula')
+    .matches(/[\W_]/, 'La contraseña debe contener al menos un carácter especial (como !, @, #, $, etc.)')
+    .trim(),
+  repeatPassword: yup.string()
+    .required(REQUIRED_FIELDS)
+    .oneOf([yup.ref('password')], 'Las contraseñas no coinciden')
+});
+
+const showSuccessMessage = (navigate) => {
+  Swal.fire({
+    title: '¡Contraseña actualizada!',
+    text: "Ahora puedes iniciar sesión con tu nueva contraseña.",
+    icon: 'success',
+    showConfirmButton: false,
+    timer: 3000,
+  }).then(() => {
+    navigate('/login', { replace: true })
+  });
+}
+
+const showErrorMessage = () => {
+  Swal.fire({
+    title: 'Error',
+    text: 'Hubo un problema al actualizar tu contraseña. Por favor, intenta nuevamente.',
+    icon: 'error',
+    confirmButtonText: 'Aceptar',
+    confirmButtonColor: '#002E5D',
+  });
+}
+
+const ResetPassword = () => {
+  const { token } = useParams();
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       password: '',
       repeatPassword: ''
     },
-    validationSchema: yup.object().shape({
-      password: yup.string()
-        .required(VALIDATION_ERROR)
-        .min(8, 'La contraseña debe tener al menos 8 caracteres')
-        .matches(/[A-Z]/, 'La contraseña debe contener al menos una letra mayúscula')
-        .matches(/[a-z]/, 'La contraseña debe contener al menos una letra minúscula')
-        .matches(/[\W_]/, 'La contraseña debe contener al menos un carácter especial (como !, @, #, $, etc.)')
-        .trim(),
-      repeatPassword: yup.string()
-        .required(VALIDATION_ERROR)
-        .oneOf([yup.ref('password')], 'Las contraseñas no coinciden')
-    }),
+    validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        console.log(token);
+        await new Promise(resolve => setTimeout(resolve, 2000));
         const response = await AxiosClient.post(`/reset-password/${token}`, {
           password: values.password,
           repeatPassword: values.repeatPassword
         });
         if (response) {
-          Swal.fire({
-            title: '¡Contraseña actualizada!',
-            text: "Ahora puedes iniciar sesión con tu nueva contraseña.",
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 3000,
-          }).then(() => {
-            navigate('/login', { replace: true })
-          });
+          showSuccessMessage(navigate);
         } else
           throw Error('Error')
       } catch (error) {
-        Swal.fire({
-          title: 'Error',
-          text: 'Hubo un problema al actualizar tu contraseña. Por favor, intenta nuevamente.',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
-          confirmButtonColor: '#002E5D',
-        });
+        showErrorMessage();
       } finally {
         setSubmitting(false);
       }
-    }
-  })
+    },
+  });
 
   return (
     <div className="container-fluid d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
@@ -103,15 +110,26 @@ const ResetPassword = () => {
                   ) : null}
                 </div>
                 <div className="form-group d-flex flex-column mt-2">
-                  <button className={`${styles['confirm-btn']}`} type="submit"
-                    disabled={formik.isSubmitting}
-                  >
-                    <div className={`${styles['confirm-content']}`}>
-                      Confirmar
-                      <CheckSquare className="ms-2" size={15} />
-                    </div>
-                    <span></span>
-                  </button>
+                  {formik.isSubmitting ? (
+                    <button className={`${styles['confirm-btn']}`} type="submit" disabled>
+                      <div className={`${styles['confirm-content']}`}>
+                        Cargando...
+                        <output className="spinner-border ms-4" style={{ width: '1.25rem', height: '1.25rem' }}>
+                          <span className="visually-hidden"></span>
+                        </output>
+                      </div>
+                      <span></span>
+                    </button>
+                  ) : (
+                    <button className={`${styles['confirm-btn']}`} type="submit" disabled={formik.isSubmitting}>
+                      <div className={`${styles['confirm-content']}`}>
+                        Confirmar
+                        <CheckSquare className="ms-2" size={15} />
+                      </div>
+                      <span></span>
+                    </button>
+                  )}
+
                 </div>
               </form>
             </div>

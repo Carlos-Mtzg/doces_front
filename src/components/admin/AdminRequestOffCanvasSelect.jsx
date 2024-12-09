@@ -1,9 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { ChevronsRight, BarChart2, AlertCircle, FileText, Calendar, Send, Paperclip, File } from 'react-feather';
-import styles from '../assets/css/components/offcanvas-requests.module.css';
+import { ChevronsRight, BarChart2, AlertCircle, FileText, Send, Paperclip, File } from 'react-feather';
+import styles from '../../assets/css/admin/admin-offcanvas.module.css';
 import Swal from "sweetalert2";
-import AxiosClient from '../config/htttp-client/axios-client';
-import AxiosFormData from '../config/htttp-client/axios-fortmData';
+import AxiosClient from '../../config/htttp-client/axios-client';
+import AxiosFormData from '../../config/htttp-client/axios-fortmData';
+import PropTypes from 'prop-types';
 
 const AdminRequestOffCanvasSelect = ({ request }) => {
     const fileInputRef = useRef(null);
@@ -26,7 +27,6 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     setData(userResponse || 'No se encontró la información');
-                    console.log(userResponse);
                 } catch (error) {
                     console.error('Error al consumir el endpoint:', error);
                 }
@@ -41,7 +41,6 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
 
     const handleButtonError = async (event) => {
         event.preventDefault();
-        //const user_id = request.userData.match(/\d+/)[0];
         const user_id = data.id;
         try {
             const userResponse = await AxiosClient.get(`/user/${user_id}`, {
@@ -57,21 +56,22 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
             formData.append('subject', 'Asunto del correo');
             formData.append('title', 'Error encontrado en tu solicitud');
             formData.append('messageContent', messageContent);
-            const emailReponse = await AxiosFormData.post(`/documentRequest/sendEmail`, formData, {
+            const emailResponse = await AxiosFormData.post(`/documentRequest/sendEmail`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            Swal.fire({
-                title: 'Correo enviado correctamente.',
-                icon: 'success',
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: '#002E5D'
-            }).then(() => {
-                window.location.reload();
-            });
-
+            if (emailResponse) {
+                Swal.fire({
+                    title: 'Correo enviado correctamente.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#002E5D'
+                }).then(() => {
+                    window.location.reload();
+                });
+            }
         } catch (error) {
             Swal.fire({
                 title: 'Error al enviar el correo.',
@@ -103,14 +103,16 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            Swal.fire({
-                title: 'La prioridad cambio correctamente.',
-                icon: 'success',
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: '#002E5D'
-            }).then(() => {
-                window.location.reload();
-            });
+            if (response) {
+                Swal.fire({
+                    title: 'La prioridad cambio correctamente.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#002E5D'
+                }).then(() => {
+                    window.location.reload();
+                });
+            }
         } catch (error) {
             Swal.fire({
                 title: 'Error al cambiar la prioridad.',
@@ -121,23 +123,25 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
         }
     };
 
-    const handleStatusChange = (event) => {
+    const handleStatusChange = async (event) => {
         const newStatus = (event.target.value);
         setStatus(newStatus);
         try {
-            const response = AxiosClient.put(`/documentRequest/status/${request.id}/${newStatus}`, {}, {
+            const response = await AxiosClient.put(`/documentRequest/status/${request.id}/${newStatus}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-            Swal.fire({
-                title: 'El estatus cambio correctamente.',
-                icon: 'success',
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: '#002E5D'
-            }).then(() => {
-                window.location.reload();
-            });
+            if (response) {
+                Swal.fire({
+                    title: 'El estatus cambio correctamente.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#002E5D'
+                }).then(() => {
+                    window.location.reload();
+                });
+            }
         } catch (error) {
             Swal.fire({
                 title: 'Error al cambiar el estatus.',
@@ -146,15 +150,12 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                 confirmButtonColor: '#002E5D'
             });
         }
-
     };
 
     const handleSendEmail = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('token');
-        //const user_id = request.userData.match(/\d+/)[0];
         const user_id = data.id;
-        console.log("user_id", user_id);
 
         try {
             const userResponse = await AxiosClient.get(`/user/${user_id}`, {
@@ -177,15 +178,16 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
                 }, maxContentLength: Infinity,
                 maxBodyLength: Infinity
             });
-
-            Swal.fire({
-                title: 'Correo enviado correctamente.',
-                icon: 'success',
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: '#002E5D'
-            }).then(() => {
-                window.location.reload();
-            });
+            if (emailResponse) {
+                Swal.fire({
+                    title: 'Correo enviado correctamente.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#002E5D'
+                }).then(() => {
+                    window.location.reload();
+                });
+            }
         } catch (error) {
             console.error('Error al enviar el correo:', error);
             Swal.fire({
@@ -197,7 +199,7 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
         }
     };
 
-    const { type: fileType, userData: user } = request || {};
+    const { type: fileType } = request || {};
 
     return (
         <div className={`${styles['custom-offcanvas']} offcanvas offcanvas-end`} tabIndex="-1" id="offCanvasRequests" aria-labelledby="offCanvasRequestsLabel">
@@ -303,6 +305,14 @@ const AdminRequestOffCanvasSelect = ({ request }) => {
             </div>
         </div>
     );
+};
+
+AdminRequestOffCanvasSelect.propTypes = {
+    request: PropTypes.shape({
+        id: PropTypes.number,
+        priority: PropTypes.string,
+        status: PropTypes.string,
+    }),
 };
 
 export default AdminRequestOffCanvasSelect;

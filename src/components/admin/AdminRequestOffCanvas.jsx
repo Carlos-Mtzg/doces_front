@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { ChevronsRight, BarChart2, AlertCircle, FileText, File } from 'react-feather'
-import styles from '../assets/css/components/offcanvas-requests.module.css'
-import StatusBadge from './StatusBadge'
-import PriorityBadge from './PriorityBadge'
-import AxiosClient from '../config/htttp-client/axios-client'
+import styles from '../../assets/css/admin/admin-offcanvas.module.css'
+import StatusBadge from './../StatusBadge'
+import PriorityBadge from './../PriorityBadge'
+import AxiosClient from '../../config/htttp-client/axios-client'
 import Swal from 'sweetalert2'
 import PropTypes from 'prop-types';
 
@@ -15,13 +15,11 @@ const AdminRequestOffCanvas = ({ request }) => {
         const fetchData = async () => {
             if (request) {
                 const userId = request.id;
-                console.log(userId);
                 try {
                     const userResponse = await AxiosClient.get(`/documentRequest/user/byDocumentRequest/${userId}`, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     setData(userResponse || 'No se encontró la información');
-                    console.log(userResponse);
                 } catch (error) {
                     console.error('Error al consumir el endpoint:', error);
                 }
@@ -133,11 +131,10 @@ const AdminRequestOffCanvas = ({ request }) => {
 
 AdminRequestOffCanvas.propTypes = {
     request: PropTypes.shape({
-        id: PropTypes.number.isRequired,
+        id: PropTypes.number,
         priority: PropTypes.string,
         status: PropTypes.string,
-        // Agrega más propiedades según sea necesario
-    }).isRequired,
+    }),
 };
 
 export default AdminRequestOffCanvas
