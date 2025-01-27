@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import styles from '../../assets/css/auth/login.module.css';
+import styles from '../../assets/css/auth/authentication.module.css';
 import { AlertCircle, Send } from 'react-feather';
-
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import AxiosClient from '../../config/htttp-client/axios-client';
@@ -20,6 +19,7 @@ const RecoverPasswordModal = () => {
         }),
         onSubmit: async (values, { setSubmitting }) => {
             try {
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 const response = await AxiosClient.post('/recover-password-email', {
                     email: values.email
                 });
@@ -54,14 +54,14 @@ const RecoverPasswordModal = () => {
         }
 
     });
-    
+
     const handleCloseModal = () => {
         formik.resetForm();
         setAlert({ ...alert, open: false });
     };
 
     return (
-        <div className="modal fade" id="recover-password" aria-hidden="true" aria-labelledby="recover-password">
+        <div className="modal fade" id="recover-password" aria-hidden="true" aria-labelledby="recover-password" data-bs-backdrop="static" data-bs-keyboard="false">
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                     <div className={`modal-header ${styles['modal-header']}`}>
@@ -104,18 +104,30 @@ const RecoverPasswordModal = () => {
                             )}
                         </div>
                         <div className="modal-footer">
-                            <button type='submit' className={`py-2 ${styles['send-email-btn']}`} disabled={formik.isSubmitting}>
-                                <div className={`${styles['send-email-content']}`}>
-                                    Enviar Correo
-                                    <Send className="ms-2" width={18} />
-                                </div>
-                                <span></span>
-                            </button>
+                            {formik.isSubmitting ? (
+                                <button type='submit' className={`py-2 ${styles['send-email-btn']}`} disabled>
+                                    <div className={`${styles['send-email-content']}`}>
+                                        Cargando...
+                                        <output className="spinner-border ms-4" style={{ width: '1.25rem', height: '1.25rem' }}>
+                                            <span className="visually-hidden"></span>
+                                        </output>
+                                    </div>
+                                    <span></span>
+                                </button>
+                            ) : (
+                                <button type='submit' className={`py-2 ${styles['send-email-btn']}`} disabled={formik.isSubmitting}>
+                                    <div className={`${styles['send-email-content']}`}>
+                                        Enviar Correo
+                                        <Send className="ms-2" width={18} />
+                                    </div>
+                                    <span></span>
+                                </button>
+                            )}
                         </div>
                     </form>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

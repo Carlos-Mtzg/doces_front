@@ -1,35 +1,20 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
-import styles from '../assets/css/user/requests.module.css';
+import styles from '../assets/css/user/user-pages.module.css';
 import RequestCard from '../components/RequestCard.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AxiosClient from '../config/htttp-client/axios-client.js'
 
 const Requests = () => {
-    // const data = [
-    //     { id: '1', title: 'Kardex', description: 'Descripción del kardex', status: 'Solicitud en espera' },
-    //     { id: '2', title: 'Constancia de estudios', description: 'Descripción del certificado', status: 'Solicitud en progreso' },
-    //     { id: '3', title: 'Carta de recomendación', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
-    //     { id: '4', title: 'Certificado de estudios', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
-    //     { id: '5', title: 'Certificado de estudios', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
-    //     { id: '6', title: 'Kardex', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
-    //     { id: '7', title: 'Certificado de estudios', description: 'Descripción de la constancia', status: 'Solicitud terminada' },
-
-    // ];
-
     const [data, setData] = useState([]);
     const userId = sessionStorage.getItem('userId');
-    console.log("User id", userId);
-
-    
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem('token'); // Obtén el token de sesión
+                const token = localStorage.getItem('token');
                 const response = await AxiosClient.get(`/documentRequest/user/${userId}`, {
                     headers: {
-                        Authorization: `Bearer ${token}` // Agrega el encabezado de autorización
+                        Authorization: `Bearer ${token}`
                     }
                 });
                 setData(response);
@@ -37,11 +22,9 @@ const Requests = () => {
                 console.error('Error fetching data:', error);
             }
         };
-    
         fetchData();
     }, [userId]);
 
-   
 
     return (
         <>

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const StatusBadge = ({ status, customColors }) => {
     let statusClass = '';
@@ -27,6 +28,15 @@ const StatusBadge = ({ status, customColors }) => {
     }
 
     return <span className={statusClass} style={customStyle}>{statusText}</span>;
+};
+
+StatusBadge.propTypes = {
+    status: PropTypes.string,
+    customColors: PropTypes.shape({
+        inProgress: PropTypes.object,
+        pending: PropTypes.object,
+        completed: PropTypes.object,
+    }),
 };
 
 export default StatusBadge;

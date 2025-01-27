@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import styles from '../assets/css/auth/login.module.css'
+import styles from '../assets/css/auth/authentication.module.css'
 import { LogIn } from 'react-feather'
-
 import * as yup from 'yup'
 import { useFormik } from 'formik'
 import AuthContext from '../config/context/auth-context'
@@ -17,7 +16,7 @@ const Login = () => {
     const [alert, setAlert] = useState({ open: false, severity: '', message: '', title: '' });
     const { dispatch } = useContext(AuthContext)
     const navigate = useNavigate();
-    const VALIDATION_ERROR = 'Campo obligatorio *';
+    const REQUIRED_FIELDS = 'Campo obligatorio *';
 
     const formik = useFormik({
         initialValues: {
@@ -25,25 +24,26 @@ const Login = () => {
             password: ''
         },
         validationSchema: yup.object().shape({
-            email: yup.string().email('Ingresa un correo electrónico válido').required(VALIDATION_ERROR),
-            password: yup.string().required(VALIDATION_ERROR)
+            email: yup.string().email('Ingresa un correo electrónico válido').required(REQUIRED_FIELDS).trim(),
+            password: yup.string().required(REQUIRED_FIELDS).trim()
         }),
         onSubmit: async (values, { setSubmitting }) => {
             try {
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 const response = await AxiosClient.post('/login', {
                     email: values.email,
                     password: values.password
                 });
-                if (response && response.accessToken) {
+                if (response?.accessToken) {
                     localStorage.setItem('token', response.accessToken);
                     localStorage.setItem('role', response.role);
                     sessionStorage.setItem('userId', response.id);
                     Swal.fire({
                         title: 'Has iniciado sesión correctamente.',
                         icon: 'success',
-                        confirmButtonText: 'Aceptar',
-                        confirmButtonColor: '#002E5D'
-                    }).then(()=> {
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(() => {
                         dispatch({ type: 'SIGNIN', payload: response });
                         navigate('/', { replace: true });
                     })
@@ -106,16 +106,25 @@ const Login = () => {
                         <Link className={`${styles['forget-password']}`} to="" data-bs-toggle="modal" data-bs-target="#recover-password">¿Olvidaste tu contraseña?</Link>
                     </div>
                     <div className="form-group d-flex flex-column gap-3">
-                        <button className={`${styles['signIn-btn']}`} type='submit'
-                            disabled={formik.isSubmitting}
-                        >
-                            <div className={`${styles['signIn-content']}`}>
-                                Iniciar Sesión
-                                <LogIn className="ms-2" />
-                            </div>
-                            <span></span>
-                        </button>
-
+                        {formik.isSubmitting ? (
+                            <button className={`${styles['signIn-btn']}`} type='submit' disabled>
+                                <div className={`${styles['signIn-content']}`}>
+                                    Cargando...
+                                    <output className="spinner-border ms-1" style={{ width: '1.25rem', height: '1.25rem' }}>
+                                        <span className="visually-hidden"></span>
+                                    </output>
+                                </div>
+                                <span></span>
+                            </button>
+                        ) : (
+                            <button className={`${styles['signIn-btn']}`} type='submit' disabled={formik.isSubmitting}>
+                                <div className={`${styles['signIn-content']}`}>
+                                    Iniciar Sesión
+                                    <LogIn className="ms-2" />
+                                </div>
+                                <span></span>
+                            </button>
+                        )}
                         <Link className={`text-center ${styles['register-now']}`} to="/register">Registrarme ahora</Link>
                     </div>
                 </form>

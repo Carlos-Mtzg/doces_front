@@ -7,6 +7,8 @@ import RequestFormModal from './RequestFormModal'
 
 function DocumentCard() {
     const [selectedDocument, setSelectedDocument] = useState({ title: '', price: '' });
+    const firstColor = '#1985B6';
+    const secondColor = '#00AB84'
 
     const handleClick = () => {
         const arrowRight = ReactDOMServer.renderToString(<ArrowRight size={18} style={{ color: '#002E5D' }} />)
@@ -30,7 +32,7 @@ function DocumentCard() {
         <div className={`${styles['cardsContainer']}`}>
             {/* Kardex */}
             <div className={`${styles['card']}`}>
-                <div className={`${styles['colorLabel']}`} style={{ backgroundColor: '#1985B6' }} />
+                <div className={`${styles['colorLabel']}`} style={{ backgroundColor: firstColor }} />
                 <FileText size={80} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 30 }}>
                     <h4>Kardex</h4>
@@ -55,7 +57,7 @@ function DocumentCard() {
             </div>
             {/* Constancia de estudios */}
             <div className={`${styles['card']}`}>
-                <div className={`${styles['colorLabel']}`} style={{ backgroundColor: '#00AB84' }} />
+                <div className={`${styles['colorLabel']}`} style={{ backgroundColor: secondColor }} />
                 <FileText size={80} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 30 }}>
                     <h4>Constancia de estudios</h4>
@@ -81,7 +83,7 @@ function DocumentCard() {
 
             {/* Certificado de estudios */}
             <div className={`${styles['card']}`}>
-                <div className={`${styles['colorLabel']}`} style={{ backgroundColor: '#00AB84' }} />
+                <div className={`${styles['colorLabel']}`} style={{ backgroundColor: secondColor }} />
                 <Award size={80} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 30 }}>
                     <h4>Certificado de estudios</h4>
@@ -107,7 +109,7 @@ function DocumentCard() {
 
             {/* Carta de recomendacion */}
             <div className={`${styles['card']}`}>
-                <div className={`${styles['colorLabel']}`} style={{ backgroundColor: '#1985B6' }} />
+                <div className={`${styles['colorLabel']}`} style={{ backgroundColor: firstColor }} />
                 <FileText size={80} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 30 }}>
                     <h4>Carta de recomendación</h4>
@@ -133,7 +135,7 @@ function DocumentCard() {
 
             {/* Titulo */}
             <div className={`${styles['card']}`}>
-                <div className={`${styles['colorLabel']}`} style={{ backgroundColor: '#1985B6' }} />
+                <div className={`${styles['colorLabel']}`} style={{ backgroundColor: firstColor }} />
                 <Award size={80} style={{ color: '#A3AED0', strokeWidth: '0.5' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 30 }}>
                     <h4>Título</h4>

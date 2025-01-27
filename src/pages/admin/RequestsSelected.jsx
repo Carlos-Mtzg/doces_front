@@ -1,8 +1,8 @@
 import React, {useEffect,useState}from 'react'
-import styles from '../../assets/css/admin/selected.module.css'
-import AdminRequestTable from '../../components/AdminRequestTable'
+import styles from '../../assets/css/admin/admin-pages.module.css'
+import AdminRequestTable from '../../components/admin/AdminRequestTable'
 import AxiosClient from '../../config/htttp-client/axios-client'
-import AdminRequestOffCanvasSelect from '../../components/AdminRequestOffCanvasSelect';
+import AdminRequestOffCanvasSelect from '../../components/admin/AdminRequestOffCanvasSelect';
 const Requests = () => {
     
         const [requests, setRequests] = useState([]);
@@ -18,8 +18,6 @@ const Requests = () => {
                             Authorization: `Bearer ${token}`
                         }
                     });
-                 
-
                     if (response) {
                         const filteredRequests = response.filter(request => request.admin_id === parseInt(id));
                         const formattedRequests = filteredRequests.map((request) => ({
@@ -37,7 +35,6 @@ const Requests = () => {
                     console.error("Error al traer la información", error);
                 }
             };
-
             fetchRequests();
         }, [token, id]);
 
